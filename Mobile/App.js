@@ -1,83 +1,64 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ThemeProvider, Header, Icon } from 'react-native-elements';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Dimensions
+import {SearchBar, ThemeProvider, Header, Card, Button, Icon, BottomSheet, ListItem, withTheme } from 'react-native-elements';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
+import { Dimensions } from 'react-native';
+import { grey } from "ansi-colors";
+
 
 function MainView(props) {
-  // There is a state for the view which exists in the app wraper at like 440, which gets passed into MainView
-
-  if(props.view == "Login"){
-    return <Login changeView={props.changeView}/>
+  if(props.view == "Splash"){
+    return <Splash changeView={props.changeView}/>
   }
   else if(props.view == "Home"){
     return (
-        <Home/>
+        <Home changeView={props.changeView}/>
+    );
+  }
+  else if(props.view == "Discussions"){
+    return(
+        <Discussions changeView={props.changeView}/>
+    );
+  }
+  else if(props.view == "Messages"){
+    return(
+      <Messages changeView={props.changeView}/>
     );
   }
 };
 
-// import auth from '@react-native-firebase/auth'
-// export default function App() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
+function Splash(props){
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-//   Set an initializing state whilst Firebase connects
-//   const [initializing, setInitializing] = useState(true);
-//   const [user, setUser] = useState();
-
-//   // Handle user state changes
-//   function onAuthStateChanged(user) {
-//     setUser(user);
-//     if (initializing) setInitializing(false);
-//   }
-
-//   useEffect(() => {
-//     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-//     return subscriber; // unsubscribe on unmount
-//   }, []);
-
-//   if (initializing) return null;
-
-//   if (!user) {
-//     return (
-//       <View>
-//         <Text>Login</Text>
-//       </View>
-//     );
-//   }
-
-//   return (
-//     <View>
-//       <Text>Welcome {user.email}</Text>
-//     </View>
-//   );
-
-function Login(props){
-  return (
+  return(
     <View style={styles.container}>
-      <Text
-        style={styles.title}
-        >SPP</Text>
-      <StatusBar style="auto" />
+      <Text style={styles.title}>Thoughts</Text>
+      <Image style={styles.image} source={require('./assets/logo.jpg')} />
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Email."
+          placeholder="Email"
           placeholderTextColor="#003f5c"
-          // onChangeText={(email) => setEmail(email)}
+          onChangeText={(email) => setEmail(email)}
         />
       </View>
- 
+
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Password."
+          placeholder="Password"
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
-          // onChangeText={(password) => setPassword(password)}
+          onChangeText={(password) => setPassword(password)}
         />
       </View>
 
@@ -85,57 +66,122 @@ function Login(props){
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn} 
-        onPress={() => {props.changeView("Home")}}>
+      <TouchableOpacity style={styles.loginBtn}  onPress={()=> {props.changeView("Home");}}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity>
-        <Text style={styles.signup_button}>Sign up!</Text>
-      </TouchableOpacity>
-
     </View>
   );
 }
 
 function Home(props){
-  return (
-      <View>
-        <MapView
-          style={styles.map}
-         // style={{ flex: 1 }}
-         // provider={PROVIDER_GOOGLE}
-         // showsUserLocation
-         // initialRegion={{
-         // latitude: 37.78825,
-         // longitude: -122.4324,
-         // latitudeDelta: 0.0922,
-         // longitudeDelta: 0.0421}}
-      />
+  return(
+    <View>
+      <TouchableOpacity style={styles.navBtnLeft}  onPress={()=> {props.changeView("Discussions");}}>
+        <Text style={styles.loginText}>Discussions</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.navBtnRight}  onPress={()=> {props.changeView("Messages");}}>
+        <Text style={styles.loginText}>DMs</Text>
+      </TouchableOpacity>
+      <View style={styles.toolBar}  onPress={()=> {props.changeView("Home");}}>
       </View>
+    </View>
+  );
+}
+
+function Discussions(props){
+  return(
+    <View>
+      <TouchableOpacity style={styles.navBtnLeft} onPress={()=> {props.changeView("Home");}}>
+        <Text style={styles.loginText}>Home</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.navBtnRight}  onPress={()=> {props.changeView("Messages");}}>
+        <Text style={styles.loginText}>DMs</Text>
+      </TouchableOpacity>
+      <DiscussionTab />
+    </View>
+  );
+}
+
+function DiscussionTab(props){
+  return(
+      <Pressable
+    onPress={() => {
+  }}
+      style={({ pressed }) => [
+        styles.item,
+        {
+          backgroundColor: pressed
+            ? 'white'
+            : 'pink'
+        },
+      ]}
+    >
+
+        {({ pressed }) => (
+          <Text style={styles.text}>
+            {pressed ? 'Open ' + props.item.name : props.item.name}
+          </Text>
+        )}
+
+      </Pressable>
+  );
+}
+
+function Discussion(props){
+  return(
+    <View>
+    </View>
     );
 }
-// }
+
+function Messages(props){
+  const[search, updateSearch] = useState("");
+  return(
+    <View>
+      <TouchableOpacity style={styles.navBtnLeft}  onPress={()=> {props.changeView("Discussions");}}>
+        <Text style={styles.loginText}>Discussions</Text>
+      </TouchableOpacity>
+      <SearchBar placeholder="Search" onChangeText={this, updateSearch} value={search}/>
+      <TouchableOpacity style={styles.navBtnRight}  onPress={()=> {props.changeView("Home");}}>
+        <Text style={styles.loginText}>Home</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+export default function App() {
+  const [view, changeView] = useState("Splash");
+    return(
+      <SafeAreaProvider>
+          <MainView view={view} changeView={changeView}/>
+          <StatusBar hidden />
+      </SafeAreaProvider>
+    )
+}
 
 const styles = StyleSheet.create({
-  map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#0ABAB5",
     alignItems: "center",
     justifyContent: "center",
   },
 
   title:{
-    marginBottom: 50
+    fontSize: 20,
+    fontWeight: "bold",
+    fontFamily: "Roboto",
+    color: "white",
+    marginBottom: 15
+  },
+
+  image: {
+    marginBottom: 40,
+    width: (Dimensions.get('window').width)/2,
   },
 
   inputView: {
-    backgroundColor: "cyan",
+    backgroundColor: "#A9DCE3",
     borderRadius: 30,
     width: "70%",
     height: 45,
@@ -156,11 +202,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
 
-   signup_button: {
-    height: 30,
-    marginTop: 20,
-  },
-
   loginBtn: {
     width: "80%",
     borderRadius: 25,
@@ -168,23 +209,48 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
-    backgroundColor: "grey",
+    backgroundColor: "#00FFEF",
   },
-});
 
-export default function AppWrapper(){
-  const [view, changeView] = useState("Login");
-  return(
-    <SafeAreaProvider>
-      <ThemeProvider useDark={false}>
-      <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'SPP', style: { color: '#fff' } }}
-          rightComponent={{ icon: 'home', onPress: ()=> {changeView("Login")}  , color: '#fff' }}
-        />
-        <MainView view={view} changeView={changeView}/>
-        <StatusBar style="auto"/>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  );
-}
+  navBtnLeft: {
+    width: "25%",
+    borderBottomRightRadius: 5,
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 0,
+    backgroundColor: "#00FFEF",
+  },
+
+  navBtnRight: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: "25%",
+    borderBottomLeftRadius: 5,
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 0,
+    backgroundColor: "#00FFEF",
+  },
+
+  toolBar: {
+    position: 'absolute',
+    height: 60,
+    left: 0, 
+    top: Dimensions.get('window').height - 60,
+    width: Dimensions.get('window').width, 
+    backgroundColor: 'grey',
+  },
+  item: {
+    backgroundColor: 'pink',
+    padding: 10,
+    borderWidth: 2,
+    margin: 10,
+    fontSize: 18,
+    height: 44,
+    elevation: 30,
+    justifyContent: 'center'
+  },
+})
