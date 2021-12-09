@@ -8,8 +8,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Dimensions } from "react-native";
+import Canvas from "react-native-canvas";
 
 const HomeScreen = (props) => {
+
+    handleCanvas = (canvas) => {
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'purple';
+        ctx.fillRect(0, 0, 100, 100);
+    }
+
     return(
       <View>
         <TouchableOpacity style={styles.navBtnLeft}  onPress={()=> {props.changeView("Discussions");}}>
@@ -18,11 +26,17 @@ const HomeScreen = (props) => {
         <TouchableOpacity style={styles.navBtnRight}  onPress={()=> {props.changeView("Messages");}}>
           <Text>DMs</Text>
         </TouchableOpacity>
+        <View style={styles.container}>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+            <Canvas ref={this.handleCanvas}/>
+        </View>
+      </View>
         <View style={styles.toolBar}  onPress={()=> {props.changeView("Home");}}>
         </View>
       </View>   
     );
 }
+
 const styles = StyleSheet.create({
   navBtnLeft: {
     width: "25%",

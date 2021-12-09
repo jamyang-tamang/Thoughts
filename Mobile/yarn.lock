@@ -1132,6 +1132,13 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     "to-fast-properties" "^2.0.0"
 
+"@bucky24/react-canvas@^1.7.1":
+  "integrity" "sha512-ZpQUZhUO/ZxeW6FasmMDHf+gmbqcmqjPkhEkPhiTJZQf0vndyQMfHiu9ZxKKHtId/lk7zGUhNu3pO36QBY08fQ=="
+  "resolved" "https://registry.npmjs.org/@bucky24/react-canvas/-/react-canvas-1.7.1.tgz"
+  "version" "1.7.1"
+  dependencies:
+    "prop-types" "^15.7.2"
+
 "@cnakazawa/watch@^1.0.3":
   "integrity" "sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ=="
   "resolved" "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz"
@@ -1620,7 +1627,7 @@
   dependencies:
     "compare-versions" "^3.4.0"
 
-"@unimodules/react-native-adapter@~6.3.7":
+"@unimodules/react-native-adapter@~6.3.8":
   "integrity" "sha512-i9/9Si4AQ8awls+YGAKkByFbeAsOPgUNeLoYeh2SQ3ddjxJ5ZJDtq/I74clDnpDcn8zS9pYlcDJ9fgVJa39Glw=="
   "resolved" "https://registry.yarnpkg.com/@unimodules/react-native-adapter/-/react-native-adapter-6.3.9.tgz"
   "version" "6.3.9"
@@ -2507,6 +2514,11 @@
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.0.9.tgz"
   "version" "3.0.9"
 
+"ctx-polyfill@^1.1.4":
+  "integrity" "sha1-CEILxcVA0IrDbQVyDKUDxl4wLWU="
+  "resolved" "https://registry.npmjs.org/ctx-polyfill/-/ctx-polyfill-1.1.4.tgz"
+  "version" "1.1.4"
+
 "dayjs@^1.8.15":
   "integrity" "sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig=="
   "resolved" "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.7.tgz"
@@ -2697,6 +2709,11 @@
   "resolved" "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz"
   "version" "2.0.0"
 
+"escape-string-regexp@2.0.0":
+  "integrity" "sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w=="
+  "resolved" "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz"
+  "version" "2.0.0"
+
 "esprima@^4.0.0":
   "integrity" "sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A=="
   "resolved" "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz"
@@ -2827,15 +2844,15 @@
   "version" "1.0.4"
 
 "expo@~42.0.1":
-  "integrity" "sha512-i1QvMb3cIXdsx7OQh0/N0KJHkPwFlBGEGsXRr/IF2DJFHMWd/J4DR8IaAnTAhx0ifborWHmENgXj5hgWJgirog=="
-  "resolved" "https://registry.yarnpkg.com/expo/-/expo-42.0.4.tgz"
-  "version" "42.0.4"
+  "integrity" "sha512-geIJJYnZoSi7lrww+pQZpr94paGYac0xwU/kiAZ1EGkdXUFUGAx19aQhfVX5AWoeOFWvDvx63pdXEwie72jj7Q=="
+  "resolved" "https://registry.npmjs.org/expo/-/expo-42.0.5.tgz"
+  "version" "42.0.5"
   dependencies:
     "@babel/runtime" "^7.1.2"
     "@expo/metro-config" "^0.1.70"
     "@expo/vector-icons" "^12.0.4"
     "@unimodules/core" "~7.1.2"
-    "@unimodules/react-native-adapter" "~6.3.7"
+    "@unimodules/react-native-adapter" "~6.3.8"
     "babel-preset-expo" "~8.4.1"
     "cross-spawn" "^6.0.5"
     "expo-application" "~3.2.0"
@@ -2970,9 +2987,9 @@
     "through2" "^2.0.0"
 
 "fbjs@^0.8.4":
-  "integrity" "sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90="
-  "resolved" "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz"
-  "version" "0.8.17"
+  "integrity" "sha512-EQaWFK+fEPSoibjNy8IxUtaFOMXcWsY0JaVrQoZR9zC8N2Ygf9iDITPWjUTVIax95b6I742JFLqASHfsag/vKA=="
+  "resolved" "https://registry.npmjs.org/fbjs/-/fbjs-0.8.18.tgz"
+  "version" "0.8.18"
   dependencies:
     "core-js" "^1.0.0"
     "isomorphic-fetch" "^2.1.1"
@@ -2980,7 +2997,7 @@
     "object-assign" "^4.1.0"
     "promise" "^7.1.1"
     "setimmediate" "^1.0.5"
-    "ua-parser-js" "^0.7.18"
+    "ua-parser-js" "^0.7.30"
 
 "fbjs@^1.0.0":
   "integrity" "sha512-MUgcMEJaFhCaF1QtWGnmq9ZDRAzECTCRAF7O6UZIlAlkTs1SasiX9aP0Iw7wfD2mJ7wDTNfg2w7u5fSCwJk1OA=="
@@ -3412,7 +3429,7 @@
     "strip-ansi" "^4.0.0"
     "through" "^2.3.6"
 
-"invariant@^2.2.2", "invariant@^2.2.4":
+"invariant@^2.2.2", "invariant@^2.2.4", "invariant@2.2.4":
   "integrity" "sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA=="
   "resolved" "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz"
   "version" "2.2.4"
@@ -4879,6 +4896,13 @@
   "resolved" "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz"
   "version" "17.0.2"
 
+"react-native-canvas@^0.1.38":
+  "integrity" "sha512-DjtN921PKoa2liYF8hKq1263xg2o47Bj/1E/+l75GPicT2RV/x/Y1HBrLvFVCR3OO+UslXEC5BtRjfxDoh/Bug=="
+  "resolved" "https://registry.npmjs.org/react-native-canvas/-/react-native-canvas-0.1.38.tgz"
+  "version" "0.1.38"
+  dependencies:
+    "ctx-polyfill" "^1.1.4"
+
 "react-native-elements@^3.4.2":
   "integrity" "sha512-m0eAWOn7JuR1wNTNY0WHuaqst4LI/gFE4N5Bbyfsc4DiryWsMST7aAg5w/Gos4IexWIzhLKCIkPxthND1m/8Xg=="
   "resolved" "https://registry.npmjs.org/react-native-elements/-/react-native-elements-3.4.2.tgz"
@@ -4938,6 +4962,14 @@
     "normalize-css-color" "^1.0.2"
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.4"
+
+"react-native-webview@^11.15.0", "react-native-webview@>=5.10.0 || >=6.1.0":
+  "integrity" "sha512-0Wv+8qu8XuACx1xZwzc2Yfl+rOvxUouLcPxUKdkhaMVNpwoM5/ePpczCQZ3LpiRnSoEtjaUkfyQHbJQ+x4dDJQ=="
+  "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.15.0.tgz"
+  "version" "11.15.0"
+  dependencies:
+    "escape-string-regexp" "2.0.0"
+    "invariant" "2.2.4"
 
 "react-native@*", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz":
   "version" "0.63.2"
@@ -5744,10 +5776,10 @@
   "resolved" "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz"
   "version" "0.0.6"
 
-"ua-parser-js@^0.7.18":
-  "integrity" "sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g=="
-  "resolved" "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz"
-  "version" "0.7.28"
+"ua-parser-js@^0.7.18", "ua-parser-js@^0.7.30":
+  "integrity" "sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ=="
+  "resolved" "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.31.tgz"
+  "version" "0.7.31"
 
 "uglify-es@^3.1.9":
   "integrity" "sha512-r+MU0rfv4L/0eeW3xZrd16t4NZfK8Ld4SWVglYBb7ez5uXFWHuVRs6xCTrf1yirs9a4j4Y27nn7SRfO6v67XsQ=="
