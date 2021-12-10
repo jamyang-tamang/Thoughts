@@ -95,7 +95,7 @@ function Signup(props){
 }
 
 export default function App() {
-  const [view, changeView] = useState("Discussions");
+  const [view, changeView] = useState("Splash");
     return(
       <SafeAreaProvider>
           <MainView view={view} changeView={changeView}/>
