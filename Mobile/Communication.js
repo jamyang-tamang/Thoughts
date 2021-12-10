@@ -6,11 +6,43 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { Dimensions, FlatList } from "react-native";
-import {SearchBar} from 'react-native-elements';
+import { Dimensions, FlatList, Modal } from "react-native";
+import {FAB, SearchBar} from 'react-native-elements';
 
 const Messages = (props) => {
     const[search, updateSearch] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalHeading, setModalHeading] = useState("Topic");
+
+    function openModel(text){
+      setModalOpen(true);
+      setModalHeading(text);
+    }
+
+  const ItemTab = (props) => {
+    return(
+    <Pressable
+        onPress={() => openModel(props.item.name)}
+            style={({ pressed }) => [
+            styles.item,
+            {
+                backgroundColor: pressed
+                ? 'white'
+                : 'pink'
+            },
+            ]}
+        >
+
+        {({ pressed }) => (
+            <Text style={styles.text}>
+            {pressed ? 'Go to ' + props.item.name : props.item.name}
+            </Text>
+        )}
+    </Pressable>
+    )
+  }
+
+
     return(
       <View style = {styles.listContainer}>
         <TouchableOpacity style={styles.navBtnLeft}  onPress={()=> {props.changeView("Discussions");}}>
@@ -22,7 +54,17 @@ const Messages = (props) => {
         <TouchableOpacity style={styles.navBtnRight}  onPress={()=> {props.changeView("Home");}}>
           <Text>Home</Text>
         </TouchableOpacity>
-        <View style={styles.messagesContainer}>
+        <Modal visible={modalOpen} animationType="slide">
+        <TouchableOpacity style={styles.navBtnLeft} onPress={()=> setModalOpen(false)}>
+          <Text style={styles.loginText}>Back</Text>
+        </TouchableOpacity>
+          <View style={styles.modalContent}>
+            <Text>
+              {modalHeading}
+            </Text>
+          </View>
+        </Modal>
+        <View style={styles.communicationContainer}>
           <View style={styles.messages}>
             <Text styles={styles.labels}>Messages</Text>
             <FlatList
@@ -42,6 +84,7 @@ const Messages = (props) => {
               ]}
               renderItem={({item}) => <ItemTab item={item}></ItemTab>}
             />
+            <FAB title="+" style={ styles.newButton } onPress={() => setModalOpen(true) } color="grey" placement="right" />
           </View>
           <View style={styles.rooms}>
           <Text styles={styles.labels}>Rooms</Text>
@@ -62,32 +105,10 @@ const Messages = (props) => {
               ]}
               renderItem={({item}) => <ItemTab item={item}></ItemTab>}
             />
+            <FAB title="+" style={ styles.newButton } onPress={() => setModalOpen(true) } color="grey" placement="right" />
           </View>
         </View>
       </View>
-    )
-}
-
-const ItemTab = (props) => {
-    return(
-    <Pressable
-        onPress={() => {}}
-            style={({ pressed }) => [
-            styles.item,
-            {
-                backgroundColor: pressed
-                ? 'white'
-                : 'pink'
-            },
-            ]}
-        >
-
-        {({ pressed }) => (
-            <Text style={styles.text}>
-            {pressed ? 'Go to ' + props.item.name : props.item.name}
-            </Text>
-        )}
-    </Pressable>
     )
 }
 
@@ -119,6 +140,12 @@ const Rooms = (props) =>{
 }
 
 const styles = StyleSheet.create({
+  newButton: {
+    width: 60,  
+    height: 60,   
+    borderRadius: 30,            
+    backgroundColor: 'grey',  
+  },
     listContainer: {
         flex: 1,
         backgroundColor: '#0ABAB5'
@@ -154,7 +181,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
         backgroundColor: "#00FFEF",
     },
-    messagesContainer:{
+    communicationContainer:{
         flexDirection: "row",
         flex: 3,
         marginTop: (Dimensions.get('window').height)/10,

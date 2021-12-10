@@ -5,6 +5,7 @@ const Canvas = (props) => {
     const canvasRef = useRef(null)
     const contextRef = useRef(null)
     const [isDrawing, setIsDrawing] = useState(false)
+    const [strokeColor, changeStrokeColor] = useState("black");
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -16,7 +17,7 @@ const Canvas = (props) => {
         const context = canvas.getContext("2d")
         context.scale(1, 1)
         context.lineCap = "round"
-        context.strokeStyle = "black"
+        context.strokeStyle = strokeColor
         context.lineWidth = 5
         contextRef.current = context;
     }, [])
@@ -44,8 +45,14 @@ const Canvas = (props) => {
 
     const styleObj = {
         backgroundColor: "grey",
+        borderTop: "1px solid #E7E7E7",
         textAlign: "center",
-        padding: "10px",
+        padding: "20px",
+        position: "fixed",
+        left: "0",
+        bottom: "0",
+        height: "60px",
+        width: "100%",
     }
     return (
         <div>
@@ -58,7 +65,19 @@ const Canvas = (props) => {
                 ref={canvasRef}
             />
             <div style={styleObj}>
-                asdfh
+                <button>colorPicker</button>
+                <button>undo</button>
+                <button>redo</button>
+                <button>pencil</button>
+                <button>eraser</button>
+                <button>spray</button>
+                <button>pen</button>
+                <button>PaintBucket</button>
+                <button>strokeWidth</button>
+                <button>hide</button>
+                <button>pan</button>
+                <button>clear</button>
+
             </div>
 
         </div>

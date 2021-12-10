@@ -6,12 +6,53 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { Dimensions, FlatList } from "react-native";
-import {SearchBar} from 'react-native-elements';
+import { Dimensions, FlatList, Modal, Button } from "react-native";
+import { FAB, SearchBar} from 'react-native-elements';
 
 const Discussions = (props) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalHeading, setModalHeading] = useState("Topic");
+
+  function openModel(text){
+    setModalOpen(true);
+    setModalHeading(text);
+  }
+
+  const ItemTab =(props) => {
+    return(
+    <Pressable
+            onPress={()=> openModel(props.item.name) }
+            style={({ pressed }) => [
+            styles.item,
+            {
+                backgroundColor: pressed
+                ? '#faf9f9'
+                : '#ffd6ba'
+            },
+            ]}
+        >
+
+        {({ pressed }) => (
+            <Text style={styles.text}>
+            {pressed ? 'Go to ' + props.item.name : props.item.name}
+            </Text>
+        )}
+    </Pressable>
+    )
+  }
     return(
       <View style={styles.listContainer}>
+        <Modal visible={modalOpen} animationType="slide">
+        <TouchableOpacity style={styles.navBtnLeft} onPress={()=> setModalOpen(false)}>
+          <Text style={styles.loginText}>Back</Text>
+        </TouchableOpacity>
+          <View style={styles.modalContent}>
+            <Text>
+              {modalHeading}
+            </Text>
+          </View>
+        </Modal>
+
         <TouchableOpacity style={styles.navBtnLeft} onPress={()=> {props.changeView("Home");}}>
           <Text style={styles.loginText}>Home</Text>
         </TouchableOpacity>
@@ -37,34 +78,18 @@ const Discussions = (props) => {
             renderItem={({item}) => <ItemTab item={item}></ItemTab>}
           />
         </View>
+        <FAB title="+" style={ styles.newButton } onPress={() => setModalOpen(true) } color="grey" placement="right" />
       </View>
     );
   }
 
-const ItemTab =(props) => {
-    return(
-    <Pressable
-        onPress={() => {}}
-            style={({ pressed }) => [
-            styles.item,
-            {
-                backgroundColor: pressed
-                ? 'white'
-                : 'pink'
-            },
-            ]}
-        >
-
-        {({ pressed }) => (
-            <Text style={styles.text}>
-            {pressed ? 'Go to ' + props.item.name : props.item.name}
-            </Text>
-        )}
-    </Pressable>
-    )
-}
-
 const styles = StyleSheet.create({
+    newButton: {
+      width: 60,  
+      height: 60,   
+      borderRadius: 30,            
+      backgroundColor: 'grey',  
+    },
     listContainer: {
         flex: 1,
         backgroundColor: '#0ABAB5'
@@ -121,7 +146,6 @@ const styles = StyleSheet.create({
 })
 
 export default Discussions;
-
 //Inprogress
 // function Discussion(props){
 //     return(

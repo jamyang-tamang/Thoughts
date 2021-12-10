@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Container, Row, Col } from "react-bootstrap";
 
 const Messages = (props) => {
 
@@ -45,24 +45,34 @@ const Messages = (props) => {
         );
     }
     return(
-        <div>
-            <button onClick={props.goToDiscussions}>Discussions</button>
-            <button onClick={props.goToHome}>Home</button>
+    <div>
+        <button onClick={props.goToDiscussions}>Discussions</button>
+        <button onClick={props.goToHome}>Home</button>
+        <Container>
             <div>
-                <ul>
-                    {messages.map((item) => (
-                        <li key={item.key}>{item.name}</li>
-                    ))}
-                </ul>
+            <Row className={"show-grid"}>
+                <Col>
+                    <div>
+                        <ul>
+                            {messages.map((item) => (
+                                <li key={item.key}>{item.name}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </Col>
+                <Col>
+                    <div>
+                        <ul>
+                            {rooms.map((item) => (
+                                <li key={item.key}>{item.name}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </Col>
+            </Row>
             </div>
-            <div>
-                <ul>
-                    {rooms.map((item) => (
-                        <li key={item.key}>{item.name}</li>
-                    ))}
-                </ul>
-            </div>
-        </div>
+        </Container>
+    </div>
     )
 }
 
