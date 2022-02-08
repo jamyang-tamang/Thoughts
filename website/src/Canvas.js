@@ -1,11 +1,14 @@
-import React from 'react';
-import { useRef, useState, useEffect, StyleSheet } from 'react';
+import React, {Component} from 'react';
+import { useRef, useState, useEffect} from 'react';
+import {SketchPicker } from 'react-color'
 
 const Canvas = (props) => {
     const canvasRef = useRef(null)
     const contextRef = useRef(null)
     const [isDrawing, setIsDrawing] = useState(false)
-    const [strokeColor, changeStrokeColor] = useState("black");
+    const [strokeColor, changeStrokeColor] = useState("#00000");
+    const [toolVisible, changeToolVisibility] = useState(true);
+    const [colorPickerVisible, changeColorPickerVisiblity] = useState(false);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -27,11 +30,17 @@ const Canvas = (props) => {
         contextRef.current.beginPath()
         contextRef.current.moveTo(offsetX, offsetY)
         setIsDrawing(true)
+        console.log(strokeColor)
+    }
+
+    const clearCanvas = () => {
+        contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     }
 
     const penUp = () => {
         contextRef.current.closePath()
         setIsDrawing(false)
+        console.log(strokeColor)
     }
 
     const penMove = ({nativeEvent}) => {
@@ -54,6 +63,61 @@ const Canvas = (props) => {
         height: "60px",
         width: "100%",
     }
+
+    const drawingToolStyle = {
+        position: "fixed",
+        left: "0",
+        bottom: "0",
+    }
+
+    const toogleTool = () => {
+        changeToolVisibility(!toolVisible);
+    }
+
+    const colorPickerButton = () => {
+        changeColorPickerVisiblity(!colorPickerVisible);
+    }
+
+
+    const handleChangeComplete = (color) => {
+        changeStrokeColor(color.hex);
+        console.log(color.hex);
+    }
+    
+    function DrawingTools () {
+        if(toolVisible){
+        return <div style={styleObj}>
+                    <button onClick={colorPickerButton}>ColorPicker</button>
+                    <button>undo</button>
+                    <button>redo</button>
+                    <button>pencil</button>
+                    <button>eraser</button>
+                    <button>spray</button>
+                    <button>pen</button>
+                    <button>PaintBucket</button>
+                    <button>strokeWidth</button>
+                    <button onClick={toogleTool}>hide</button>
+                    <button>pan</button>
+                    <button onClick={clearCanvas}>clear</button>
+                </div>
+        }
+        else{
+            return <button onClick={toogleTool}>showTools</button>
+        }
+    }
+    
+    function ColorPicker () {
+        if(colorPickerVisible){
+            return <div style={drawingToolStyle}>
+                        <SketchPicker 
+                        color = {strokeColor}
+                        onChangeComplete= {handleChangeComplete}
+                        />
+                     </div>
+        }
+        return 0
+    }
+    
     return (
         <div>
             <button onClick={props.goToDiscussions}>Discussions</button>
@@ -64,24 +128,11 @@ const Canvas = (props) => {
                 onMouseMove={penMove}
                 ref={canvasRef}
             />
-            <div style={styleObj}>
-                <button>colorPicker</button>
-                <button>undo</button>
-                <button>redo</button>
-                <button>pencil</button>
-                <button>eraser</button>
-                <button>spray</button>
-                <button>pen</button>
-                <button>PaintBucket</button>
-                <button>strokeWidth</button>
-                <button>hide</button>
-                <button>pan</button>
-                <button>clear</button>
-
-            </div>
-
+            <ColorPicker />
+            <DrawingTools />
         </div>
     )
+    
 }
 
 export default Canvas;
