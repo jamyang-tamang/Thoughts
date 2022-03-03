@@ -3,10 +3,10 @@ import { useRef, useState, useLayoutEffect} from 'react';
 import {SketchPicker } from 'react-color'
 import LineWidthPicker from 'react-line-width-picker'
 import 'react-line-width-picker/dist/index.css'
-import pencil from './pencil.png';
-import eraser from './eraser.png';
-import colorPicker from './color-picker.png';
-import widthPicker from './width.png';
+import pencil from '../pencil.png';
+import eraser from '../eraser.png';
+import colorPicker from '../color-picker.png';
+import widthPicker from '../width.png';
 
 const Canvas = (props) => {
     const contextRef = useRef(null)

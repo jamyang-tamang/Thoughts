@@ -49,15 +49,14 @@ const Discussions = (props) => {
         );
     }
     return(
-        <div style={{}}>
+        <div>
             <button onClick={props.goToHome}>Home</button>
-            <button onClick={props.gotToMessages}>DMs</button>
+            <button onClick={props.goToMessages}>DMs</button>
             <div style={discussionsStyle}>
                     {discussions.map((item) => (
                         <Item key={item.key} name={item.name} thumbnail={item.thumbnail} upvotes={item.upvotes} downvotes={item.downvotes} comments={item.comments} createdBy={item.createdBy}/>
                     ))}
             </div>
-            <div>why</div>
         </div>
     )
 }
