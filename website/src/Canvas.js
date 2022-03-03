@@ -1,39 +1,40 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { useRef, useState, useLayoutEffect} from 'react';
-import context from 'react-bootstrap/esm/AccordionContext';
-import { getOverlayDirection } from 'react-bootstrap/esm/helpers';
 import {SketchPicker } from 'react-color'
 import LineWidthPicker from 'react-line-width-picker'
 import 'react-line-width-picker/dist/index.css'
+import pencil from './pencil.png';
+import eraser from './eraser.png';
+import colorPicker from './color-picker.png';
+import widthPicker from './width.png';
 
 const Canvas = (props) => {
-    const canvasRef = useRef(null)
     const contextRef = useRef(null)
     const [isDrawing, setIsDrawing] = useState(false)
-    const [strokeColor, changeStrokeColor] = useState("#00000");
+    const [strokeColor, changeStrokeColor] = useState("#000000");
     const [strokeWidth, changeStrokeWidth] = useState(5);
     const [toolVisible, changeToolVisibility] = useState(true);
     const [colorPickerVisible, changeColorPickerVisiblity] = useState(false);
     const [widthPickerVisible, changeWidthPickerVisiblity] = useState(false);
     const [shapesVisible, changeShapesVisilbility] = useState(false);
+    const [eraseMode, eraseModeToggle] = useState(false);
+    const [textMode, textModeToggle] = useState(false);
     const drawings = []
 
+    // const [cursor, setCursor] = useState('pointer');
     useLayoutEffect(() => {
-        async function drawCanvas(){
-            const canvas = document.getElementById('canvas');
-            const context = canvas.getContext("2d");
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            canvas.style.width = '${window.innerWidth}px';
-            canvas.style.height = '${window.innerHeight}px';
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.width = '${window.innerWidth}px';
+        canvas.style.height = '${window.innerHeight}px';
 
-            context.scale(1, 1)
-            context.lineCap = "round"
-            context.strokeStyle = strokeColor
-            context.lineWidth = strokeWidth
-            contextRef.current = context;
-        }
-        drawCanvas();
+        context.scale(1, 1)
+        context.lineCap = "round"
+        context.strokeStyle = strokeColor
+        context.lineWidth = strokeWidth
+        contextRef.current = context;
     }, [])
 
     const penDown = ({nativeEvent}) => {
@@ -44,9 +45,8 @@ const Canvas = (props) => {
     }
 
     const clearCanvas = () => {
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext("2d");
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        const context = contextRef.current;
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     }
 
     const penUp = () => {
@@ -74,6 +74,7 @@ const Canvas = (props) => {
         bottom: "0",
         height: "60px",
         width: "100%",
+        // cursor: cursor,
     }
 
     const ShowButtonObj = {
@@ -87,59 +88,89 @@ const Canvas = (props) => {
     }
 
     const drawingToolStyle = {
-        position: "absolute",
+        position: "fixed",
+        border: '2px solid black',
+        background: "#36454F",
         left: "30px",
-        bottom: "30px",
+        bottom: "60px",
+    }
+
+    const toolButtons = {
+        height: "20px",
+         width: "20px",
     }
 
     const handleColorChangeComplete = (color) => {
         changeStrokeColor(color.hex);
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext("2d");
-        context.strokeStyle = (color.hex);
+        if(!eraseMode){
+            const context = contextRef.current;
+            context.strokeStyle = (color.hex);
+        }
     }
 
     const togglePencil = () => {
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext("2d");
-        context.strokeStyle = (strokeColor);
-        context.lineWidth = (strokeWidth);
+        // cursor: url("pencil_cursor.png"), auto;
+        eraseModeToggle(false);
 
         console.log(strokeColor);
         console.log(strokeWidth);
+        const context = contextRef.current;
+        context.strokeStyle = (strokeColor);
+        context.lineWidth = (strokeWidth);
+        console.log(eraseMode);
+
+        document.querySelector('cursor').style.url("pencil_cursor.png");
+        // document.querySelector('[cursor=pointer]').style.url("pencil_cursor.png");
     }
 
     const toggleEraser = () => {
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext("2d");
+        eraseModeToggle(true);
+        const context = contextRef.current;
         context.strokeStyle = ("#FFFFFF");
         context.lineWidth = (22);
+    }
 
-        console.log(strokeColor);
-        console.log(strokeWidth);
+    const toogleText = () => {
     }
 
     const handleWidthChangeComplete = (width) => {
         changeStrokeWidth(width);
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext("2d");
+        const context = contextRef.current;
         context.lineWidth = (width);
     }
 
     const toogleTool = () => {
         changeToolVisibility(!toolVisible);
     }
-    
+
+    const cursorStyle = {
+        width: "30rem",
+        height: "30rem",
+        border: "2px solid black",
+        borderRadius: "50%",
+        position: "absolute",
+        transform: "translate (-50%, -50%)",
+        zIndex: "999",
+        back: "red",
+        // pointer-events: none,
+        // transition: all 0.2s ease;
+        // transition-property: background border transform,
+        // transform-origin: 150% 150%;
+        
+    }
+
+    function Cursor(){ return <div style={cursorStyle}></div>;}
+
     function DrawingTools () {
         if(toolVisible){
-        return <div style={styleObj}>
-                    <button onClick={toggleColorPicker}>ColorPicker</button>
-                    <button onClick={toggleWidthPicker}>strokeWidth</button>
-                    <button onClick={undo}>undo</button>
-                    <button>redo</button>
-                    <button onClick={togglePencil}>pencil</button>
-                    <button onClick={toggleEraser}>eraser</button>
-                    <button>spray</button>
+        return <div style={styleObj} >
+                    <button onClick={togglePencil}><img src={pencil} style = {toolButtons}/></button>
+                    <button onClick={toggleEraser}><img src={eraser} style = {toolButtons}/></button>
+                    <button onClick={toggleColorPicker}><img src={colorPicker} style = {toolButtons}/></button>
+                    <button onClick={toggleWidthPicker}><img src={widthPicker} style = {toolButtons}/></button>
+                    <button onClick={undo}>Undo</button>
+                    <button>Redo</button>
+                    <button onClick={toogleText}>Text</button>
                     <button>PaintBucket</button>
                     <button onClick={toggleShapes}>Shapes</button>
                     <button onClick={toogleTool}>hide</button>
@@ -170,8 +201,7 @@ const Canvas = (props) => {
         }
         return null
     }
-
-    
+ 
     const toggleWidthPicker = () => {
         changeWidthPickerVisiblity(!widthPickerVisible);
         changeColorPickerVisiblity(false);
@@ -204,9 +234,16 @@ const Canvas = (props) => {
         }
         return 0
     }
+
+    function handleMouseMove(ev) { 
+        const cursor = document.querySelector(".cursor")
+        cursor.style.left = '${e.pageX}px'
+        cursor.style.top = '${e.pageY}px'
+        cursor.style.background = "cornflowerblue"
+    };
     
     return (
-        <div>
+        <div onMouseMove={(ev) => handleMouseMove(ev)}>
             <button onClick={props.goToDiscussions}>Discussions</button>
             <button onClick={props.goToMessages}>DMs</button>
             <canvas id="canvas"
@@ -214,6 +251,7 @@ const Canvas = (props) => {
                 onMouseUp={penUp}
                 onMouseMove={penMove}
             />
+            <Cursor/>
             <ColorPicker />
             <WidthPicker/>
             <DrawingTools />

@@ -31,7 +31,6 @@ class App extends React.Component {
         });
     }
 
-
     render() {
         if(this.state.Page === "Home") {
             return (
