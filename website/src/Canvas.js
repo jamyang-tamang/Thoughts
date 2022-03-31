@@ -244,13 +244,15 @@ const Canvas = (props) => {
     
     return (
         <div onMouseMove={(ev) => handleMouseMove(ev)}>
-            <button onClick={props.goToDiscussions}>Discussions</button>
-            <button onClick={props.goToMessages}>DMs</button>
-            <canvas id="canvas"
-                onMouseDown={penDown}
-                onMouseUp={penUp}
-                onMouseMove={penMove}
-            />
+            <div style = {{textAlign: "center"}}>
+                <button onClick={props.goToDiscussions}>Discussions</button>
+                <button onClick={props.goToMessages}>DMs</button>
+                <canvas id="canvas"
+                    onMouseDown={penDown}
+                    onMouseUp={penUp}
+                    onMouseMove={penMove}
+                />
+            </div>
             <Cursor/>
             <ColorPicker />
             <WidthPicker/>

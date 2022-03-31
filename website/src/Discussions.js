@@ -17,14 +17,15 @@ const Discussions = (props) => {
     ];
 
     const discussionsStyle={
-        // alignItems: 'center',
-        flex: 1,
-        // justifyContent: 'center'
+        alignContent: 'center',
+        flex: 5,
+        flexDirection: "row",
+        // marginLeft: '${window.innerWidth}px',
     }
 
     const discussionStyle={
         width: window.innerWidth*.8,
-        height: window.innerWidth/40,
+        height: window.innerWidth/15,
         background: "grey",
         marginTop: 5,
         marginBottom: 5,
@@ -33,11 +34,13 @@ const Discussions = (props) => {
 
     function Item(props) {
         return <div style={discussionStyle} key = {props.key}> 
-        <div style={{justifyContent: 'flex-start', flexDirection: 'row'}}>{props.name}</div>
-        <div >{props.upvotes}</div>
-        <div>{props.downvotes}</div>
-        <div>{props.comments}</div>
-        <div> {props.createdBy}</div>
+        <div style={{ textAlign: 'center'}}>{props.name}</div>
+        <div>
+            <div> Upvotes: {props.upvotes}</div>
+            <div> Downvotes: {props.downvotes}</div>
+            <div> Comments: {props.comments}</div>
+        </div>
+        <div style={{textAlign: 'right'}}> Original Poster: {props.createdBy}</div>
         </div>;
     }
 
@@ -49,17 +52,28 @@ const Discussions = (props) => {
         );
     }
     return(
-        <div style={{}}>
-            <button onClick={props.goToHome}>Home</button>
-            <button onClick={props.gotToMessages}>DMs</button>
-            <div style={discussionsStyle}>
-                    {discussions.map((item) => (
-                        <Item key={item.key} name={item.name} thumbnail={item.thumbnail} upvotes={item.upvotes} downvotes={item.downvotes} comments={item.comments} createdBy={item.createdBy}/>
-                    ))}
+        <div>
+            <div style = {{textAlign: "center"}}>
+                <button onClick={props.goToHome}>Home</button>
+                <button onClick={props.goToMessages}>DMs</button>
             </div>
-            <div>why</div>
+            
+            
+            <div style={{flex:5, flexDirection: "column", marginLeft: window.innerWidth*0.1, marginnRight: window.innerWidth*0.1}}>
+                <div style={{flex: 1}}/>
+                <div style={discussionsStyle}>
+                    <div style={{flex: 3}}>
+                        {discussions.map((item) => (
+                            <Item key={item.key} name={item.name} thumbnail={item.thumbnail} upvotes={item.upvotes} downvotes={item.downvotes} comments={item.comments} createdBy={item.createdBy}/>
+                        ))}
+                    </div>
+                </div>
+                <div style={{flex: 1}}/>
+            </div>
+            
         </div>
     )
 }
 
 export default Discussions;
+

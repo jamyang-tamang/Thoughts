@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .App-logo {
@@ -49,4 +49,10 @@
   transition-property: background, border, transform;
   transform-origin: 150% 150%;
   z-index: 999;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 150px;
 }

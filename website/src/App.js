@@ -3,14 +3,28 @@ import './App.css';
 import Canvas from "./Canvas";
 import Messages from "./Messages"
 import Discussions from "./Discussions";
+import Login from "./Login";
+import ForgotPassword from "./ForgotPassword";
 
 class App extends React.Component {
 
     constructor(){
         super()
         this.state = {
-            Page: "Home"
+            Page: "Login"
         }
+    }
+
+    goToLogin = () => {
+        this.setState({
+            Page: "Login"
+        });
+    }
+
+    goToForgotPassword = () => {
+        this.setState({
+            Page: "ForgotPassword"
+        });
     }
 
     goToHome = () => {
@@ -53,7 +67,20 @@ class App extends React.Component {
                 </div>
             )
         }
-
+        if(this.state.Page == "Login") {
+            return (
+                <div className="App">
+                    <Login goToForgotPassword={this.goToForgotPassword}/>
+                </div>
+            )
+        }
+        if(this.state.Page == "ForgotPassword") {
+            return (
+                <div className="App">
+                    <ForgotPassword goToLogin={this.goToLogin}/>
+                </div>
+            )
+        }
     }
 }
 
