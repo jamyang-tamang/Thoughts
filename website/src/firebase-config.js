@@ -2,7 +2,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from 'firebase/app';
 import {getAuth, onAuthStateChanged} from'firebase/auth';
-import {getDatabase} from'firebase/database';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyBo2Uy2IdTDQq-DR33WWH3MTA7P5O6sy8Q",
@@ -15,8 +14,7 @@ const firebaseApp = initializeApp({
 })
 
 export const auth = getAuth(firebaseApp);
-const db = getDatabase(firebaseApp);
-// const comments = collection(db, 'comments');
+export const db = firebaseApp.firestore();
 
 onAuthStateChanged(auth, user=> {
   if(user != null){

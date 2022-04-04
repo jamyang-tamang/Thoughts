@@ -1,5 +1,6 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { signOut } from "firebase/auth";
+import {auth} from './firebase-config'
 
 const Messages = (props) => {
 
@@ -58,11 +59,17 @@ const Messages = (props) => {
         </div>;
     }
 
+    const logout = async () => {
+        await signOut(auth);
+        props.goToLogin();
+    };
+
     return(
     <div>
         <div style = {{textAlign: "center"}}>
             <button onClick={props.goToDiscussions}>Discussions</button>
             <button onClick={props.goToHome}>Home</button>
+            <button onClick={logout}>LogOut</button>
         </div>
         <div className={"container"}>
             <div> Search Bar</div>

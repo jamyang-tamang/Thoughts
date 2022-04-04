@@ -7,6 +7,9 @@ import pencil from './pencil.png';
 import eraser from './eraser.png';
 import colorPicker from './color-picker.png';
 import widthPicker from './width.png';
+import { signOut } from "firebase/auth";
+import {auth} from './firebase-config'
+import Button from '@mui/material/Button';
 
 const Canvas = (props) => {
     const contextRef = useRef(null)
@@ -65,7 +68,7 @@ const Canvas = (props) => {
     }
 
     const styleObj = {
-        backgroundColor: "grey",
+        backgroundColor: "skyblue",
         borderTop: "1px solid #E7E7E7",
         textAlign: "center",
         padding: "20px",
@@ -164,18 +167,18 @@ const Canvas = (props) => {
     function DrawingTools () {
         if(toolVisible){
         return <div style={styleObj} >
-                    <button onClick={togglePencil}><img src={pencil} style = {toolButtons}/></button>
-                    <button onClick={toggleEraser}><img src={eraser} style = {toolButtons}/></button>
-                    <button onClick={toggleColorPicker}><img src={colorPicker} style = {toolButtons}/></button>
-                    <button onClick={toggleWidthPicker}><img src={widthPicker} style = {toolButtons}/></button>
-                    <button onClick={undo}>Undo</button>
-                    <button>Redo</button>
-                    <button onClick={toogleText}>Text</button>
-                    <button>PaintBucket</button>
-                    <button onClick={toggleShapes}>Shapes</button>
-                    <button onClick={toogleTool}>hide</button>
-                    <button>pan</button>
-                    <button onClick={clearCanvas}>clear</button>
+                    <Button variant="contained" onClick={togglePencil}><img src={pencil} style = {toolButtons}/></Button>
+                    <Button variant="contained" onClick={toggleEraser}><img src={eraser} style = {toolButtons}/></Button>
+                    <Button variant="contained" onClick={toggleColorPicker}><img src={colorPicker} style = {toolButtons}/></Button>
+                    <Button variant="contained" onClick={toggleWidthPicker}><img src={widthPicker} style = {toolButtons}/></Button>
+                    <Button variant="contained" onClick={undo}>Undo</Button>
+                    <Button variant="contained">Redo</Button>
+                    <Button variant="contained" onClick={toogleText}>Text</Button>
+                    <Button variant="contained">PaintBucket</Button>
+                    <Button variant="contained" onClick={toggleShapes}>Shapes</Button>
+                    <Button variant="contained" onClick={toogleTool}>hide</Button>
+                    <Button variant="contained">pan</Button>
+                    <Button variant="contained" onClick={clearCanvas}>clear</Button>
                 </div>
         }
         else{
@@ -236,17 +239,24 @@ const Canvas = (props) => {
     }
 
     function handleMouseMove(ev) { 
-        const cursor = document.querySelector(".cursor")
-        cursor.style.left = '${e.pageX}px'
-        cursor.style.top = '${e.pageY}px'
-        cursor.style.background = "cornflowerblue"
+        // const cursor = document.querySelector(".cursor")
+        // cursor.style.left = '${e.pageX}px'
+        // cursor.style.top = '${e.pageY}px'
+        // cursor.style.background = "cornflowerblue"
+    };
+
+    const logout = async () => {
+        await signOut(auth);
+        props.goToLogin();
     };
     
     return (
-        <div onMouseMove={(ev) => handleMouseMove(ev)}>
+        // <div onMouseMove={(ev) => handleMouseMove(ev)}>
+        <div>
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToDiscussions}>Discussions</button>
                 <button onClick={props.goToMessages}>DMs</button>
+                <button onClick={logout}>LogOut</button>
                 <canvas id="canvas"
                     onMouseDown={penDown}
                     onMouseUp={penUp}

@@ -5,14 +5,25 @@ import Messages from "./Messages"
 import Discussions from "./Discussions";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
+import {auth} from './firebase-config';
+import {onAuthStateChanged} from'firebase/auth';
 
 class App extends React.Component {
-
     constructor(){
         super()
-        this.state = {
-            Page: "Login"
+        this.state ={
+            Page: "Home"
         }
+    }
+
+    componentDidMount() {
+        onAuthStateChanged(auth, (user) => {
+            if(user){
+                this.setState({
+                    Page: "Discussions"
+                });
+            }
+        });
     }
 
     goToLogin = () => {
@@ -49,32 +60,32 @@ class App extends React.Component {
         if(this.state.Page === "Home") {
             return (
                 <div className="App">
-                    <Canvas goToMessages={this.goToMessages} goToDiscussions={this.goToDiscussions}/>
+                    <Canvas goToLogin={this.goToLogin} goToMessages={this.goToMessages} goToDiscussions={this.goToDiscussions}/>
                 </div>
             )
         }
         if(this.state.Page === "Discussions") {
             return (
                 <div className="App">
-                    <Discussions goToHome={this.goToHome} goToMessages={this.goToMessages}/>
+                    <Discussions goToLogin={this.goToLogin} goToHome={this.goToHome} goToMessages={this.goToMessages}/>
                 </div>
             )
         }
         if(this.state.Page === "Messages") {
             return (
                 <div className="App">
-                    <Messages goToHome={this.goToHome} goToDiscussions={this.goToDiscussions}/>
+                    <Messages goToLogin={this.goToLogin} goToHome={this.goToHome} goToDiscussions={this.goToDiscussions}/>
                 </div>
             )
         }
-        if(this.state.Page == "Login") {
+        if(this.state.Page ==="Login") {
             return (
                 <div className="App">
-                    <Login goToForgotPassword={this.goToForgotPassword}/>
+                    <Login goToHome={this.goToHome} goToForgotPassword={this.goToForgotPassword}/>
                 </div>
             )
         }
-        if(this.state.Page == "ForgotPassword") {
+        if(this.state.Page === "ForgotPassword") {
             return (
                 <div className="App">
                     <ForgotPassword goToLogin={this.goToLogin}/>
