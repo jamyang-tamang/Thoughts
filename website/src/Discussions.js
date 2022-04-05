@@ -221,6 +221,7 @@ const Discussions = (props) => {
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToHome}>Home</button>
                 <button onClick={props.goToMessages}>DMs</button>
+                <button onClick={logout}>LogOut</button>
             </div>
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>

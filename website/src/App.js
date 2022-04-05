@@ -49,28 +49,28 @@ class App extends React.Component {
         if(this.state.Page === "Home") {
             return (
                 <div className="App">
-                    <Canvas goToMessages={this.goToMessages} goToDiscussions={this.goToDiscussions}/>
+                    <Canvas goToMessages={this.goToMessages} goToDiscussions={this.goToDiscussions} goToLogin={this.goToLogin}/>
                 </div>
             )
         }
         if(this.state.Page === "Discussions") {
             return (
                 <div className="App">
-                    <Discussions goToHome={this.goToHome} goToMessages={this.goToMessages}/>
+                    <Discussions goToHome={this.goToHome} goToMessages={this.goToMessages} goToLogin={this.goToLogin}/>
                 </div>
             )
         }
         if(this.state.Page === "Messages") {
             return (
                 <div className="App">
-                    <Messages goToHome={this.goToHome} goToDiscussions={this.goToDiscussions}/>
+                    <Messages goToHome={this.goToHome} goToDiscussions={this.goToDiscussions} goToLogin={this.goToLogin}/>
                 </div>
             )
         }
         if(this.state.Page == "Login") {
             return (
                 <div className="App">
-                    <Login goToForgotPassword={this.goToForgotPassword}/>
+                    <Login goToHome={this.goToHome} goToForgotPassword={this.goToForgotPassword}/>
                 </div>
             )
         }

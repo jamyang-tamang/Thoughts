@@ -7,6 +7,8 @@ import pencil from './pencil.png';
 import eraser from './eraser.png';
 import colorPicker from './color-picker.png';
 import widthPicker from './width.png';
+import { signOut } from "firebase/auth";
+import {auth} from './firebase-config'
 
 const Canvas = (props) => {
     const contextRef = useRef(null)
@@ -161,6 +163,11 @@ const Canvas = (props) => {
 
     function Cursor(){ return <div style={cursorStyle}></div>;}
 
+    const logout = async () => {
+        await signOut(auth);
+        props.goToLogin();
+    };
+
     function DrawingTools () {
         if(toolVisible){
         return <div style={styleObj} >
@@ -243,10 +250,12 @@ const Canvas = (props) => {
     };
     
     return (
-        <div onMouseMove={(ev) => handleMouseMove(ev)}>
+        // <div onMouseMove={(ev) => handleMouseMove(ev)}>
+        <div >
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToDiscussions}>Discussions</button>
                 <button onClick={props.goToMessages}>DMs</button>
+                <button onClick={logout}>logout</button>
                 <canvas id="canvas"
                     onMouseDown={penDown}
                     onMouseUp={penUp}
