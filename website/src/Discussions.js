@@ -1,76 +1,238 @@
 import React from "react";
+import { useState, useEffect} from 'react';
+import { signOut } from "firebase/auth";
+import {auth} from './firebase-config'
+import { Fab, IconButton } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
+import {Stack, Container} from '@mui/material'
+import { db } from "./firebase-config";
+import {collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
+import Discussion from './components/discussions'
+import CreateIcon from '@mui/icons-material/Create';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import CancelIcon from '@mui/icons-material/Cancel';
+import Modal from 'react-modal'
+import Avatar from '@mui/material/Avatar';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
+import Typography from "@mui/material/Typography";
 
 const Discussions = (props) => {
-    const discussions = [
-        {name: 'Sample Discussions', key: '0', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key: '1', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key: '2', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'3', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'4', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'5', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'604', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'605', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'606', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'607', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'608', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'},
-        {name: 'Sample Discussions', key:'80', upvotes: '3', downvotes: '2', comments: '5', createdBy: 'adx_333'}
-    ];
+    const [discussions, setDiscussions] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [modalIsOpen, setModalOpen] = useState(false);
+    const [discussionTitle, setNewDiscussionTitle] = useState("");
+    const [postContent, setNewPostContent] = useState("");
+    const [contentLink, setNewContentLink] = useState("");
+    const [titlePresent, toggleTitlePresent] = useState(false);
+    
+    useEffect(()=> {
+        const colRef = collection(db, 'discussions');
 
-    const discussionsStyle={
-        alignContent: 'center',
-        flex: 5,
-        flexDirection: "row",
-        // marginLeft: '${window.innerWidth}px',
+        getDocs(colRef)
+        .then((snapshot) => {
+            let discussions = []
+            snapshot.docs.forEach((doc) => {
+            discussions.push({ ...doc.data(), key: doc.id })
+            })
+            setDiscussions(discussions)
+            console.log(discussions)
+        })
+        .catch(error => {
+            console.log(error.message)
+        })
+    }, []);
+    
+    // useEffect(()=> {
+    //     const colRef = collection(db, 'tags');
+
+    //     getDocs(colRef)
+    //     .then((snapshot) => {
+    //         let tags = []
+    //         snapshot.docs.forEach((doc) => {
+    //         discussions.push({ ...doc.data(), key: doc.id })
+    //         })
+    //         setDiscussions(tags)
+    //         console.log(tags)
+    //     })
+    //     .catch(error => {
+    //         console.log(error.message)
+    //     })
+    // }, []);
+
+    useEffect(()=> {
+        if(discussionTitle != "")
+            toggleTitlePresent(true);
+        toggleTitlePresent(false);
+    }, []);
+
+    const openModal = () => {
+        setModalOpen(true);
     }
 
-    const discussionStyle={
-        width: window.innerWidth*.8,
-        height: window.innerWidth/15,
-        background: "grey",
-        marginTop: 5,
-        marginBottom: 5,
+    const closeModal = () => {
+        setModalOpen(false);
+    }
+    
+    const resetModalForm = () => {
+        setNewDiscussionTitle("");
+        setNewPostContent("");
+        setTags([]);
+        closeModal();
     }
 
-
-    function Item(props) {
-        return <div style={discussionStyle} key = {props.key}> 
-        <div style={{ textAlign: 'center'}}>{props.name}</div>
-        <div>
-            <div> Upvotes: {props.upvotes}</div>
-            <div> Downvotes: {props.downvotes}</div>
-            <div> Comments: {props.comments}</div>
-        </div>
-        <div style={{textAlign: 'right'}}> Original Poster: {props.createdBy}</div>
-        </div>;
+    const postNewDisccusion = () => {
+        const colRef = collection(db, 'discussions');
+        addDoc(colRef, {
+            commentCount: 0,
+            contentId: "",
+            createdAt: Date().toLocaleString(),
+            creatorId: auth.currentUser.uid,
+            creatorName: auth.currentUser.email,
+            description: postContent,
+            downVoteCount: 0,
+            title: discussionTitle,
+            upVoteCount: 0,
+            updatedAt: Date().toLocaleString(),
+            tags: {tags},
+        })
+        .then(() => {
+            resetModalForm()
+        })
     }
 
-    function MyList(items) {
-        return (
-            <ul>
-                {items.map((item) => <Item key={item.key} value={item} />)}
-            </ul>
-        );
-    }
+    const logout = async () => {
+        await signOut(auth);
+        props.goToLogin();
+    };
+
+    const fabStyle = {
+        margin: 0,
+        top: 'auto',
+        right: 20,
+        bottom: 20,
+        left: 'auto',
+        position: 'fixed',
+    };
+
+    const customStyles = {
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+        },
+    };
+
     return(
         <div>
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                style={customStyles}
+                ariaHideApp={false}
+                >
+                <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                sx={{
+                    marginTop: 3,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+                >
+                <Avatar sx={{ m: 1, bgcolor: 'tertiary.main' }}>
+                    <CreateIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Create a New Post
+                </Typography>
+                <Box component="form" sx={{ mt: 3 }}>
+                    <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                        required
+                        fullWidth
+                        id="standard-basic"
+                        label="Title"
+                        name="email"
+                        autoComplete=""
+                        onChange={(event) => {
+                            setNewDiscussionTitle(event.target.value)
+                        }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                        fullWidth
+                        multiline
+                        id="post"
+                        label="Post"
+                        name="post"
+                        onChange={(event) => {
+                            setNewPostContent(event.target.value)
+                        }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                    <Autocomplete
+                        multiple
+                        id="tags-filled"
+                        options={tags.map((option) => option.title)}
+                        freeSolo
+                        renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                        ))
+                        }
+                        renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="filled"
+                            label="Tags"
+                            placeholder="Enter a tag for this post"
+                        />
+                        )}
+                    />
+                    </Grid>
+                    </Grid>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item justifyContent="flex-end">
+                            <IconButton size="large" color="secondary" onClick={closeModal}>
+                                <CancelIcon/>
+                            </IconButton>
+                            <IconButton disabled={titlePresent} size="large" color="primary" onClick={postNewDisccusion}>
+                                <PostAddIcon/>
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </Box>
+                </Box>
+            </Container>
+            </Modal>
+            
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToHome}>Home</button>
                 <button onClick={props.goToMessages}>DMs</button>
             </div>
-            
-            
-            <div style={{flex:5, flexDirection: "column", marginLeft: window.innerWidth*0.1, marginnRight: window.innerWidth*0.1}}>
-                <div style={{flex: 1}}/>
-                <div style={discussionsStyle}>
-                    <div style={{flex: 3}}>
-                        {discussions.map((item) => (
-                            <Item key={item.key} name={item.name} thumbnail={item.thumbnail} upvotes={item.upvotes} downvotes={item.downvotes} comments={item.comments} createdBy={item.createdBy}/>
-                        ))}
-                    </div>
-                </div>
-                <div style={{flex: 1}}/>
-            </div>
-            
+            <Container>
+                <Stack direction="column" m={5} spacing ={2}>
+                    {discussions.map((item) => (
+                        <Discussion key={item.key} title={item.title} upvotes={item.upVoteCount} downvotes={item.downVoteCount} 
+                        comments={item.commentCount} description={item.description} creatorName={item.creatorName}/>
+                    ))}
+                </Stack>
+                <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
+                    <Add />
+                </Fab>
+            </Container>
         </div>
     )
 }

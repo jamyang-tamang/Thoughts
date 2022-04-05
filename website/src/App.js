@@ -10,8 +10,8 @@ class App extends React.Component {
 
     constructor(){
         super()
-        this.state = {
-            Page: "Login"
+        this.state ={
+            Page: "Discussions"
         }
     }
 

@@ -2,7 +2,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from 'firebase/app';
 import {getAuth, onAuthStateChanged} from'firebase/auth';
-import {getDatabase} from'firebase/database';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyBo2Uy2IdTDQq-DR33WWH3MTA7P5O6sy8Q",
@@ -15,12 +15,27 @@ const firebaseApp = initializeApp({
 })
 
 export const auth = getAuth(firebaseApp);
-const db = getDatabase(firebaseApp);
-// const comments = collection(db, 'comments');
+export const db = getFirestore();
+
+const colRef = collection(db, 'discussions');
+
+getDocs(colRef)
+  .then((snapshot) => {
+    let discussions = []
+    snapshot.docs.forEach((doc) => {
+      discussions.push({ ...doc.data(), id: doc.id })
+    })
+    console.log(discussions)
+  })
+  .catch(error => {
+    console.log(error.message)
+  })
 
 onAuthStateChanged(auth, user=> {
   if(user != null){
-    console.log('logged in!');
+    console.log(auth.currentUser.email);
+    console.log(auth.currentUser.uid);
+    console.log('logged in!'); 
   }
   else{
     console.log('No user');
