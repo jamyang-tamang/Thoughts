@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useState} from 'react';
 import './App.css';
 import Canvas from "./Canvas";
 import Messages from "./Messages"
@@ -6,81 +6,68 @@ import Discussions from "./Discussions";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 
-class App extends React.Component {
-    constructor(){
-        super()
-        this.state ={
-            Page: "Login"
+const App = () => {
+    const [Page, setPage] = useState("Login")
+    // constructor(){
+    //     super()
+    //     this.state ={
+    //         Page: {JSON.parse(localStorage.getItem('page')) || 'Login'}
+    //     }
+    // }
+
+    const goToLogin = () => {
+        setPage("Login");
+    }
+
+    const goToForgotPassword = () => {
+        setPage("ForgotPassword");
+    }
+
+    const goToHome = () => {
+        setPage("Home");
+    }
+
+    const goToMessages = () => {
+        setPage("Messages");
+    }
+
+    const goToDiscussions = () => {
+        setPage("Discussions");
+    }
+
+    function Application() {
+        
+        if(Page === "Home") {
+            return ( <div className="App">
+                        <Canvas goToMessages={goToMessages} goToDiscussions={goToDiscussions} goToLogin={goToLogin}/>
+                    </div>);
+            }
+        if(Page === "Discussions") {
+                    return <div className="App">
+                        <Discussions goToHome={goToHome} goToMessages={goToMessages} goToLogin={goToLogin}/>
+                    </div>
+            }
+        if(Page === "Messages") {
+                    return <div className="App">
+                        <Messages goToHome={goToHome} goToDiscussions={goToDiscussions} goToLogin={goToLogin}/>
+                    </div>
+                
+            }
+        if(Page == "Login") {   
+                return <div className="App">
+                        <Login goToHome={goToHome} goToForgotPassword={goToForgotPassword}/>
+                    </div>
+            }
+        if(Page == "ForgotPassword") {
+                return <div className="App">
+                        <ForgotPassword goToLogin={goToLogin}/>
+                    </div>
         }
     }
 
-    goToLogin = () => {
-        this.setState({
-            Page: "Login"
-        });
-    }
-
-    goToForgotPassword = () => {
-        this.setState({
-            Page: "ForgotPassword"
-        });
-    }
-
-    goToHome = () => {
-        this.setState({
-            Page: "Home"
-        });
-    }
-
-    goToMessages = () => {
-        this.setState({
-            Page: "Messages"
-        });
-    }
-
-    goToDiscussions = () => {
-        this.setState({
-            Page: "Discussions"
-        });
-    }
-
-    render() {
-        if(this.state.Page === "Home") {
-            return (
-                <div className="App">
-                    <Canvas goToMessages={this.goToMessages} goToDiscussions={this.goToDiscussions} goToLogin={this.goToLogin}/>
-                </div>
-            )
-        }
-        if(this.state.Page === "Discussions") {
-            return (
-                <div className="App">
-                    <Discussions goToHome={this.goToHome} goToMessages={this.goToMessages} goToLogin={this.goToLogin}/>
-                </div>
-            )
-        }
-        if(this.state.Page === "Messages") {
-            return (
-                <div className="App">
-                    <Messages goToHome={this.goToHome} goToDiscussions={this.goToDiscussions} goToLogin={this.goToLogin}/>
-                </div>
-            )
-        }
-        if(this.state.Page == "Login") {
-            return (
-                <div className="App">
-                    <Login goToHome={this.goToHome} goToForgotPassword={this.goToForgotPassword}/>
-                </div>
-            )
-        }
-        if(this.state.Page == "ForgotPassword") {
-            return (
-                <div className="App">
-                    <ForgotPassword goToLogin={this.goToLogin}/>
-                </div>
-            )
-        }
-    }
-}
+    return(
+        <Application/>
+    )
+};
 
 export default App;
