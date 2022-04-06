@@ -6,7 +6,7 @@ import { Fab, IconButton } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import {Stack, Container} from '@mui/material'
 import { db } from "./firebase-config";
-import {collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
+import {collection, onSnapshot, addDoc} from "firebase/firestore";
 import Discussion from './components/discussions'
 import CreateIcon from '@mui/icons-material/Create';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -27,42 +27,24 @@ const Discussions = (props) => {
     const [modalIsOpen, setModalOpen] = useState(false);
     const [discussionTitle, setNewDiscussionTitle] = useState("");
     const [postContent, setNewPostContent] = useState("");
-    const [contentLink, setNewContentLink] = useState("");
+    // const [contentLink, setNewContentLink] = useState("");
     const [titlePresent, toggleTitlePresent] = useState(false);
+    const colRef = collection(db, 'discussions');
     
     useEffect(()=> {
-        const colRef = collection(db, 'discussions');
-
-        getDocs(colRef)
-        .then((snapshot) => {
-            let discussions = []
-            snapshot.docs.forEach((doc) => {
-            discussions.push({ ...doc.data(), key: doc.id })
-            })
-            setDiscussions(discussions)
-            console.log(discussions)
-        })
-        .catch(error => {
-            console.log(error.message)
-        })
+        onSnapshot(collection(db, 'discussions'),
+            (snapshot) => {
+                let discussions = []
+                snapshot.forEach((doc) => {
+                discussions.push({ ...doc.data(), key: doc.id })
+                })
+                setDiscussions(discussions);
+            },
+            (error) => {
+                console.log(error.message)
+            }
+        )
     }, []);
-    
-    // useEffect(()=> {
-    //     const colRef = collection(db, 'tags');
-
-    //     getDocs(colRef)
-    //     .then((snapshot) => {
-    //         let tags = []
-    //         snapshot.docs.forEach((doc) => {
-    //         discussions.push({ ...doc.data(), key: doc.id })
-    //         })
-    //         setDiscussions(tags)
-    //         console.log(tags)
-    //     })
-    //     .catch(error => {
-    //         console.log(error.message)
-    //     })
-    // }, []);
 
     useEffect(()=> {
         if(discussionTitle != "")
@@ -86,14 +68,13 @@ const Discussions = (props) => {
     }
 
     const postNewDisccusion = () => {
-        const colRef = collection(db, 'discussions');
         addDoc(colRef, {
             commentCount: 0,
             contentId: "",
             createdAt: Date().toLocaleString(),
             creatorId: auth.currentUser.uid,
             creatorName: auth.currentUser.email,
-            description: postContent,
+            contentText: postContent,
             downVoteCount: 0,
             title: discussionTitle,
             upVoteCount: 0,
@@ -208,8 +189,8 @@ const Discussions = (props) => {
                             <IconButton size="large" color="secondary" onClick={closeModal}>
                                 <CancelIcon/>
                             </IconButton>
-                            <IconButton disabled={titlePresent} size="large" color="primary" onClick={postNewDisccusion}>
-                                <PostAddIcon/>
+                            <IconButton disabled={titlePresent} size="large" onClick={postNewDisccusion}>
+                                <PostAddIcon color="success"/>
                             </IconButton>
                         </Grid>
                     </Grid>
@@ -226,8 +207,8 @@ const Discussions = (props) => {
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>
                     {discussions.map((item) => (
-                        <Discussion key={item.key} title={item.title} upvotes={item.upVoteCount} downvotes={item.downVoteCount} 
-                        comments={item.commentCount} description={item.description} creatorName={item.creatorName}/>
+                        <Discussion id={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
+                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName}/>
                     ))}
                 </Stack>
                 <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">

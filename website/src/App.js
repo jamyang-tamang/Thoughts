@@ -7,11 +7,10 @@ import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 
 class App extends React.Component {
-
     constructor(){
         super()
         this.state ={
-            Page: "Discussions"
+            Page: "Login"
         }
     }
 

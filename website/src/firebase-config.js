@@ -19,18 +19,6 @@ export const db = getFirestore();
 
 const colRef = collection(db, 'discussions');
 
-getDocs(colRef)
-  .then((snapshot) => {
-    let discussions = []
-    snapshot.docs.forEach((doc) => {
-      discussions.push({ ...doc.data(), id: doc.id })
-    })
-    console.log(discussions)
-  })
-  .catch(error => {
-    console.log(error.message)
-  })
-
 onAuthStateChanged(auth, user=> {
   if(user != null){
     console.log(auth.currentUser.email);

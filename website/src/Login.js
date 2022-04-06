@@ -18,11 +18,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {db} from './firebase-config';
+import {collection, addDoc} from "firebase/firestore";
+
 
 const Login = (props) => {
     Modal.setAppElement(this);
-
-    const [user, setCurrentUser] = useState ({});
+    const [registerUserName, setRegisterUserName] = useState("");
     const [registerEmail, setRegisterEmail] = useState ("");
     const [registerPassword, setRegisterPassword] = useState ("");
     const [loginEmail, setLoginEmail] = useState ("");
@@ -30,10 +32,7 @@ const Login = (props) => {
     const [modalIsOpen, setModalOpen] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState ("");
     const [signUpErrorMessage, setSignupErrorMessage] = useState ("");
-
-    onAuthStateChanged(auth, (currentUser) => {
-        setCurrentUser(currentUser);
-    })
+    const colRef = collection(db, 'users');
 
     const openModal = () => {
         setModalOpen(true);
@@ -43,6 +42,13 @@ const Login = (props) => {
         setModalOpen(false);
     }
 
+    const createUser = () => {
+      addDoc(colRef, {
+          userName: registerUserName,
+          email: registerEmail,
+      })
+  }
+
     const register = async () => {
         try {
             const user = await createUserWithEmailAndPassword(
@@ -51,6 +57,7 @@ const Login = (props) => {
                 registerPassword);
             console.log(user);
             setSignupErrorMessage("");
+            createUser();
             props.goToHome();
         } catch (error) {
             console.log(error.message);
@@ -123,27 +130,19 @@ const Login = (props) => {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              {/* <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
+                  id="userName"
+                  label="User Name"
+                  name="name"
+                  autoComplete="name"
+                  onChange={(event) => {
+                    setRegisterUserName(event.target.value)
+                }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required
