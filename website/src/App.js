@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import './App.css';
 import Canvas from "./Canvas";
 import Messages from "./Messages"
@@ -6,14 +6,20 @@ import Discussions from "./Discussions";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 
+function getPage() {
+    const activePage = sessionStorage.getItem("Page");
+    if (!activePage) {
+      return "Login";
+    }
+    return JSON.parse(activePage);
+  }
+
 const App = () => {
-    const [Page, setPage] = useState("Login")
-    // constructor(){
-    //     super()
-    //     this.state ={
-    //         Page: {JSON.parse(localStorage.getItem('page')) || 'Login'}
-    //     }
-    // }
+    const [Page, setPage] = useState(getPage)
+
+    useEffect(() => {
+        sessionStorage.setItem('Page', JSON.stringify(Page));
+    }, [Page]);   
 
     const goToLogin = () => {
         setPage("Login");
