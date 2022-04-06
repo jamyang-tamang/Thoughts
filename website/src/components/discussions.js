@@ -1,13 +1,17 @@
-import { useState, useEffect} from 'react';
-import { Stack, Typography, Box, Button ,IconButton} from "@mui/material"
+import  {React, useState, useEffect} from 'react';
+import { Stack, Typography, Box, Button ,IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
 import {auth, db} from '../firebase-config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Discussion = (props) => {
-    
+    const [modalIsOpen, setModalOpen] = useState(false);
+    const [discussionTitle, setNewDiscussionTitle] = useState("");
+    const [postContent, setNewPostContent] = useState("");
+
     const deleteDiscussion = value => () => {
         console.log(value);
         deleteDoc(doc(db, "discussions", value)); 
@@ -25,7 +29,7 @@ const Discussion = (props) => {
         })
     }
 
-    const updateDiscussion = value => () => { 
+    const editDiscussion = value => () => { 
         updateDoc(doc(db, "discussions", value.id),{
             // commentCount: value.commentCount,
             contentText: value.postContentText,
@@ -40,6 +44,12 @@ const Discussion = (props) => {
     function DeleteButton (){
         if(auth.currentUser.email === props.creatorName)
             return <IconButton onClick={deleteDiscussion(props.id)}><DeleteIcon /></IconButton>;
+        return null
+    }
+
+    function EditButton (){
+        if(auth.currentUser.email === props.creatorName)
+            return <IconButton onClick={editDiscussion(props) }><EditIcon /></IconButton>;
         return null
     }
 
@@ -70,7 +80,10 @@ const Discussion = (props) => {
                 <Typography>{props.commentCount} comments</Typography>
                 <Typography>Submitted by {props.creatorName} </Typography>
             </Box>
-            <DeleteButton id={props.id} />
+            <Stack direction="Column">
+                <DeleteButton id={props.id} />
+                <EditButton id={props.id}/>
+            </Stack>
         </Stack>
     )
     

@@ -106,7 +106,7 @@ const Login = (props) => {
 
     return(
     <ThemeProvider theme={theme}>
-        <Modal
+      <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
