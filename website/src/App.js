@@ -1,22 +1,40 @@
 import {React, useState, useEffect} from 'react';
 import './App.css';
-import Canvas from "./Canvas";
-import Messages from "./Messages"
-import Discussions from "./Discussions";
-import Login from "./Login";
-import ForgotPassword from "./ForgotPassword";
-
+import {auth} from'./firebase-config';
+import Canvas from "./components/Canvas/Canvas";
+import Messages from "./components/Messages/Messages"
+import Login from "./components/Login/Login";
+import ForgotPassword from "./components/Login/ForgotPassword";
+import DiscussionCommentView from './components/Discussions/DiscussionCommentView';
+import {onAuthStateChanged} from'firebase/auth';
+  
 function getPage() {
-    const activePage = sessionStorage.getItem("Page");
-    if (!activePage) {
-      return "Login";
-    }
-    return JSON.parse(activePage);
+    // if(userPresent){
+        const activePage = sessionStorage.getItem("Page");
+        if (!activePage) {
+            return "Login";
+        }
+        return JSON.parse(activePage);
+    // }
+    // else{
+    //     return "Login";
+    // }
   }
 
 const App = () => {
     const [Page, setPage] = useState(getPage)
+    // const [userPresent, setUserPresenece] = useState(false);
 
+    // onAuthStateChanged(auth, user=> {
+    //     if(user != null){
+    //       userPresent = true;
+    //     }
+    //     else{
+    //       userPresent = false;
+    //     }
+    //   })
+  
+      
     useEffect(() => {
         sessionStorage.setItem('Page', JSON.stringify(Page));
     }, [Page]);   
@@ -50,7 +68,7 @@ const App = () => {
             }
         if(Page === "Discussions") {
                     return <div className="App">
-                        <Discussions goToHome={goToHome} goToMessages={goToMessages} goToLogin={goToLogin}/>
+                        <DiscussionCommentView goToHome={goToHome} goToMessages={goToMessages} goToLogin={goToLogin}/>
                     </div>
             }
         if(Page === "Messages") {
@@ -59,12 +77,12 @@ const App = () => {
                     </div>
                 
             }
-        if(Page == "Login") {   
+        if(Page === "Login") {   
                 return <div className="App">
                         <Login goToHome={goToHome} goToForgotPassword={goToForgotPassword}/>
                     </div>
             }
-        if(Page == "ForgotPassword") {
+        if(Page === "ForgotPassword") {
                 return <div className="App">
                         <ForgotPassword goToLogin={goToLogin}/>
                     </div>

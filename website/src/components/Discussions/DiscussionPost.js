@@ -2,15 +2,16 @@ import  {React, useState, useEffect} from 'react';
 import { Stack, Typography, Box, Button ,IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
-import {auth, db} from '../firebase-config'
+import {auth, db} from '../../firebase-config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import EditIcon from '@mui/icons-material/Edit';
 
-const Discussion = (props) => {
-    const [modalIsOpen, setModalOpen] = useState(false);
-    const [discussionTitle, setNewDiscussionTitle] = useState("");
-    const [postContent, setNewPostContent] = useState("");
+const DiscussionPost = (props) => {
+
+    // const launchDiscussion = value => () => {
+    //     return <Discussion props={props}/>
+    // }
 
     const deleteDiscussion = value => () => {
         console.log(value);
@@ -35,7 +36,6 @@ const Discussion = (props) => {
             contentText: value.postContentText,
             // downVoteCount: value.downVoteCount,
             title: value.title,
-            
             updatedAt: Date().toLocaleString(),
             tags: value.tags,
         })
@@ -74,7 +74,8 @@ const Discussion = (props) => {
                     backgroundColor: 'primary.main',
                     opacity: [0.9, 0.8, 0.7],
                     },
-                }}
+                }} 
+                onClick={props.toggleDiscussion}
                 > 
                 <Typography>{props.title} </Typography>
                 <Typography>{props.commentCount} comments</Typography>
@@ -89,4 +90,4 @@ const Discussion = (props) => {
     
 }
 
-export default Discussion
+export default DiscussionPost

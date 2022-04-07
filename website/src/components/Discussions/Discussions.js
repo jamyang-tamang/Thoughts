@@ -1,13 +1,13 @@
 import React from "react";
 import { useState, useEffect} from 'react';
 import { signOut } from "firebase/auth";
-import {auth} from './firebase-config'
+import {auth} from '../../firebase-config'
 import { Fab, IconButton } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import {Stack, Container} from '@mui/material'
-import { db } from "./firebase-config";
+import { db } from "../../firebase-config";
 import {collection, onSnapshot, addDoc} from "firebase/firestore";
-import Discussion from './components/discussions'
+import DiscussionPost from './DiscussionPost'
 import CreateIcon from '@mui/icons-material/Create';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -207,8 +207,8 @@ const Discussions = (props) => {
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>
                     {discussions.map((item) => (
-                        <Discussion id={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
-                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName}/>
+                        <DiscussionPost id={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
+                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} toggleDiscussion={props.toggleDiscussion}/>
                     ))}
                 </Stack>
                 <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">

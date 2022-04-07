@@ -2,7 +2,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from 'firebase/app';
 import {getAuth, onAuthStateChanged} from'firebase/auth';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection } from 'firebase/firestore';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyBo2Uy2IdTDQq-DR33WWH3MTA7P5O6sy8Q",
@@ -17,18 +17,17 @@ const firebaseApp = initializeApp({
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore();
 
-const colRef = collection(db, 'discussions');
-
 onAuthStateChanged(auth, user=> {
   if(user != null){
     console.log(auth.currentUser.email);
     console.log(auth.currentUser.uid);
-    console.log('logged in!'); 
+    console.log('logged in!');
   }
   else{
     console.log('No user');
   }
 })
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

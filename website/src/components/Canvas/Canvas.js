@@ -3,12 +3,12 @@ import { useRef, useState, useLayoutEffect} from 'react';
 import {SketchPicker } from 'react-color'
 import LineWidthPicker from 'react-line-width-picker'
 import 'react-line-width-picker/dist/index.css'
-import pencil from './pencil.png';
-import eraser from './eraser.png';
-import colorPicker from './color-picker.png';
-import widthPicker from './width.png';
+import pencil from '../../Assets/Canvas/pencil.png';
+import eraser from '../../Assets/Canvas/eraser.png';
+import colorPicker from '../../Assets/Canvas/color-picker.png';
+import widthPicker from '../../Assets/Canvas/width-picker.png';
 import { signOut } from "firebase/auth";
-import {auth} from './firebase-config'
+import {auth} from '../../firebase-config'
 
 const Canvas = (props) => {
     const contextRef = useRef(null)

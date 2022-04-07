@@ -1,7 +1,7 @@
 import React from "react";
 import {useState} from "react";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import {auth} from './firebase-config'
+import {auth} from '../../firebase-config'
 import Modal from 'react-modal'
 
 import Avatar from '@mui/material/Avatar';
@@ -18,7 +18,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {db} from './firebase-config';
+import {db} from '../../firebase-config';
 import {collection, addDoc} from "firebase/firestore";
 
 
