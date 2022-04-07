@@ -6,9 +6,9 @@ import {auth, db} from '../../firebase-config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import EditIcon from '@mui/icons-material/Edit';
+import NewCommentModal from './Comments/NewCommentModal'
 
 const DiscussionPost = (props) => {
-
     // const launchDiscussion = value => () => {
     //     return <Discussion props={props}/>
     // }
@@ -54,38 +54,40 @@ const DiscussionPost = (props) => {
     }
 
     return (
-        <Stack key={props.id} alignItems="flex-start" direction="row">
-                <Stack direction="Row">
-                    <Stack direction="Column">
-                        <IconButton onClick={upVote(props)}><ThumbUpIcon /></IconButton>
-                        <Box>{props.upVoteCount}</Box>
+        <div>
+            <Stack key={props.id} alignItems="flex-start" direction="row">
+                    <Stack direction="Row">
+                        <Stack direction="Column">
+                            <IconButton onClick={upVote(props)}><ThumbUpIcon /></IconButton>
+                            <Box>{props.upVoteCount}</Box>
+                        </Stack>
+                        <Stack direction="Column">
+                            <IconButton onClick={downVote(props)}><ThumbDownIcon /></IconButton>
+                            <Box>{props.downVoteCount}</Box>
+                        </Stack>
                     </Stack>
-                    <Stack direction="Column">
-                        <IconButton onClick={downVote(props)}><ThumbDownIcon /></IconButton>
-                        <Box>{props.downVoteCount}</Box>
-                    </Stack>
+                <Box
+                    sx={{
+                        width: window.innerWidth,
+                        padding: 4,
+                        backgroundColor: 'primary.main',
+                        '&:hover': {
+                        backgroundColor: 'primary.main',
+                        opacity: [0.9, 0.8, 0.7],
+                        },
+                    }} 
+                    onClick={props.toggleDiscussion}
+                    > 
+                    <Typography>{props.title} </Typography>
+                    <Typography>{props.commentCount} comments</Typography>
+                    <Typography>Submitted by {props.creatorName} </Typography>
+                </Box>
+                <Stack direction="Column">
+                    <DeleteButton id={props.id} />
+                    <EditButton id={props.id}/>
                 </Stack>
-            <Box
-                sx={{
-                    width: window.innerWidth,
-                    padding: 4,
-                    backgroundColor: 'primary.main',
-                    '&:hover': {
-                    backgroundColor: 'primary.main',
-                    opacity: [0.9, 0.8, 0.7],
-                    },
-                }} 
-                onClick={props.toggleDiscussion}
-                > 
-                <Typography>{props.title} </Typography>
-                <Typography>{props.commentCount} comments</Typography>
-                <Typography>Submitted by {props.creatorName} </Typography>
-            </Box>
-            <Stack direction="Column">
-                <DeleteButton id={props.id} />
-                <EditButton id={props.id}/>
             </Stack>
-        </Stack>
+        </div>
     )
     
 }

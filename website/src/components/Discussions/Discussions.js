@@ -2,35 +2,19 @@ import React from "react";
 import { useState, useEffect} from 'react';
 import { signOut } from "firebase/auth";
 import {auth} from '../../firebase-config'
-import { Fab, IconButton } from '@material-ui/core';
+import { Fab } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import {Stack, Container} from '@mui/material'
 import { db } from "../../firebase-config";
 import {collection, onSnapshot, addDoc} from "firebase/firestore";
 import DiscussionPost from './DiscussionPost'
-import CreateIcon from '@mui/icons-material/Create';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import CancelIcon from '@mui/icons-material/Cancel';
-import Modal from 'react-modal'
-import Avatar from '@mui/material/Avatar';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Autocomplete from "@mui/material/Autocomplete";
-import Chip from "@mui/material/Chip";
-import Typography from "@mui/material/Typography";
 
 import NewDiscussionModal from './NewDiscussionModal';
 
 const Discussions = (props) => {
     const [discussions, setDiscussions] = useState([]);
     const [modalIsOpen, setModalOpen] = useState(false);
-    
-    // const [contentLink, setNewContentLink] = useState("");
-    
-    
-    
+
     useEffect(()=> {
         onSnapshot(collection(db, 'discussions'),
             (snapshot) => {
@@ -68,12 +52,9 @@ const Discussions = (props) => {
         position: 'fixed',
     };
 
-
-
     return(
         <div> 
             <NewDiscussionModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
-
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToHome}>Home</button>
                 <button onClick={props.goToMessages}>DMs</button>

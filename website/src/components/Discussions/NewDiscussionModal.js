@@ -1,11 +1,10 @@
 import React from "react";
 import { useState, useEffect} from 'react';
-import { signOut } from "firebase/auth";
 import {auth} from '../../firebase-config'
-import { Fab, IconButton } from '@material-ui/core';
-import {Stack, Container} from '@mui/material'
+import { IconButton } from '@material-ui/core';
+import {Container} from '@mui/material'
 import { db } from "../../firebase-config";
-import {collection, onSnapshot, addDoc} from "firebase/firestore";
+import {collection, addDoc} from "firebase/firestore";
 import CreateIcon from '@mui/icons-material/Create';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -24,6 +23,7 @@ const NewDiscussionModal = (props) => {
     const [discussionTitle, setNewDiscussionTitle] = useState("");
     const [postContent, setNewPostContent] = useState("");
     const [tags, setTags] = useState([]);
+    // const [contentLink, setNewContentLink] = useState("");
 
     const colRef = collection(db, 'discussions');
     
