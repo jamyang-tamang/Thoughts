@@ -3,8 +3,8 @@ import { Stack, Typography, Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { updateDoc, deleteDoc, doc } from "firebase/firestore";
 import {auth, db} from '../../../firebase-config'
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/Edit';
 
 const Comment = (props) => {
@@ -53,12 +53,9 @@ const Comment = (props) => {
         <Stack key={props.commentId} alignItems="flex-start" direction="row">
                 <Stack direction="row">
                     <Stack direction="column">
-                        <IconButton onClick={upVote(props)}><ThumbUpIcon /></IconButton>
-                        <Box>{props.upVoteCount}</Box>
-                    </Stack>
-                    <Stack direction="column">
-                        <IconButton onClick={downVote(props)}><ThumbDownIcon /></IconButton>
-                        <Box>{props.downVoteCount}</Box>
+                        <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
+                        <Box style={{alignContent:"center"}}>{props.upVoteCount - props.downVoteCount}</Box>
+                        <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                     </Stack>
                 </Stack>
             <Box
