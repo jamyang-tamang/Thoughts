@@ -19,19 +19,19 @@ const DiscussionPost = (props) => {
     }
 
     const upVote = value => () => {
-        updateDoc(doc(db, "discussions", value.id),{
+        updateDoc(doc(db, "discussions", value.discussionId),{
             upVoteCount: value.upVoteCount + 1,
         })
     }
 
     const downVote = value => () => {
-        updateDoc(doc(db, "discussions", value.id),{
+        updateDoc(doc(db, "discussions", value.discussionId),{
             downVoteCount: value.downVoteCount + 1,
         })
     }
 
     const editDiscussion = value => () => { 
-        updateDoc(doc(db, "discussions", value.id),{
+        updateDoc(doc(db, "discussions", value.discussionId),{
             // commentCount: value.commentCount,
             contentText: value.postContentText,
             // downVoteCount: value.downVoteCount,
@@ -43,7 +43,7 @@ const DiscussionPost = (props) => {
 
     function DeleteButton (){
         if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={deleteDiscussion(props.id)}><DeleteIcon /></IconButton>;
+            return <IconButton onClick={deleteDiscussion(props.discussionId)}><DeleteIcon /></IconButton>;
         return null
     }
 
@@ -53,9 +53,11 @@ const DiscussionPost = (props) => {
         return null
     }
 
+
+
     return (
         <div>
-            <Stack key={props.id} alignItems="flex-start" direction="row">
+            <Stack key={props.discussionId} alignItems="flex-start" direction="row">
                     <Stack direction="Row">
                         <Stack direction="Column">
                             <IconButton onClick={upVote(props)}><ThumbUpIcon /></IconButton>
@@ -76,15 +78,16 @@ const DiscussionPost = (props) => {
                         opacity: [0.9, 0.8, 0.7],
                         },
                     }} 
-                    onClick={props.toggleDiscussion}
+                    onClick={props.toggleDiscussion(props.discussionId)}
                     > 
                     <Typography>{props.title} </Typography>
                     <Typography>{props.commentCount} comments</Typography>
                     <Typography>Submitted by {props.creatorName} </Typography>
+                    <Typography>Created at {props.createdAt} </Typography>
                 </Box>
                 <Stack direction="Column">
-                    <DeleteButton id={props.id} />
-                    <EditButton id={props.id}/>
+                    <DeleteButton id={props.discussionId} />
+                    <EditButton id={props.discussionId}/>
                 </Stack>
             </Stack>
         </div>

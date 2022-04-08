@@ -11,7 +11,7 @@ import DiscussionPost from './DiscussionPost'
 
 import NewDiscussionModal from './NewDiscussionModal';
 
-const Discussions = (props) => {
+const AllDiscussions = (props) => {
     const [discussions, setDiscussions] = useState([]);
     const [modalIsOpen, setModalOpen] = useState(false);
 
@@ -63,8 +63,8 @@ const Discussions = (props) => {
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>
                     {discussions.map((item) => (
-                        <DiscussionPost id={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
-                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} toggleDiscussion={props.toggleDiscussion}/>
+                        <DiscussionPost discussionId={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
+                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} toggleDiscussion={props.toggleDiscussion} setDiscussionId={props.setDiscussionId}/>
                     ))}
                 </Stack>
                 <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
@@ -75,5 +75,5 @@ const Discussions = (props) => {
     )
 }
 
-export default Discussions;
+export default AllDiscussions;
 

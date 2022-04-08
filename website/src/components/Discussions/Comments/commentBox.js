@@ -72,7 +72,7 @@ const Comment = (props) => {
                     },
                 }}
                 > 
-                <Typography>{props.title} </Typography>
+                <Typography>{props.discussionId} {props.comment}</Typography>
                 <Typography>{props.commentCount} comments</Typography>
                 <Typography>Submitted by {props.creatorName} </Typography>
             </Box>

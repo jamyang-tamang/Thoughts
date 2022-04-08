@@ -1,26 +1,35 @@
 import  {React, useState, useEffect} from 'react';
-import Discussions from './Discussions';
+import AllDiscussions from './AllDiscussions';
 import DiscussionThread from './DiscussionThread';
 
 
 const DiscussionCommentView = (props) => {
-    const [showDiscussion, setDiscussion] = useState(true);
+    const [showIndividualDiscussion, setDiscussion] = useState(true);
+    const [discussionId, setDiscussionId] = useState("None");
 
-    function toggleDiscussion(){
-        console.log("TogglingDiscussions");
-        if(showDiscussion)
+    useEffect(() => {
+        if(showIndividualDiscussion){  
+            console.log("discussionId: " + discussionId);
             setDiscussion(false);
-        else
+        }
+        else{
+            console.log("Showing individual discussion");
+            console.log("discussionId: " + discussionId);
             setDiscussion(true);
+        }
+    }, [discussionId]);
+
+    const toggleDiscussion = value => () => {
+        setDiscussionId(value);
     }
     
     function View() {
-        if(showDiscussion)
+        if(showIndividualDiscussion)
             return(
-                <Discussions toggleDiscussion={toggleDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+                <DiscussionThread discussionId={discussionId} toggleDiscussion={toggleDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
             )
         return(
-            <DiscussionThread goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin} toggleDiscussion={toggleDiscussion}/>
+            <AllDiscussions toggleDiscussion={toggleDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
         )
     }
 

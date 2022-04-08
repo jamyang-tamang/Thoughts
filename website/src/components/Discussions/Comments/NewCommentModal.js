@@ -1,10 +1,9 @@
 import React from "react";
 import { useState, useEffect} from 'react';
-import { signOut } from "firebase/auth";
 import {auth, db} from '../../../firebase-config'
-import { Fab, IconButton } from '@material-ui/core';
-import {Stack, Container} from '@mui/material'
-import {collection, updateDoc, doc, onSnapshot, addDoc, query, where} from "firebase/firestore";
+import { IconButton } from '@material-ui/core';
+import {Container} from '@mui/material'
+import {collection, addDoc} from "firebase/firestore";
 import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -42,7 +41,7 @@ const NewCommentModal = (props) => {
             comment: newComment,
             upVoteCount: 0,
             updatedAt: Date().toLocaleString(),
-            discussionId: "props.discussionId",
+            discussionId: props.discussionId,
         })
         .then(() => {
             resetModalForm()

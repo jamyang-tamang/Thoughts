@@ -17,16 +17,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
 import NewCommentModal from "./Comments/NewCommentModal"
+import Button from "@mui/material/Button"
 
 
 const DiscussionThread = (props) => {
     const [comments, setComments] = useState([]);
     const [modalIsOpen, setModalOpen] = useState(false);
     
-    const colRef = collection(db, 'comments');
-    
     useEffect(()=> {
-        const q = query (collection(db, "comments"), where("discussionId", "==", "ads"));
+        const q = query (collection(db, "comments"), where("discussionId", "==", props.discussionId));
     
         onSnapshot(q, (querySnapshot) => {
             const comments = [];
@@ -39,8 +38,6 @@ const DiscussionThread = (props) => {
             console.log(error.message)
         })
     }, []);
-
-    
 
     const openModal = () => {
         setModalOpen(true);
@@ -64,44 +61,54 @@ const DiscussionThread = (props) => {
         position: 'fixed',
     };
 
-    return(
-        <div>
-            <NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} discussionId={props.key}/>
-            <div style = {{textAlign: "center"}}>
-                <button onClick={props.goToHome}>Home</button>
-                <button onClick={props.goToMessages}>DMs</button>
-                <button onClick={logout}>LogOut</button>
+    // if(comments.length > 0){
+        return(
+            <div>
+                <NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} discussionId={props.discussionId}/>
+                <div style = {{textAlign: "center"}}>
+                    <button onClick={props.toggleDiscussion("None")}>Back</button>
+                    <button onClick={props.goToHome}>Home</button>
+                    <button onClick={props.goToMessages}>DMs</button>
+                    <button onClick={logout}>LogOut</button>
+                </div>
+                <Container>
+                    <Box
+                        sx={{
+                            width: window.innerWidth,
+                            margin: 3,
+                            padding: 4,
+                            backgroundColor: 'primary.main',
+                            '&:hover': {
+                            backgroundColor: 'primary.main',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                        }}
+                        >
+                        <Typography>Comment Title</Typography> 
+                        <Typography>{props.title}</Typography>
+                        <Typography>{props.commentCount} comments</Typography>
+                        <Typography>Submitted by {props.creatorName} {props.createdAt} hours ago</Typography>
+                    </Box>
+                    <Stack direction="column" m={5} spacing ={2}>
+                        {comments.map((item) => (
+                            <CommentBox id={item.key} comment={item.comment} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
+                            commentCount={item.commentCount} contentText={item.contentText} disccusionId={item.discussionId} creatorName={item.creatorName}/>
+                        ))}
+                    </Stack>
+                    <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
+                        <CommentIcon />
+                    </Fab>
+                </Container>
             </div>
-            <Container>
-                <Box
-                    sx={{
-                        width: window.innerWidth,
-                        margin: 3,
-                        padding: 4,
-                        backgroundColor: 'primary.main',
-                        '&:hover': {
-                        backgroundColor: 'primary.main',
-                        opacity: [0.9, 0.8, 0.7],
-                        },
-                    }}
-                    > 
-                    <Typography>{props.title}</Typography>
-                    <Typography>{props.commentCount} comments</Typography>
-                    <Typography>Submitted by {props.creatorName} {props.createdAt} hours ago</Typography>
-                </Box>
-                <Stack direction="column" m={5} spacing ={2}>
-                    {comments.map((item) => (
-                        <CommentBox id={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
-                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName}/>
-                    ))}
-                </Stack>
-                <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
-                    <CommentIcon />
-                </Fab>
-            </Container>
-        </div>
-    )
-}
+        )
+    }
+    // else{
+    //     return <div><NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} discussionId={props.discussionId}/><Button>no comments</Button> 
+    //     <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
+    //                     <CommentIcon />
+    //                 </Fab></div>
+    // }
+// }
 
 export default DiscussionThread;
 
