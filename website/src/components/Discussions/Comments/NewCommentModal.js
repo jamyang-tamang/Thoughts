@@ -22,10 +22,10 @@ const NewCommentModal = (props) => {
     const colRef = collection(db, 'comments');
 
     useEffect(()=> {
-        if(newComment != "")
+        if(newComment !== "")
             toggleCommentPresent(true);
         toggleCommentPresent(false);
-    }, []);
+    }, [newComment]);
 
     const resetModalForm = () => {
         setNewComment("");

@@ -1,17 +1,13 @@
-import  {React, useState, useEffect} from 'react';
-import { Stack, Typography, Box, Button ,IconButton} from "@mui/material";
+import  {React} from 'react';
+import { Stack, Typography, Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
+import { updateDoc, deleteDoc, doc} from "firebase/firestore";
 import {auth, db} from '../../firebase-config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import EditIcon from '@mui/icons-material/Edit';
-import NewCommentModal from './Comments/NewCommentModal'
 
 const DiscussionPost = (props) => {
-    // const launchDiscussion = value => () => {
-    //     return <Discussion props={props}/>
-    // }
 
     const deleteDiscussion = value => () => {
         console.log(value);
@@ -30,7 +26,7 @@ const DiscussionPost = (props) => {
         })
     }
 
-    const editDiscussion = value => () => { 
+    const editComment = value => () => { 
         updateDoc(doc(db, "discussions", value.discussionId),{
             // commentCount: value.commentCount,
             contentText: value.postContentText,
@@ -49,7 +45,7 @@ const DiscussionPost = (props) => {
 
     function EditButton (){
         if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={editDiscussion(props) }><EditIcon /></IconButton>;
+            return <IconButton onClick={editComment(props) }><EditIcon /></IconButton>;
         return null
     }
 
@@ -58,12 +54,12 @@ const DiscussionPost = (props) => {
     return (
         <div>
             <Stack key={props.discussionId} alignItems="flex-start" direction="row">
-                    <Stack direction="Row">
-                        <Stack direction="Column">
+                    <Stack direction="row">
+                        <Stack direction="column">
                             <IconButton onClick={upVote(props)}><ThumbUpIcon /></IconButton>
                             <Box>{props.upVoteCount}</Box>
                         </Stack>
-                        <Stack direction="Column">
+                        <Stack direction="column">
                             <IconButton onClick={downVote(props)}><ThumbDownIcon /></IconButton>
                             <Box>{props.downVoteCount}</Box>
                         </Stack>
@@ -85,7 +81,7 @@ const DiscussionPost = (props) => {
                     <Typography>Submitted by {props.creatorName} </Typography>
                     <Typography>Created at {props.createdAt} </Typography>
                 </Box>
-                <Stack direction="Column">
+                <Stack direction="column">
                     <DeleteButton id={props.discussionId} />
                     <EditButton id={props.discussionId}/>
                 </Stack>

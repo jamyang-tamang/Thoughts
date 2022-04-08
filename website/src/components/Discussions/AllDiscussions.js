@@ -6,7 +6,7 @@ import { Fab } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import {Stack, Container} from '@mui/material'
 import { db } from "../../firebase-config";
-import {collection, onSnapshot, addDoc} from "firebase/firestore";
+import {collection, onSnapshot} from "firebase/firestore";
 import DiscussionPost from './DiscussionPost'
 
 import NewDiscussionModal from './NewDiscussionModal';
@@ -63,7 +63,7 @@ const AllDiscussions = (props) => {
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>
                     {discussions.map((item) => (
-                        <DiscussionPost discussionId={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
+                        <DiscussionPost key={item.key} discussionId={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
                         commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} toggleDiscussion={props.toggleDiscussion} setDiscussionId={props.setDiscussionId}/>
                     ))}
                 </Stack>

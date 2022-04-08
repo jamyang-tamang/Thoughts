@@ -2,23 +2,14 @@ import React from "react";
 import { useState, useEffect} from 'react';
 import { signOut } from "firebase/auth";
 import {auth, db} from '../../firebase-config'
-import { Fab, IconButton } from '@material-ui/core';
+import { Fab } from '@material-ui/core';
 import {Stack, Container} from '@mui/material'
-import {collection, updateDoc, doc, onSnapshot, addDoc, query, where} from "firebase/firestore";
+import {collection, onSnapshot, query, where} from "firebase/firestore";
 import CommentBox from './Comments/commentBox'
-import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
-import CancelIcon from '@mui/icons-material/Cancel';
-import Modal from 'react-modal'
-import Avatar from '@mui/material/Avatar';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
-import NewCommentModal from "./Comments/NewCommentModal"
-import Button from "@mui/material/Button"
-
+import NewCommentModal from "./Comments/NewCommentModal";
 
 const DiscussionThread = (props) => {
     const [comments, setComments] = useState([]);
@@ -37,7 +28,7 @@ const DiscussionThread = (props) => {
         (error) => {
             console.log(error.message)
         })
-    }, []);
+    }, [props.discussionId]);
 
     const openModal = () => {
         setModalOpen(true);
@@ -61,7 +52,6 @@ const DiscussionThread = (props) => {
         position: 'fixed',
     };
 
-    // if(comments.length > 0){
         return(
             <div>
                 <NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} discussionId={props.discussionId}/>
@@ -84,14 +74,14 @@ const DiscussionThread = (props) => {
                             },
                         }}
                         >
-                        <Typography>Comment Title</Typography> 
+                        <Typography>Title</Typography> 
                         <Typography>{props.title}</Typography>
                         <Typography>{props.commentCount} comments</Typography>
                         <Typography>Submitted by {props.creatorName} {props.createdAt} hours ago</Typography>
                     </Box>
                     <Stack direction="column" m={5} spacing ={2}>
                         {comments.map((item) => (
-                            <CommentBox id={item.key} comment={item.comment} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
+                            <CommentBox commentId={item.key} key={item.key} comment={item.comment} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
                             commentCount={item.commentCount} contentText={item.contentText} disccusionId={item.discussionId} creatorName={item.creatorName}/>
                         ))}
                     </Stack>
@@ -102,13 +92,6 @@ const DiscussionThread = (props) => {
             </div>
         )
     }
-    // else{
-    //     return <div><NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} discussionId={props.discussionId}/><Button>no comments</Button> 
-    //     <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
-    //                     <CommentIcon />
-    //                 </Fab></div>
-    // }
-// }
 
 export default DiscussionThread;
 

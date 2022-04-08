@@ -1,7 +1,7 @@
-import  {React, useState, useEffect} from 'react';
-import { Stack, Typography, Box, Button ,IconButton} from "@mui/material";
+import  {React} from 'react';
+import { Stack, Typography, Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
+import { updateDoc, deleteDoc, doc } from "firebase/firestore";
 import {auth, db} from '../../../firebase-config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -9,27 +9,27 @@ import EditIcon from '@mui/icons-material/Edit';
 
 const Comment = (props) => {
 
-    const deleteDiscussion = value => () => {
+    const deleteComment = value => () => {
         console.log(value);
-        deleteDoc(doc(db, "discussions", value)); 
+        deleteDoc(doc(db, "comments", value)); 
     }
 
     const upVote = value => () => {
-        updateDoc(doc(db, "comment", value.id),{
+        updateDoc(doc(db, "comments", value.commentId),{
             upVoteCount: value.upVoteCount + 1,
         })
     }
 
     const downVote = value => () => {
-        updateDoc(doc(db, "comment", value.id),{
+        updateDoc(doc(db, "comments", value.commentId),{
             downVoteCount: value.downVoteCount + 1,
         })
     }
 
     const editDiscussion = value => () => { 
-        updateDoc(doc(db, "discussions", value.id),{
+        updateDoc(doc(db, "comments", value.commentId),{
             // commentCount: value.commentCount,
-            contentText: value.postContentText,
+            comment: value.comment,
             // downVoteCount: value.downVoteCount,
             title: value.title,
             updatedAt: Date().toLocaleString(),
@@ -39,7 +39,7 @@ const Comment = (props) => {
 
     function DeleteButton (){
         if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={deleteDiscussion(props.id)}><DeleteIcon /></IconButton>;
+            return <IconButton onClick={deleteComment(props.commentId)}><DeleteIcon /></IconButton>;
         return null
     }
 
@@ -50,13 +50,13 @@ const Comment = (props) => {
     }
 
     return (
-        <Stack key={props.id} alignItems="flex-start" direction="row">
-                <Stack direction="Row">
-                    <Stack direction="Column">
+        <Stack key={props.commentId} alignItems="flex-start" direction="row">
+                <Stack direction="row">
+                    <Stack direction="column">
                         <IconButton onClick={upVote(props)}><ThumbUpIcon /></IconButton>
                         <Box>{props.upVoteCount}</Box>
                     </Stack>
-                    <Stack direction="Column">
+                    <Stack direction="column">
                         <IconButton onClick={downVote(props)}><ThumbDownIcon /></IconButton>
                         <Box>{props.downVoteCount}</Box>
                     </Stack>
@@ -76,7 +76,7 @@ const Comment = (props) => {
                 <Typography>{props.commentCount} comments</Typography>
                 <Typography>Submitted by {props.creatorName} </Typography>
             </Box>
-            <Stack direction="Column">
+            <Stack direction="column">
                 <DeleteButton id={props.id} />
                 <EditButton id={props.id}/>
             </Stack>
