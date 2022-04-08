@@ -4,32 +4,32 @@ import DiscussionThread from './DiscussionThread';
 
 
 const DiscussionCommentView = (props) => {
-    const [showIndividualDiscussion, setDiscussion] = useState(true);
-    const [discussionId, setDiscussionId] = useState("None");
+    const [showIndividualDiscussion, toggleShowIndividualDiscussion] = useState(true);
+    const [discussion, setDiscussion] = useState({"discussionId":"None"});
 
     useEffect(() => {
         if(showIndividualDiscussion){  
-            console.log("discussionId: " + discussionId);
-            setDiscussion(false);
+            console.log("discussionId: " + discussion.discussionId);
+            toggleShowIndividualDiscussion(false);
         }
         else{
             console.log("Showing individual discussion");
-            console.log("discussionId: " + discussionId);
-            setDiscussion(true);
+            console.log("discussionId: " + discussion.discussionId);
+            toggleShowIndividualDiscussion(true);
         }
-    }, [discussionId]);
+    }, [discussion.discussionId]);
 
-    const toggleDiscussion = value => () => {
-        setDiscussionId(value);
+    const returnDiscussion = value => () => {
+        setDiscussion(value);
     }
     
     function View() {
         if(showIndividualDiscussion)
             return(
-                <DiscussionThread discussionId={discussionId} toggleDiscussion={toggleDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+                <DiscussionThread discussionId={discussion.discussionId} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
             )
         return(
-            <AllDiscussions toggleDiscussion={toggleDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+            <AllDiscussions returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
         )
     }
 

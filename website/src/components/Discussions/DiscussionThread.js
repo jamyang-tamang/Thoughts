@@ -56,7 +56,7 @@ const DiscussionThread = (props) => {
             <div>
                 <NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} discussionId={props.discussionId}/>
                 <div style = {{textAlign: "center"}}>
-                    <button onClick={props.toggleDiscussion("None")}>Back</button>
+                    <button onClick={props.returnDiscussion({"discussionId":"None" })}>Back</button>
                     <button onClick={props.goToHome}>Home</button>
                     <button onClick={props.goToMessages}>DMs</button>
                     <button onClick={logout}>LogOut</button>

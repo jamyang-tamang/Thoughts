@@ -64,7 +64,7 @@ const AllDiscussions = (props) => {
                 <Stack direction="column" m={5} spacing ={2}>
                     {discussions.map((item) => (
                         <DiscussionPost key={item.key} discussionId={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
-                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} toggleDiscussion={props.toggleDiscussion} setDiscussionId={props.setDiscussionId}/>
+                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} returnDiscussion={props.returnDiscussion} setDiscussionId={props.setDiscussionId}/>
                     ))}
                 </Stack>
                 <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">

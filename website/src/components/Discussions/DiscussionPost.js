@@ -74,7 +74,7 @@ const DiscussionPost = (props) => {
                         opacity: [0.9, 0.8, 0.7],
                         },
                     }} 
-                    onClick={props.toggleDiscussion(props.discussionId)}
+                    onClick={props.returnDiscussion(props)}
                     > 
                     <Typography>{props.title} </Typography>
                     <Typography>{props.commentCount} comments</Typography>
