@@ -4,32 +4,32 @@ import DiscussionThread from './DiscussionThread';
 
 
 const DiscussionCommentView = (props) => {
-    const [showIndividualDiscussion, toggleShowIndividualDiscussion] = useState(true);
+    // const [showIndividualDiscussion, toggleShowIndividualDiscussion] = useState(true);
     const [discussion, setDiscussion] = useState({"discussionId":"None"});
 
-    useEffect(() => {
-        if(showIndividualDiscussion){  
-            console.log("discussionId: " + discussion.discussionId);
-            toggleShowIndividualDiscussion(false);
-        }
-        else{
-            console.log("Showing individual discussion");
-            console.log("discussionId: " + discussion.discussionId);
-            toggleShowIndividualDiscussion(true);
-        }
-    }, [discussion.discussionId]);
+    // useEffect(() => {
+    //     if(showIndividualDiscussion){  
+    //         console.log("discussionId: " + discussion.discussionId);
+    //         toggleShowIndividualDiscussion(false);
+    //     }
+    //     else{
+    //         console.log("Showing individual discussion");
+    //         console.log("discussionId: " + discussion.discussionId);
+    //         toggleShowIndividualDiscussion(true);
+    //     }
+    // }, [discussion.discussionId]);
 
     const returnDiscussion = value => () => {
         setDiscussion(value);
     }
     
     function View() {
-        if(showIndividualDiscussion)
+        if(discussion.discussionId != "None")
             return(
                 <DiscussionThread discussionId={discussion.discussionId} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
             )
         return(
-            <AllDiscussions returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+            <AllDiscussions title={discussion.title} discussionId={discussion.discussionId} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
         )
     }
 

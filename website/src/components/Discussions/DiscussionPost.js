@@ -1,4 +1,4 @@
-import  {React} from 'react';
+import  {React, useDebugValue} from 'react';
 import { Stack, Typography, Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { updateDoc, deleteDoc, doc} from "firebase/firestore";
@@ -27,14 +27,7 @@ const DiscussionPost = (props) => {
     }
 
     const editComment = value => () => { 
-        updateDoc(doc(db, "discussions", value.discussionId),{
-            // commentCount: value.commentCount,
-            contentText: value.postContentText,
-            // downVoteCount: value.downVoteCount,
-            title: value.title,
-            updatedAt: Date().toLocaleString(),
-            tags: value.tags,
-        })
+        props.openEditModal(value);
     }
 
     function DeleteButton (){
@@ -83,7 +76,7 @@ const DiscussionPost = (props) => {
                 </Box>
                 <Stack direction="column">
                     <DeleteButton id={props.discussionId} />
-                    <EditButton id={props.discussionId}/>
+                    <EditButton id={props}/>
                 </Stack>
             </Stack>
         </div>

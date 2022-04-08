@@ -10,10 +10,13 @@ import {collection, onSnapshot} from "firebase/firestore";
 import DiscussionPost from './DiscussionPost'
 
 import NewDiscussionModal from './NewDiscussionModal';
+import EditDiscussionModal from "./EditDiscussionModal";
 
 const AllDiscussions = (props) => {
     const [discussions, setDiscussions] = useState([]);
     const [modalIsOpen, setModalOpen] = useState(false);
+    const [editModalIsOpen, setEditModal] = useState(false);
+    const [editModalRef, setEditModalRef] = useState("None");
 
     useEffect(()=> {
         onSnapshot(collection(db, 'discussions'),
@@ -38,6 +41,15 @@ const AllDiscussions = (props) => {
         setModalOpen(false);
     }
     
+    function openEditModal(value){
+        setEditModalRef(value);
+        setEditModal(true);
+    }
+
+    const closeEditModal = () => {
+        setEditModal(false);
+    }
+
     const logout = async () => {
         await signOut(auth);
         props.goToLogin();
@@ -54,6 +66,7 @@ const AllDiscussions = (props) => {
 
     return(
         <div> 
+            <EditDiscussionModal editModalRef={editModalRef} title={editModalRef.title} modalIsOpen={editModalIsOpen} closeModal={closeEditModal}/>
             <NewDiscussionModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToHome}>Home</button>
@@ -63,7 +76,7 @@ const AllDiscussions = (props) => {
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>
                     {discussions.map((item) => (
-                        <DiscussionPost key={item.key} discussionId={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
+                        <DiscussionPost key={item.key} openEditModal={openEditModal} discussionId={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
                         commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} returnDiscussion={props.returnDiscussion} setDiscussionId={props.setDiscussionId}/>
                     ))}
                 </Stack>
