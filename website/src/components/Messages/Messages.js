@@ -1,6 +1,9 @@
 import React from "react";
 import { signOut } from "firebase/auth";
 import {auth} from '../../firebase-config'
+import {Stack, Container} from '@mui/material'
+import IndividualMessages from "./IndividualMessages";
+import IndividualRooms from "./IndividualRooms";
 
 const Messages = (props) => {
 
@@ -33,32 +36,6 @@ const Messages = (props) => {
         {name: 'Sample Room', key:'80', members: ['jd', 'jd', 'jd', 'jd']},
     ];
 
-    const messagesStyle={
-        height: window.innerWidth/25,
-        background: "grey",
-        marginTop: 5,
-        marginBottom: 5,
-    }
-
-    function Message(props) {
-        return <div style={messagesStyle} key = {props.key}> 
-                <div style={{ textAlign: 'left'}}>{props.messenger}</div>
-                <div style={{textAlign: 'left'}}> {props.messageBrief}</div>
-        </div>;
-    }
-
-    function Room(props) {
-        return <div style={messagesStyle} key = {props.key}> 
-                <div style={{ textAlign: 'left'}}>{props.name}</div>
-                <div style={{textAlign: 'left'}}> 
-                <ul>
-                    {props.members.map((member) => (
-                        <li>{member}</li>
-                    ))}
-                    </ul>{props.members}</div>
-        </div>;
-    }
-
     const logout = async () => {
         await signOut(auth);
         props.goToLogin();
@@ -71,28 +48,22 @@ const Messages = (props) => {
             <button onClick={props.goToHome}>Home</button>
             <button onClick={logout}>LogOut</button>
         </div>
-        <div className={"container"}>
-            <div> Search Bar</div>
-            <div>
-                <div>
-                    <ul>
-                        {messages.map((message) => (
-                            <Message key={message.key} messenger={message.messenger} messageBrief={message.messageBrief} />
-                        ))}
-                    </ul>
-                </div>
-            </div>
         
-            <div>
-                <div>
-                    <ul>
-                        {rooms.map((room) => (
-                            <Room key={room.key} name={room.name} members={room.members}/>
+        <div> Search Bar</div>
+        <Container>
+            <Stack direction="row">
+                <Stack direction="column" m={5} spacing ={2}>
+                {messages.map((message) => (
+                            <IndividualMessages key={message.key} sender={message.messenger} messageBrief={message.messageBrief} />
                         ))}
-                    </ul>
-                </div>
-            </div>
-        </div>
+                </Stack>
+                <Stack direction="column" m={5} spacing ={2}>
+                {rooms.map((room) => (
+                            <IndividualRooms key={room.key} roomName={room.name} members={room.members}/>
+                        ))}
+                </Stack>
+            </Stack>
+        </Container>
     </div>
     )
 }
