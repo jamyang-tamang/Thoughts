@@ -8,6 +8,7 @@ const IndividualMessages = (props) => {
             <Stack key={props.discussionId} alignItems="flex-start" direction="row">
                 <Box
                     sx={{
+                        width: "100%",
                         padding: 4,
                         backgroundColor: 'primary.main',
                         '&:hover': {
@@ -15,9 +16,9 @@ const IndividualMessages = (props) => {
                         opacity: [0.9, 0.8, 0.7],
                         },
                     }} 
-                    // onClick={props.returnDiscussion(props)}
                     > 
-                    <Typography>{props.sender} </Typography>
+                    <Typography>{props.recipientId} </Typography>
+                    <Typography>{props.messageText} </Typography>
                 </Box>
             </Stack>
         </div>

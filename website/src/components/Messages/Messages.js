@@ -1,44 +1,85 @@
-import React from "react";
+import {React, useEffect, useState} from "react";
 import { signOut } from "firebase/auth";
-import {auth} from '../../firebase-config'
+import {auth, db} from '../../firebase-config'
 import {Stack, Container} from '@mui/material'
 import IndividualMessages from "./IndividualMessages";
 import IndividualRooms from "./IndividualRooms";
+import { onSnapshot, collection } from "firebase/firestore";
+import { Fab } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
+import NewMessageModal from "./Modals/NewMessageModal";
+import TextField from '@mui/material/TextField';
 
 const Messages = (props) => {
+    const [messages, setMessages] = useState([]);
+    const [rooms, setRooms] = useState([]);
+    const [newMessageModalState, setNewMessageModalState] = useState(false);
 
-    const messages = [
-        {messenger: 'John Doe', key: '0', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key: '1', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key: '2', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'3', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'4', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'5', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'604', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'605', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'606', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'607', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'608', messageBrief: 'Lorem Ipsum?' },
-        {messenger: 'John Doe', key:'80', messageBrief: 'Lorem Ipsum?' }
-    ];
-    const rooms = [
-        {name: 'Sample Room', key: '0', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key: '1', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key: '2', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key: '3', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key: '4', members: ['jd', 'j sd', 'jd', 'jd']},
-        {name: 'Sample Room', key: '5', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key:'604', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key:'605', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key:'606', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key:'607', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key:'608', members: ['jd', 'jd', 'jd', 'jd']},
-        {name: 'Sample Room', key:'80', members: ['jd', 'jd', 'jd', 'jd']},
-    ];
+    useEffect(()=> {
+        onSnapshot(collection(db, 'messages'),
+            (snapshot) => {
+                let messages = []
+                snapshot.forEach((doc) => {
+                messages.push({ ...doc.data(), key: doc.id })
+                })
+                setMessages(messages);
+                console.log(messages);
+            },
+            (error) => {
+                console.log(error.message)
+            }
+        )
+    }, []);
+
+    useEffect(()=> {
+        onSnapshot(collection(db, 'rooms'),
+            (snapshot) => {
+                let rooms = []
+                snapshot.forEach((doc) => {
+                    rooms.push({ ...doc.data(), key: doc.id })
+                })
+                setRooms(rooms);
+                console.log(rooms);
+            },
+            (error) => {
+                console.log(error.message)
+            }
+        )
+    }, []);
+
+    function openNewMessageModal(){
+        setNewMessageModalState(true);
+    }
+
+    function openNewRoomModal(){
+        console.log();
+    }
+
+    const closeNewMessageModal = () => {
+        setNewMessageModalState(false);
+    }
 
     const logout = async () => {
         await signOut(auth);
         props.goToLogin();
+    };
+
+    const messagesFabStyle = {
+        margin: 0,
+        top: 'auto',
+        left: 20,
+        bottom: 20,
+        left: 'auto',
+        position: 'fixed',
+    };
+
+    const roomsFabStyle = {
+        margin: 0,
+        top: 'auto',
+        right: 20,
+        bottom: 20,
+        left: 'auto',
+        position: 'fixed',
     };
 
     return(
@@ -49,19 +90,26 @@ const Messages = (props) => {
             <button onClick={logout}>LogOut</button>
         </div>
         
-        <div> Search Bar</div>
+        <TextField id="outlined-search" label="Search field" type="search" />
+        <NewMessageModal modalIsOpen={newMessageModalState} closeModal={closeNewMessageModal}/>
         <Container>
             <Stack direction="row">
-                <Stack direction="column" m={5} spacing ={2}>
-                {messages.map((message) => (
-                            <IndividualMessages key={message.key} sender={message.messenger} messageBrief={message.messageBrief} />
-                        ))}
+                <Fab onClick={openNewMessageModal} style={messagesFabStyle} size="large" color="primary" aria-label="add">
+                        <Add />
+                    </Fab>
+                <Stack width={window.innerWidth} direction="column" m={5} spacing ={2}>
+                    {messages.map((message) => (
+                                <IndividualMessages key={message.key} recipientId={message.recipientId} messageText={message.messageText} />
+                            ))}
                 </Stack>
-                <Stack direction="column" m={5} spacing ={2}>
+                <Stack width={window.innerWidth} direction="column" m={5} spacing ={2}>
                 {rooms.map((room) => (
                             <IndividualRooms key={room.key} roomName={room.name} members={room.members}/>
                         ))}
                 </Stack>
+                <Fab onClick={openNewRoomModal} style={roomsFabStyle} size="large" color="primary" aria-label="add">
+                        <Add />
+                    </Fab>
             </Stack>
         </Container>
     </div>

@@ -1,5 +1,5 @@
-import  {React, useDebugValue} from 'react';
-import { Stack, Typography, Box, IconButton} from "@mui/material";
+import  {React} from 'react';
+import { Stack, Typography, Box} from "@mui/material";
 
 const IndividualRooms = (props) => {
 
@@ -8,6 +8,7 @@ const IndividualRooms = (props) => {
             <Stack key={props.discussionId} alignItems="flex-start" direction="row">
                 <Box
                     sx={{
+                        width: "100%",
                         padding: 4,
                         backgroundColor: 'primary.main',
                         '&:hover': {
