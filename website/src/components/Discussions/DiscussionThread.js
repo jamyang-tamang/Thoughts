@@ -64,7 +64,6 @@ const DiscussionThread = (props) => {
                 <Container>
                     <Box
                         sx={{
-                            width: window.innerWidth,
                             margin: 3,
                             padding: 4,
                             backgroundColor: 'primary.main',
@@ -74,8 +73,7 @@ const DiscussionThread = (props) => {
                             },
                         }}
                         >
-                        <Typography>Title</Typography> 
-                        <Typography>{props.title}</Typography>
+                        <Typography>Title {props.title}</Typography>
                         <Typography>{props.commentCount} comments</Typography>
                         <Typography>Submitted by {props.creatorName} {props.createdAt} hours ago</Typography>
                     </Box>

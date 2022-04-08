@@ -3,8 +3,8 @@ import { Stack, Typography, Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { updateDoc, deleteDoc, doc} from "firebase/firestore";
 import {auth, db} from '../../firebase-config'
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/Edit';
 
 const DiscussionPost = (props) => {
@@ -32,13 +32,13 @@ const DiscussionPost = (props) => {
 
     function DeleteButton (){
         if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={deleteDiscussion(props.discussionId)}><DeleteIcon /></IconButton>;
+            return <IconButton onClick={deleteDiscussion(props.discussionId)}><DeleteIcon style={{fontSize: 30}} /></IconButton>;
         return null
     }
 
     function EditButton (){
         if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={editComment(props) }><EditIcon /></IconButton>;
+            return <IconButton onClick={editComment(props) }><EditIcon style={{fontSize: 30}} /></IconButton>;
         return null
     }
 
@@ -49,12 +49,9 @@ const DiscussionPost = (props) => {
             <Stack key={props.discussionId} alignItems="flex-start" direction="row">
                     <Stack direction="row">
                         <Stack direction="column">
-                            <IconButton onClick={upVote(props)}><ThumbUpIcon /></IconButton>
-                            <Box>{props.upVoteCount}</Box>
-                        </Stack>
-                        <Stack direction="column">
-                            <IconButton onClick={downVote(props)}><ThumbDownIcon /></IconButton>
-                            <Box>{props.downVoteCount}</Box>
+                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
+                            <Box style={{alignContent:"center"}}>{props.upVoteCount - props.downVoteCount}</Box>
+                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>
                 <Box
@@ -74,7 +71,7 @@ const DiscussionPost = (props) => {
                     <Typography>Submitted by {props.creatorName} </Typography>
                     <Typography>Created at {props.createdAt} </Typography>
                 </Box>
-                <Stack direction="column">
+                <Stack direction="column" spacing={5}>
                     <DeleteButton id={props.discussionId} />
                     <EditButton id={props}/>
                 </Stack>
