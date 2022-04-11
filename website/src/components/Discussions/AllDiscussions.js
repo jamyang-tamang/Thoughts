@@ -66,7 +66,7 @@ const AllDiscussions = (props) => {
 
     return(
         <div> 
-            <EditDiscussionModal editModalRef={editModalRef} title={editModalRef.title} modalIsOpen={editModalIsOpen} closeModal={closeEditModal}/>
+            <EditDiscussionModal editModalRef={editModalRef} modalIsOpen={editModalIsOpen} closeModal={closeEditModal}/>
             <NewDiscussionModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToHome}>Home</button>
@@ -76,8 +76,7 @@ const AllDiscussions = (props) => {
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>
                     {discussions.map((item) => (
-                        <DiscussionPost key={item.key} openEditModal={openEditModal} discussionId={item.key} title={item.title} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
-                        commentCount={item.commentCount} contentText={item.contentText} creatorName={item.creatorName} returnDiscussion={props.returnDiscussion} setDiscussionId={props.setDiscussionId}/>
+                        <DiscussionPost key={item.key} item={item} openEditModal={openEditModal} returnDiscussion={props.returnDiscussion}/>
                     ))}
                 </Stack>
                 <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">

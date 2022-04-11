@@ -10,52 +10,47 @@ import EditIcon from '@mui/icons-material/Edit';
 const Comment = (props) => {
 
     const deleteComment = value => () => {
-        console.log(value);
-        deleteDoc(doc(db, "comments", value)); 
+        deleteDoc(doc(db, "comments", value.item.key)); 
+        updateDoc(doc(db, "discussions", props.activeDiscussion.key),{
+            commentCount: props.activeDiscussion.commentCount - 1,
+        });
     }
 
     const upVote = value => () => {
-        updateDoc(doc(db, "comments", value.commentId),{
+        updateDoc(doc(db, "comments", value.key),{
             upVoteCount: value.upVoteCount + 1,
         })
     }
 
     const downVote = value => () => {
-        updateDoc(doc(db, "comments", value.commentId),{
+        updateDoc(doc(db, "comments", value.key),{
             downVoteCount: value.downVoteCount + 1,
         })
     }
 
-    const editDiscussion = value => () => { 
-        updateDoc(doc(db, "comments", value.commentId),{
-            // commentCount: value.commentCount,
-            comment: value.comment,
-            // downVoteCount: value.downVoteCount,
-            title: value.title,
-            updatedAt: Date().toLocaleString(),
-            tags: value.tags,
-        })
+    const editComment = value => () => { 
+        props.openModal(value.item);
     }
 
     function DeleteButton (){
-        if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={deleteComment(props.commentId)}><DeleteIcon /></IconButton>;
+        if(auth.currentUser.email === props.item.creatorName)
+            return <IconButton onClick={deleteComment(props)}><DeleteIcon /></IconButton>;
         return null
     }
 
     function EditButton (){
-        if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={editDiscussion(props) }><EditIcon /></IconButton>;
+        if(auth.currentUser.email === props.item.creatorName)
+            return <IconButton onClick={editComment(props)}><EditIcon /></IconButton>;
         return null
     }
 
     return (
-        <Stack key={props.commentId} alignItems="flex-start" direction="row">
+        <Stack key={props.item.commentId} alignItems="flex-start" direction="row">
                 <Stack direction="row">
                     <Stack direction="column">
-                        <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                        <Box style={{alignContent:"center"}}>{props.upVoteCount - props.downVoteCount}</Box>
-                        <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
+                        <IconButton onClick={upVote(props.item)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
+                        <Box style={{alignContent:"center"}}>{props.item.upVoteCount - props.item.downVoteCount}</Box>
+                        <IconButton onClick={downVote(props.item)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                     </Stack>
                 </Stack>
             <Box
@@ -68,14 +63,15 @@ const Comment = (props) => {
                     opacity: [0.9, 0.8, 0.7],
                     },
                 }}
+                onClick={props.returnComment(props.item)}
                 > 
-                <Typography>{props.discussionId} {props.comment}</Typography>
-                <Typography>{props.commentCount} comments</Typography>
-                <Typography>Submitted by {props.creatorName} </Typography>
+                <Typography>{props.item.comment}</Typography>
+                {/* <Typography>{props.item.commentCount} comments</Typography> */}
+                <Typography>Submitted by {props.item.creatorName} at {props.item.createdAt} </Typography>
             </Box>
             <Stack direction="column">
-                <DeleteButton id={props.id} />
-                <EditButton id={props.id}/>
+                <DeleteButton id={props} />
+                <EditButton id={props}/>
             </Stack>
         </Stack>
     )

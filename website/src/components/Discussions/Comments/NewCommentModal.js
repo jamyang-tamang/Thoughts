@@ -21,6 +21,23 @@ const NewCommentModal = (props) => {
     const [commentPresent, toggleCommentPresent] = useState(false);
     const colRef = collection(db, 'comments');
 
+    const postNewComment = () => {
+        updateDoc(doc(db, "discussions", props.activeDiscussion.key),{
+            commentCount: props.activeDiscussion.commentCount + 1,
+        })
+        addDoc(colRef, {
+            createdAt: Date().toLocaleString(),
+            creatorId: auth.currentUser.uid,
+            creatorName: auth.currentUser.email,
+            downVoteCount: 0,
+            comment: newComment,
+            upVoteCount: 0,
+            updatedAt: Date().toLocaleString(),
+            discussionId: props.activeDiscussion.key,
+        })
+        resetModalForm()
+    }
+
     useEffect(()=> {
         if(newComment !== "")
             toggleCommentPresent(true);
@@ -30,25 +47,6 @@ const NewCommentModal = (props) => {
     const resetModalForm = () => {
         setNewComment("");
         props.closeModal();
-    }
-
-    const postNewComment = () => {
-        updateDoc(doc(db, "discussions", props.discussion.discussionId),{
-            commentCount: props.discussion.commentCount + 1,
-        });
-        addDoc(colRef, {
-            createdAt: Date().toLocaleString(),
-            creatorId: auth.currentUser.uid,
-            creatorName: auth.currentUser.email,
-            downVoteCount: 0,
-            comment: newComment,
-            upVoteCount: 0,
-            updatedAt: Date().toLocaleString(),
-            discussionId: props.discussion.discussionId,
-        })
-        .then(() => {
-            resetModalForm()
-        })
     }
 
     const customStyles = {

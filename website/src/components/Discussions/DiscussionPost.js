@@ -11,34 +11,34 @@ const DiscussionPost = (props) => {
 
     const deleteDiscussion = value => () => {
         console.log(value);
-        deleteDoc(doc(db, "discussions", value)); 
+        deleteDoc(doc(db, "discussions", value.item.key)); 
     }
 
     const upVote = value => () => {
-        updateDoc(doc(db, "discussions", value.discussionId),{
-            upVoteCount: value.upVoteCount + 1,
+        updateDoc(doc(db, "discussions", value.item.key),{
+            upVoteCount: value.item.upVoteCount + 1,
         })
     }
 
     const downVote = value => () => {
-        updateDoc(doc(db, "discussions", value.discussionId),{
-            downVoteCount: value.downVoteCount + 1,
+        updateDoc(doc(db, "discussions", value.item.key),{
+            downVoteCount: value.item.downVoteCount + 1,
         })
     }
 
-    const editComment = value => () => { 
-        props.openEditModal(value);
+    const editDiscussion = value => () => { 
+        props.openEditModal(value.item);
     }
 
     function DeleteButton (){
-        if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={deleteDiscussion(props.discussionId)}><DeleteIcon style={{fontSize: 30}} /></IconButton>;
+        if(auth.currentUser.email === props.item.creatorName)
+            return <IconButton onClick={deleteDiscussion(props)}><DeleteIcon style={{fontSize: 30}} /></IconButton>;
         return null
     }
 
     function EditButton (){
-        if(auth.currentUser.email === props.creatorName)
-            return <IconButton onClick={editComment(props) }><EditIcon style={{fontSize: 30}} /></IconButton>;
+        if(auth.currentUser.email === props.item.creatorName)
+            return <IconButton onClick={editDiscussion(props)}><EditIcon style={{fontSize: 30}} /></IconButton>;
         return null
     }
 
@@ -46,11 +46,11 @@ const DiscussionPost = (props) => {
 
     return (
         <div>
-            <Stack key={props.discussionId} alignItems="flex-start" direction="row">
+            <Stack key={props.item.key} alignItems="flex-start" direction="row">
                     <Stack direction="row">
                         <Stack direction="column">
                             <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{alignContent:"center"}}>{props.upVoteCount - props.downVoteCount}</Box>
+                            <Box style={{alignContent:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>
@@ -64,16 +64,16 @@ const DiscussionPost = (props) => {
                         opacity: [0.9, 0.8, 0.7],
                         },
                     }} 
-                    onClick={props.returnDiscussion(props)}
+                    onClick={props.returnDiscussion(props.item)}
                     > 
-                    <Typography>{props.title} </Typography>
-                    <Typography>{props.commentCount} comments</Typography>
-                    <Typography>Submitted by {props.creatorName} </Typography>
-                    <Typography>Created at {props.createdAt} </Typography>
+                    <Typography>{props.item.title} </Typography>
+                    <Typography>{props.item.commentCount} comments</Typography>
+                    <Typography>Submitted by {props.item.creatorName} </Typography>
+                    <Typography>Created at {props.item.createdAt} </Typography>
                 </Box>
                 <Stack direction="column" spacing={5}>
-                    <DeleteButton id={props.discussionId} />
-                    <EditButton id={props}/>
+                    <DeleteButton item={props.item} />
+                    <EditButton item={props}/>
                 </Stack>
             </Stack>
         </div>

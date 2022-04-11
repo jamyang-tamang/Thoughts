@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect} from 'react';
 import { IconButton } from '@material-ui/core';
 import {Container} from '@mui/material'
-import { db } from "../../firebase-config";
+import { db } from "../../../firebase-config";
 import CreateIcon from '@mui/icons-material/Create';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -12,44 +12,33 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Autocomplete from "@mui/material/Autocomplete";
-import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import { updateDoc, doc } from "firebase/firestore";
 
-const EditDiscussionModal = (props) => {
+const EditCommentModal = (props) => {
     const [updateText, updateEntered] = useState(false);
-    const [discussionTitle, setNewDiscussionTitle] = useState("");
-    const [postContent, setNewPostContent] = useState("");
-    const [tags, setTags] = useState([]);
+    const [newComment, setNewComment] = useState("");
 
-    const updateDiscussion = () => {
-        updateDoc(doc(db, "discussions", props.editModalRef.key),{
-            contentId: "",
-            contentText: postContent,
-            title: discussionTitle,
-            updatedAt: Date().toLocaleString(),
-            tags: {tags},
+    const updateComment = () => {
+        updateDoc(doc(db, "comments", props.editCommentRef.key),{
+            comment: newComment,
         })
         resetModalForm();
     }
 
-     useEffect(() => {
-         setNewDiscussionTitle(props.editModalRef.title);
-         setNewPostContent(props.editModalRef.contentText);
-     }, [props.editModalRef]);
+    //  useEffect(() => {
+    //     setNewComment(props.item.comment);
+    //  }, [props.item]);
 
     useEffect(()=> {
-        if((discussionTitle != "") ||  (postContent != ""))
+        if(newComment != "")
             updateEntered(false);
         else
             updateEntered(true);
-    }, [discussionTitle, postContent]);
+    }, [newComment]);
 
     const resetModalForm = () => {
-        setNewDiscussionTitle("");
-        setNewPostContent("");
-        setTags([]);
+        setNewComment("");
         props.closeModal();
     }
     
@@ -94,54 +83,23 @@ const EditDiscussionModal = (props) => {
                     required
                     fullWidth
                     id="standard-basic"
-                    label="Title"
+                    label="Comment"
                     name="email"
                     autoComplete=""
                     onChange={(event) => {
-                        setNewDiscussionTitle(event.target.value)
+                        setNewComment(event.target.value)
                     }}
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField
-                    fullWidth
-                    multiline
-                    id="post"
-                    label="Post"
-                    name="post"
-                    onChange={(event) => {
-                        setNewPostContent(event.target.value)
-                    }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                <Autocomplete
-                    multiple
-                    id="tags-filled"
-                    options={tags.map((option) => option.title)}
-                    freeSolo
-                    renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                    ))
-                    }
-                    renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        variant="filled"
-                        label="Tags"
-                        placeholder="Enter a tag for this post"
-                    />
-                    )}
-                />
-                </Grid>
+            </Grid>
             </Grid>
                 <Grid container justifyContent="flex-end">
                     <Grid item justifyContent="flex-end">
                         <IconButton size="medium" color="secondary" onClick={props.closeModal}>
                             <CancelIcon/>
                         </IconButton>
-                        <IconButton disabled={updateText} size="medium" onClick={updateDiscussion}>
+                        <IconButton disabled={updateText} size="medium" onClick={updateComment}>
                             <PostAddIcon color="success"/>
                         </IconButton>
                     </Grid>
@@ -151,4 +109,4 @@ const EditDiscussionModal = (props) => {
     </Container>
 </Modal>);
 }
-export default EditDiscussionModal
+export default EditCommentModal

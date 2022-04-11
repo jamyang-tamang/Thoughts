@@ -10,13 +10,16 @@ import CommentIcon from '@mui/icons-material/Comment';
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import NewCommentModal from "./Comments/NewCommentModal";
+import EditCommentModal from "./Comments/EditCommentModal";
 
 const DiscussionThread = (props) => {
     const [comments, setComments] = useState([]);
     const [modalIsOpen, setModalOpen] = useState(false);
+    const [editCommentModalIsOpen, setEditCommentModal] = useState(false);
+    const [editCommentRef, setEditCommentRef] = useState("None");
     
     useEffect(()=> {
-        const q = query (collection(db, "comments"), where("discussionId", "==", props.discussionId));
+        const q = query (collection(db, "comments"), where("discussionId", "==", props.activeDiscussion.key));
     
         onSnapshot(q, (querySnapshot) => {
             const comments = [];
@@ -28,7 +31,7 @@ const DiscussionThread = (props) => {
         (error) => {
             console.log(error.message)
         })
-    }, [props.discussionId]);
+    }, [props.activeDiscussion]);
 
     const openModal = () => {
         setModalOpen(true);
@@ -37,6 +40,16 @@ const DiscussionThread = (props) => {
     const closeModal = () => {
         setModalOpen(false);
     }
+
+    const openEditModal = (value) => {
+        setEditCommentRef(value);
+        setEditCommentModal(true);
+    }
+
+    const closeEditModal = () => {
+        setEditCommentModal(false);
+    }
+
 
     const logout = async () => {
         await signOut(auth);
@@ -54,7 +67,8 @@ const DiscussionThread = (props) => {
 
         return(
             <div>
-                <NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} discussionId={props.discussionId}/>
+                <EditCommentModal editCommentRef={editCommentRef} modalIsOpen={editCommentModalIsOpen} closeModal={closeEditModal} activeComment={props.activeComment}/>
+                <NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} activeDiscussion={props.activeDiscussion}/>
                 <div style = {{textAlign: "center"}}>
                     <button onClick={props.returnDiscussion({"discussionId":"None" })}>Back</button>
                     <button onClick={props.goToHome}>Home</button>
@@ -73,14 +87,13 @@ const DiscussionThread = (props) => {
                             },
                         }}
                         >
-                        <Typography>Title {props.title}</Typography>
-                        <Typography>{props.commentCount} comments</Typography>
-                        <Typography>Submitted by {props.creatorName} {props.createdAt} hours ago</Typography>
+                        <Typography>Title {props.activeDiscussion.title}</Typography>
+                        <Typography>{props.activeDiscussion.commentCount} comments</Typography>
+                        <Typography>Submitted by {props.activeDiscussion.creatorName} {props.activeDiscussion.createdAt} hours ago</Typography>
                     </Box>
                     <Stack direction="column" m={5} spacing ={2}>
                         {comments.map((item) => (
-                            <CommentBox commentId={item.key} key={item.key} comment={item.comment} upVoteCount={item.upVoteCount} downVoteCount={item.downVoteCount} 
-                            commentCount={item.commentCount} contentText={item.contentText} disccusionId={item.discussionId} creatorName={item.creatorName}/>
+                            <CommentBox returnComment={props.returnComment} openModal={openEditModal} item={item} key={item.key} activeDiscussion={props.activeDiscussion} />
                         ))}
                     </Stack>
                     <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
