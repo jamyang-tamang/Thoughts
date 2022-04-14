@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect} from 'react';
 import { IconButton } from '@material-ui/core';
 import {Container} from '@mui/material'
-import { db, auth } from "../../../firebase-config";
+import { db } from "../../../firebase-config";
 import {collection, addDoc} from "firebase/firestore";
 import CreateIcon from '@mui/icons-material/Create';
 import SendIcon from '@mui/icons-material/Send';

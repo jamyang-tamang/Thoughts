@@ -9,13 +9,13 @@ import EditIcon from '@mui/icons-material/Edit';
 
 const MessageBox = (props) => {
 
-    if(props.thread.senderId === sessionStorage.getItem('user')){
+    if(props.thread.senderId !== sessionStorage.getItem('user')){
         return (
             <Stack key={props.thread.key} alignItems="flex-start" direction="row">
                 <Box
                         sx={{
-                            width: (window.innerWidth*0.4),
-                            padding: 4,
+                            width: (window.innerWidth*0.3),
+                            padding: 2,
                             backgroundColor: 'primary.main',
                             '&:hover': {
                             backgroundColor: 'primary.main',
@@ -30,11 +30,11 @@ const MessageBox = (props) => {
     }
     else{
         return (
-            <Stack key={props.thread.key} direction="row">
+            <Stack key={props.thread.key} style={{marginLeft:"50%"}} direction="row">
                 <Box
                         sx={{
-                            width: (window.innerWidth*0.4),
-                            padding: 4,
+                            width: (window.innerWidth*0.3),
+                            padding: 2,
                             backgroundColor: 'secondary.main',
                             '&:hover': {
                             backgroundColor: 'secondary.main',

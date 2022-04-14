@@ -13,13 +13,13 @@ const IndividualMessageThread = (props) => {
 
     useEffect(()=> {
         console.log("Key: " + props.activeMessageThread.key);
-        const q = query (collection(db, "messages"), where("threadId", "==", props.activeMessageThread.key), orderBy("createdAt"));
+        const q = query (collection(db, "messages"), where("threadId", "==", props.activeMessageThread.key));
         onSnapshot(q, (querySnapshot) => {
             const messages = [];
             querySnapshot.forEach((doc) => {
                 messages.push({...doc.data(), key: doc.id});
             })
-            setMessages(messages);
+            setMessages(messages.sort((a,b) => (a.createdAt > b.createdAt) ? 1 : ((b.createdAt > a.createdAt) ? -1 : 0)));
         },
         (error) => {
             console.log(error.message)

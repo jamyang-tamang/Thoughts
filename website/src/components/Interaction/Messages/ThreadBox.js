@@ -7,9 +7,13 @@ const ThreadBox = (props) => {
 
     const recipientId = (props) => {
         var members = (props.thread.participants).toString();
-        console.log("Members: " + members);
-        console.log(sessionStorage.getItem('user'));
-        members = members.replace(','+sessionStorage.getItem('user'),'');
+        members = members.replace(sessionStorage.getItem('user'),'');
+        console.log(members)
+        if(members.startsWith(","))
+            members = members.replace(',','');
+        else if(members.endsWith(","))
+            members = members.replace(',','');
+        members = members.replace(',,',',');
         return(members);
     }
 
