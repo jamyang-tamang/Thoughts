@@ -1,8 +1,10 @@
 import React from "react";
 import { useState, useEffect} from 'react';
+import {auth} from '../../../firebase-config'
 import { IconButton } from '@material-ui/core';
 import {Container} from '@mui/material'
-import { db } from "../../firebase-config";
+import { db } from "../../../firebase-config";
+import {collection, addDoc} from "firebase/firestore";
 import CreateIcon from '@mui/icons-material/Create';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -15,36 +17,41 @@ import Grid from '@mui/material/Grid';
 import Autocomplete from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
-import { updateDoc, doc } from "firebase/firestore";
 
-const EditDiscussionModal = (props) => {
-    const [updateText, updateEntered] = useState(false);
+const NewDiscussionModal = (props) => {
+    const [titlePresent, toggleTitlePresent] = useState(false);
     const [discussionTitle, setNewDiscussionTitle] = useState("");
     const [postContent, setNewPostContent] = useState("");
     const [tags, setTags] = useState([]);
+    // const [contentLink, setNewContentLink] = useState("");
 
-    const updateDiscussion = () => {
-        updateDoc(doc(db, "discussions", props.editModalRef.key),{
+    const colRef = collection(db, 'discussions');
+    
+    const postNewDisccusion = () => {
+        addDoc(colRef, {
+            commentCount: 0,
             contentId: "",
+            createdAt: Date().toLocaleString(),
+            creatorId: auth.currentUser.uid,
+            creatorName: auth.currentUser.email,
             contentText: postContent,
+            downVoteCount: 0,
             title: discussionTitle,
+            upVoteCount: 0,
             updatedAt: Date().toLocaleString(),
             tags: {tags},
         })
-        resetModalForm();
+        .then(() => {
+            resetModalForm()
+        })
     }
 
-     useEffect(() => {
-         setNewDiscussionTitle(props.editModalRef.title);
-         setNewPostContent(props.editModalRef.contentText);
-     }, [props.editModalRef]);
 
     useEffect(()=> {
-        if((discussionTitle != "") ||  (postContent != ""))
-            updateEntered(false);
-        else
-            updateEntered(true);
-    }, [discussionTitle, postContent]);
+        if(discussionTitle !== "")
+            toggleTitlePresent(true);
+        toggleTitlePresent(false);
+    }, [discussionTitle]);
 
     const resetModalForm = () => {
         setNewDiscussionTitle("");
@@ -52,7 +59,7 @@ const EditDiscussionModal = (props) => {
         setTags([]);
         props.closeModal();
     }
-    
+
     const customStyles = {
         content: {
           top: '50%',
@@ -85,7 +92,7 @@ const EditDiscussionModal = (props) => {
             <CreateIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-            Edit Post
+            Create a New Post
         </Typography>
         <Box component="form" sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -141,7 +148,7 @@ const EditDiscussionModal = (props) => {
                         <IconButton size="medium" color="secondary" onClick={props.closeModal}>
                             <CancelIcon/>
                         </IconButton>
-                        <IconButton disabled={updateText} size="medium" onClick={updateDiscussion}>
+                        <IconButton disabled={titlePresent} size="medium" onClick={postNewDisccusion}>
                             <PostAddIcon color="success"/>
                         </IconButton>
                     </Grid>
@@ -151,4 +158,4 @@ const EditDiscussionModal = (props) => {
     </Container>
 </Modal>);
 }
-export default EditDiscussionModal
+export default NewDiscussionModal

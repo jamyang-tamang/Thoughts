@@ -1,6 +1,6 @@
 import  {React, useState, useEffect} from 'react';
-import AllDiscussions from './AllDiscussions';
-import DiscussionThread from './DiscussionThread';
+import AllDiscussions from './Discussions/AllDiscussions';
+import DiscussionThread from './Discussions/DiscussionThread';
 
 
 const DiscussionCommentView = (props) => {
@@ -31,10 +31,10 @@ const DiscussionCommentView = (props) => {
     function View() {
         if(activeDiscussion.discussionId != "None")
             return(
-                <DiscussionThread returnComment={returnComment} activeComment={activeComment} activeDiscussion={activeDiscussion} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+                <DiscussionThread logout={props.logout} returnComment={returnComment} activeComment={activeComment} activeDiscussion={activeDiscussion} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
             )
         return(
-            <AllDiscussions returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+            <AllDiscussions logout={props.logout} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
         )
     }
 

@@ -1,5 +1,4 @@
-import React from "react";
-import {useState} from "react";
+import { React, useState, useEffect} from "react";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {auth} from '../../firebase-config'
 import Modal from 'react-modal'
@@ -32,7 +31,7 @@ const Login = (props) => {
     const [modalIsOpen, setModalOpen] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState ("");
     const [signUpErrorMessage, setSignupErrorMessage] = useState ("");
-    const colRef = collection(db, 'users');
+    const colRef = collection(db, 'users');  
 
     const openModal = () => {
         setModalOpen(true);
@@ -57,6 +56,7 @@ const Login = (props) => {
                 registerPassword);
             console.log(user);
             setSignupErrorMessage("");
+            sessionStorage.setItem('user', JSON.stringify(registerEmail));
             createUser();
             props.goToHome();
         } catch (error) {
@@ -73,6 +73,7 @@ const Login = (props) => {
                 loginPassword);
             console.log(user);
             setLoginErrorMessage("");
+            sessionStorage.setItem('user', loginEmail);
             props.goToHome();
         } catch (error) {
             console.log(error.message);

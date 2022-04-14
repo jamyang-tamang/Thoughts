@@ -2,11 +2,11 @@ import {React, useState, useEffect} from 'react';
 import './App.css';
 import {auth} from'./firebase-config';
 import Canvas from "./components/Canvas/Canvas";
-import Messages from "./components/Messages/Messages"
+import MessageView from "./components/Interaction/MessagesView"
 import Login from "./components/Login/Login";
 import ForgotPassword from "./components/Login/ForgotPassword";
 import DiscussionCommentView from './components/Discussions/DiscussionCommentView';
-import {onAuthStateChanged} from'firebase/auth';
+import {signOut} from'firebase/auth';
   
 function getPage() {
     // if(userPresent){
@@ -43,6 +43,12 @@ const App = () => {
         setPage("Login");
     }
 
+    const logout = async () => {
+        await signOut(auth);
+        sessionStorage.setItem('user', "");
+        goToLogin();
+    };
+
     const goToForgotPassword = () => {
         setPage("ForgotPassword");
     }
@@ -63,17 +69,17 @@ const App = () => {
         
         if(Page === "Home") {
             return ( <div className="App">
-                        <Canvas goToMessages={goToMessages} goToDiscussions={goToDiscussions} goToLogin={goToLogin}/>
+                        <Canvas logout={logout} goToMessages={goToMessages} goToDiscussions={goToDiscussions} goToLogin={goToLogin}/>
                     </div>);
             }
         if(Page === "Discussions") {
                     return <div className="App">
-                        <DiscussionCommentView goToHome={goToHome} goToMessages={goToMessages} goToLogin={goToLogin}/>
+                        <DiscussionCommentView logout={logout} goToHome={goToHome} goToMessages={goToMessages} goToLogin={goToLogin}/>
                     </div>
             }
         if(Page === "Messages") {
                     return <div className="App">
-                        <Messages goToHome={goToHome} goToDiscussions={goToDiscussions} goToLogin={goToLogin}/>
+                        <MessageView logout={logout} goToHome={goToHome} goToDiscussions={goToDiscussions} goToLogin={goToLogin}/>
                     </div>
                 
             }

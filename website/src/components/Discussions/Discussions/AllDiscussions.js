@@ -1,16 +1,14 @@
 import React from "react";
 import { useState, useEffect} from 'react';
-import { signOut } from "firebase/auth";
-import {auth} from '../../firebase-config'
 import { Fab } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import {Stack, Container} from '@mui/material'
-import { db } from "../../firebase-config";
+import { db } from "../../../firebase-config";
 import {collection, onSnapshot} from "firebase/firestore";
 import DiscussionPost from './DiscussionPost'
 
-import NewDiscussionModal from './NewDiscussionModal';
-import EditDiscussionModal from "./EditDiscussionModal";
+import NewDiscussionModal from '../Modals/NewDiscussionModal';
+import EditDiscussionModal from "../Modals/EditDiscussionModal";
 
 const AllDiscussions = (props) => {
     const [discussions, setDiscussions] = useState([]);
@@ -50,11 +48,6 @@ const AllDiscussions = (props) => {
         setEditModal(false);
     }
 
-    const logout = async () => {
-        await signOut(auth);
-        props.goToLogin();
-    };
-
     const fabStyle = {
         margin: 0,
         top: 'auto',
@@ -71,7 +64,7 @@ const AllDiscussions = (props) => {
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToHome}>Home</button>
                 <button onClick={props.goToMessages}>DMs</button>
-                <button onClick={logout}>LogOut</button>
+                <button onClick={props.logout}>LogOut</button>
             </div>
             <Container>
                 <Stack direction="column" m={5} spacing ={2}>

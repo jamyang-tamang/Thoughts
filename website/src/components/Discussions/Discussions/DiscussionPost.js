@@ -2,7 +2,7 @@ import  {React, useState, useEffect} from 'react';
 import { Stack, Typography, Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { updateDoc, addDoc, deleteDoc, getDocs, doc, query, collection, where, onSnapshot} from "firebase/firestore";
-import {auth, db} from '../../firebase-config'
+import {auth, db} from '../../../firebase-config'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,7 +20,7 @@ const DiscussionPost = (props) => {
         (error) => {
             console.log(error.message)
         })
-    }, [props.value]);
+    }, [props]);
 
     const deleteDiscussion = value => () => {
         // deleteDoc(doc(db, "discussions", value.item.key));
@@ -69,7 +69,7 @@ const DiscussionPost = (props) => {
     }
 
     const upVote = value => () => {
-        if(interaction == "nonExistant"){
+        if(interaction === "nonExistant"){
             addDoc(collection(db, 'interactions'), {
                 postId: value.item.key,
                 upVote: true,
@@ -90,7 +90,7 @@ const DiscussionPost = (props) => {
                 downVoteCount: value.item.downVoteCount - 1 ,
             })
         }
-        else if(interaction != "nonExistant"){
+        else if(interaction !== "nonExistant"){
             updateDoc(doc(db, "interactions", interaction.key),{
                 upVote: true,
             })
@@ -103,7 +103,7 @@ const DiscussionPost = (props) => {
 
 
     const downVote = value => () => {
-        if(interaction == "nonExistant"){
+        if(interaction === "nonExistant"){
             addDoc(collection(db, 'interactions'), {
                 postId: value.item.key,
                 upVote: false,
@@ -124,7 +124,7 @@ const DiscussionPost = (props) => {
                 upVoteCount: value.item.upVoteCount - 1 ,
             })
         }
-        else if(interaction != "nonExistant"){
+        else if(interaction !== "nonExistant"){
             updateDoc(doc(db, "interactions", interaction.key),{
                 downVote: true,
             })

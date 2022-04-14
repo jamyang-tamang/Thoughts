@@ -5,7 +5,7 @@ const IndividualRooms = (props) => {
 
     return (
         <div>
-            <Stack key={props.discussionId} alignItems="flex-start" direction="row">
+            <Stack key={props.room.key} alignItems="flex-start" direction="row">
                 <Box
                     sx={{
                         width: "100%",
@@ -18,8 +18,8 @@ const IndividualRooms = (props) => {
                     }} 
                     // onClick={props.returnDiscussion(props)}
                     > 
-                    <Typography>{props.roomName} </Typography>
-                    {props.members.map((member) => (
+                    <Typography>{props.room.roomName} </Typography>
+                    {props.room.members.map((member) => (
                         <Typography>{member + " ,"}</Typography>
                 ))}
                 </Box>

@@ -1,16 +1,16 @@
 import React from "react";
 import { useState, useEffect} from 'react';
 import { signOut } from "firebase/auth";
-import {auth, db} from '../../firebase-config'
+import {auth, db} from '../../../firebase-config'
 import { Fab } from '@material-ui/core';
 import {Stack, Container} from '@mui/material'
 import {collection, onSnapshot, query, where} from "firebase/firestore";
-import CommentBox from './Comments/commentBox'
+import CommentBox from '../Comments/commentBox'
 import CommentIcon from '@mui/icons-material/Comment';
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
-import NewCommentModal from "./Comments/NewCommentModal";
-import EditCommentModal from "./Comments/EditCommentModal";
+import NewCommentModal from "../Comments/NewCommentModal";
+import EditCommentModal from "../Comments/EditCommentModal";
 
 const DiscussionThread = (props) => {
     const [comments, setComments] = useState([]);
@@ -50,12 +50,6 @@ const DiscussionThread = (props) => {
         setEditCommentModal(false);
     }
 
-
-    const logout = async () => {
-        await signOut(auth);
-        props.goToLogin();
-    };
-
     const fabStyle = {
         margin: 0,
         top: 'auto',
@@ -73,7 +67,7 @@ const DiscussionThread = (props) => {
                     <button onClick={props.returnDiscussion({"discussionId":"None" })}>Back</button>
                     <button onClick={props.goToHome}>Home</button>
                     <button onClick={props.goToMessages}>DMs</button>
-                    <button onClick={logout}>LogOut</button>
+                    <button onClick={props.logout}>LogOut</button>
                 </div>
                 <Container>
                     <Box

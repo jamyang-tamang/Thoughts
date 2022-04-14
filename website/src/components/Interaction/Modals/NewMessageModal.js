@@ -20,20 +20,17 @@ const NewMessageModal = (props) => {
     const [userToSendTo, setUserToSendTo] = useState("");
     const [messageContent, setMessageContent] = useState("");
 
-    const colRef = collection(db, 'messages');
+    const threadRef = collection(db, 'messageThread');
 
     const sendNewMessage = () => {
-        addDoc(colRef, {
+        addDoc(threadRef, {
             createdAt: Date().toLocaleString(),
-            senderName: auth.currentUser.email,
-            messageText: messageContent,
-            recipientId: userToSendTo,
+            participants: [userToSendTo, sessionStorage.getItem('user')]
         })
         .then(() => {
             resetModalForm()
         })
     }
-
 
     useEffect(()=> {
         if(userToSendTo !== "")
@@ -92,19 +89,6 @@ const NewMessageModal = (props) => {
                     autoComplete=""
                     onChange={(event) => {
                         setUserToSendTo(event.target.value)
-                    }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                    required
-                    fullWidth
-                    id="standard-basic"
-                    label="Message"
-                    name="text"
-                    autoComplete=""
-                    onChange={(event) => {
-                        setMessageContent(event.target.value)
                     }}
                     />
                 </Grid>
