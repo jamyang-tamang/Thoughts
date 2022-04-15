@@ -2,7 +2,6 @@ import {React, useEffect, useState} from "react";
 import { db } from "../../../firebase-config";
 import {Stack, Container} from '@mui/material'
 import ThreadBox from "./ThreadBox";
-import IndividualRooms from "../Rooms/IndividualRooms";
 import { onSnapshot, collection, query, where } from "firebase/firestore";
 import { Fab } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
@@ -13,21 +12,26 @@ const AllMessagesThreads = (props) => {
     const [messagesThreads, setMessageThreads] = useState([]);
     const [rooms, setRooms] = useState([]);
     const [newMessageThreadModalState, setNewMessageThreadModalState] = useState(false);
+    const [userSearch, setUserSearch] = useState("");
 
     useEffect(()=> {
-            const q = query (collection(db, "messageThread"), where("participants", "array-contains", sessionStorage.getItem('user')));
-            // console.log(sessionStorage.getItem("user"));
+        console.log(userSearch);
+            let q = query (collection(db, "messageThread"), where("participants", "array-contains", sessionStorage.getItem('user')));
             onSnapshot(q, (querySnapshot) => {
                 const messagesThreads = [];
                 querySnapshot.forEach((doc) => {
                     messagesThreads.push({...doc.data(), key: doc.id});
                 })
-                setMessageThreads(messagesThreads);
+                if(userSearch === ""){
+                    setMessageThreads(messagesThreads);
+                }
+                // else
+                    // setMessageThreads(messagesThreads.filter(item.participants => contains(userSearch)));
             },
             (error) => {
                 console.log(error.message)
             })
-    }, []);
+    }, [userSearch]);
     
 
     useEffect(()=> {
@@ -86,7 +90,9 @@ const AllMessagesThreads = (props) => {
         <Stack direction="column">
                 <NewMessageModal modalIsOpen={newMessageThreadModalState} closeModal={closeNewMessageThreadModal}/>
                 <Container>
-                    <TextField id="outlined-search" label="Search field" type="search" fullWidth />
+                    <TextField onChange={(event) => {
+                        setUserSearch(event.target.value)
+                    }} id="outlined-search" label="Search field" type="search" fullWidth />
                     <Stack direction="row">
                         <Fab onClick={openNewMessageThreadModal} style={messagesFabStyle} size="large" color="primary" aria-label="add">
                             <Add />

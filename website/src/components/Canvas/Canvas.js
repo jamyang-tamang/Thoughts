@@ -25,6 +25,7 @@ const Canvas = (props) => {
     useLayoutEffect(() => {
         const canvas = document.getElementById('canvas');
         const context = canvas.getContext("2d");
+        console.log("canvas: " + sessionStorage.getItem('canvas'))
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         canvas.style.width = '${window.innerWidth}px';
@@ -35,6 +36,7 @@ const Canvas = (props) => {
         context.strokeStyle = strokeColor
         context.lineWidth = strokeWidth
         contextRef.current = context;
+        
     }, [])
 
     const penDown = ({nativeEvent}) => {
@@ -241,12 +243,18 @@ const Canvas = (props) => {
         cursor.style.top = '${e.pageY}px'
         cursor.style.background = "cornflowerblue"
     };
+
+    const goToDiscussions = ()=>{
+        props.goToDiscussions();
+        sessionStorage.setItem('canvas', JSON.stringify(contextRef.current.save()));
+    }
+
     
     return (
         // <div onMouseMove={(ev) => handleMouseMove(ev)}>
         <div >
             <div style = {{textAlign: "center"}}>
-                <button onClick={props.goToDiscussions}>Discussions</button>
+                <button onClick={goToDiscussions}>Discussions</button>
                 <button onClick={props.goToMessages}>DMs</button>
                 <button onClick={props.logout}>logout</button>
                 <canvas id="canvas"
