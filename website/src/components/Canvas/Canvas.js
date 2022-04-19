@@ -6,7 +6,7 @@ import pencil from '../../Assets/Canvas/pencil.png';
 import eraser from '../../Assets/Canvas/eraser.png';
 import colorPicker from '../../Assets/Canvas/color-picker.png';
 import widthPicker from '../../Assets/Canvas/width-picker.png';
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, query, collection, where, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
 
 const Canvas = (props) => {
@@ -22,20 +22,13 @@ const Canvas = (props) => {
     const [saveableCanvas, setSavableCanvas] = useState(null);
 
     useLayoutEffect(()=> {
-        if(saveableCanvas!= null){
-            getDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N")).then(docSnap => {
-                if (docSnap.exists()) {
-                    console.log("Document data:", docSnap.data());
-                    let canvas = docSnap.data().canvas.toString();
-                    console.log(canvas);
-                    saveableCanvas.loadSaveData(canvas);
-                } 
-                
-                else {
-                // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
-            })
+        if(saveableCanvas!== null){
+
+            onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
+                let canvas = doc.data().canvas.toString();
+                saveableCanvas.loadSaveData(canvas);
+                console.log(canvas);
+              });
         }
     }, [saveableCanvas]);
 
@@ -97,7 +90,7 @@ const Canvas = (props) => {
     const toggleEraser = () => {
         eraseModeToggle(true);
         setColor("#FFFFFF");
-        setBrushRadius("10");
+        setBrushRadius(10);
     }
 
     // const toogleText = () => {
@@ -233,11 +226,12 @@ const Canvas = (props) => {
                 <button onClick={props.goToDiscussions}>Discussions</button>
                 <button onClick={props.goToMessages}>DMs</button>
                 <button onClick={props.logout}>logout</button>
-                <CanvasDraw hideGrid id="canvas"
+                <CanvasDraw loadTimeOffset = {0} hideGrid id="canvas"
                 ref={canvasDraw => (setSavableCanvas(canvasDraw))}
                 brushColor={color}
                 brushRadius={brushRadius}
                 lazyRadius={0}
+                enablePanAndZoom
                 canvasWidth={window.innerWidth}
                 canvasHeight={window.innerHeight}
                 />
@@ -251,7 +245,3 @@ const Canvas = (props) => {
 }
 
 export default Canvas;
-
-
-
-
