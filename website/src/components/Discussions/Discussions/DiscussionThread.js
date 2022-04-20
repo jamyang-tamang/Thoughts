@@ -66,7 +66,7 @@ const DiscussionThread = (props) => {
                 <div style = {{textAlign: "center"}}>
                     <button onClick={props.returnDiscussion({"discussionId":"None" })}>Back</button>
                     <button onClick={props.goToHome}>Home</button>
-                    <button onClick={props.goToMessages}>DMs</button>
+                    <button onClick={props.goToInteractions}>DMs</button>
                     <button onClick={props.logout}>LogOut</button>
                 </div>
                 <Container>

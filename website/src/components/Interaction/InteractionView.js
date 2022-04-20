@@ -4,7 +4,7 @@ import IndividualMessageThread from './Messages/IndividualMessageThread';
 // import DiscussionThread from './DiscussionThread';
 
 
-const MessageView = (props) => {
+const InteractionView = (props) => {
     // const [showIndividualDiscussion, toggleShowIndividualDiscussion] = useState(true);
     const [activeMessageThread, setActiveThread] = useState({"key":"None"});
 
@@ -31,4 +31,4 @@ const MessageView = (props) => {
     return <View />
 };
 
-export default MessageView
+export default InteractionView

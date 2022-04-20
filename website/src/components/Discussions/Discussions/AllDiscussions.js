@@ -63,7 +63,7 @@ const AllDiscussions = (props) => {
             <NewDiscussionModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
             <div style = {{textAlign: "center"}}>
                 <button onClick={props.goToHome}>Home</button>
-                <button onClick={props.goToMessages}>DMs</button>
+                <button onClick={props.goToInteractions}>DMs</button>
                 <button onClick={props.logout}>LogOut</button>
             </div>
             <Container>

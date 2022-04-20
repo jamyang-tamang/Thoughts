@@ -1,7 +1,7 @@
 import  {React, useState, useEffect} from 'react';
 import { Stack, Typography, Box, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { updateDoc, addDoc, deleteDoc, getDocs, doc, query, collection, where, onSnapshot} from "firebase/firestore";
+import { updateDoc, addDoc, deleteDoc, doc, query, collection, where, onSnapshot} from "firebase/firestore";
 import {auth, db} from '../../../firebase-config'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -23,19 +23,15 @@ const DiscussionPost = (props) => {
     }, [props]);
 
     const deleteDiscussion = value => () => {
-        // deleteDoc(doc(db, "discussions", value.item.key));
-        
-        // const q = query(collection(db, "comments"), where("discussionId", "==", value.item.key));
-        // console.log(value.item.key);
-        // const querySnapshot = getDocs(q)
-        // .then(querySnapshot.forEach((doc) => {
-        //     // doc.data() is never undefined for query doc snapshots
-        //     console.log(doc.id, " => ", doc.data());
-        //     })
-        // );
-
-
-        deleteDoc(doc(db, "discussions", value.item.key)); 
+        const q = query(collection(db, "comments"), where("discussionId", "==", value.item.key));
+        const comments = [];
+        onSnapshot(q, (querySnapshot) => {
+        querySnapshot.forEach((item) => {
+                deleteDoc(doc(db, "comments", item.id));
+            },
+            deleteDoc(doc(db, "discussions", value.item.key)),
+            )
+        })
     }
 
     function Votes(){
@@ -43,7 +39,7 @@ const DiscussionPost = (props) => {
             return(<Stack direction="row">
                         <Stack direction="column">
                             <IconButton disabled={true} onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{alignContent:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
@@ -52,7 +48,7 @@ const DiscussionPost = (props) => {
             return(<Stack direction="row">
                         <Stack direction="column">
                             <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{alignContent:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton disabled={true} onClick={downVote(props)} ><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
@@ -61,7 +57,7 @@ const DiscussionPost = (props) => {
             return(<Stack direction="row">
                         <Stack direction="column">
                             <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{alignContent:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
@@ -134,20 +130,19 @@ const DiscussionPost = (props) => {
         }
     }
 
+    function DeleteEditOptions(){
+        if(auth.currentUser.email === props.item.creatorName)
+            return(<Stack direction="column" spacing={5}>
+                        <IconButton onClick={deleteDiscussion(props)}><DeleteIcon style={{fontSize: 30}} /></IconButton>
+                        <IconButton onClick={editDiscussion(props)}><EditIcon style={{fontSize: 30}} /></IconButton>
+                    </Stack>)
+        
+        return null;
+        
+    }
+
     const editDiscussion = value => () => { 
         props.openEditModal(value.item);
-    }
-
-    function DeleteButton (){
-        if(auth.currentUser.email === props.item.creatorName)
-            return <IconButton onClick={deleteDiscussion(props)}><DeleteIcon style={{fontSize: 30}} /></IconButton>;
-        return null
-    }
-
-    function EditButton (){
-        if(auth.currentUser.email === props.item.creatorName)
-            return <IconButton onClick={editDiscussion(props)}><EditIcon style={{fontSize: 30}} /></IconButton>;
-        return null
     }
 
     return (
@@ -171,10 +166,7 @@ const DiscussionPost = (props) => {
                     <Typography>Submitted by {props.item.creatorName} </Typography>
                     <Typography>Created at {props.item.createdAt} </Typography>
                 </Box>
-                <Stack direction="column" spacing={5}>
-                    <DeleteButton item={props.item} />
-                    <EditButton item={props}/>
-                </Stack>
+                <DeleteEditOptions/>
             </Stack>
         </div>
     )

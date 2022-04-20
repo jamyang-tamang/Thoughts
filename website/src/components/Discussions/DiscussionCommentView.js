@@ -31,10 +31,10 @@ const DiscussionCommentView = (props) => {
     function View() {
         if(activeDiscussion.discussionId != "None")
             return(
-                <DiscussionThread logout={props.logout} returnComment={returnComment} activeComment={activeComment} activeDiscussion={activeDiscussion} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+                <DiscussionThread logout={props.logout} returnComment={returnComment} activeComment={activeComment} activeDiscussion={activeDiscussion} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToInteractions={props.goToInteractions} goToLogin={props.goToLogin}/>
             )
         return(
-            <AllDiscussions logout={props.logout} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToMessages={props.goToMessages} goToLogin={props.goToLogin}/>
+            <AllDiscussions logout={props.logout} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToInteractions={props.goToInteractions} goToLogin={props.goToLogin}/>
         )
     }
 
