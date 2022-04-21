@@ -19,16 +19,21 @@ const Canvas = (props) => {
     const [widthPickerVisible, changeWidthPickerVisiblity] = useState(false);
     const [shapesVisible, changeShapesVisilbility] = useState(false);
     const [eraseMode, eraseModeToggle] = useState(false);
-    const [saveableCanvas, setSavableCanvas] = useState(null);
+    const [saveableCanvas, setSavableCanvas] = useState("None");
 
     useLayoutEffect(()=> {
-        if(saveableCanvas!== null){
-
+        console.log("This: " +saveableCanvas);
+        if(saveableCanvas!== "None"){
             onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
                 let canvas = doc.data().canvas.toString();
                 saveableCanvas.loadSaveData(canvas);
                 console.log(canvas);
               });
+
+            // return() => {
+            //     localStorage.setItem("savedDrawing", saveableCanvas);
+            //     console.log(localStorage.getItem("savedDrawing"));
+            // }
         }
     }, [saveableCanvas]);
 

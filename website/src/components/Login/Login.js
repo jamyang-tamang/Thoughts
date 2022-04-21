@@ -95,6 +95,12 @@ const Login = (props) => {
 
     const theme = createTheme();
 
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+      },
+    });
+
     
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -106,7 +112,7 @@ const Login = (props) => {
     };
 
     return(
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

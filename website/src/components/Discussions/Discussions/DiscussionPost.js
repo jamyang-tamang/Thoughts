@@ -6,10 +6,37 @@ import {auth, db} from '../../../firebase-config'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/Edit';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
 
 const DiscussionPost = (props) => {
     const [interaction, updateInteraction] = useState("nonExistant");
 
+    const theme = createTheme({
+        palette: {
+          background: {
+            paper: '#fff',
+          },
+          text: {
+            primary: orange[500],
+            secondary: '#46505A',
+          },
+          action: {
+            active: '#001E3C',
+          },
+        //   success: {
+        //     dark: '#009688',
+        //   },
+        },
+      });
+
+      const darkTheme = createTheme({
+        palette: {
+          mode: 'dark',
+        },
+      });
+
+      
     useEffect(()=> {
         const q = query (collection(db, "interactions"), where("postId", "==", props.item.key), where("userId", "==", auth.currentUser.uid));
         onSnapshot(q, (querySnapshot) => {
@@ -37,16 +64,16 @@ const DiscussionPost = (props) => {
     function Votes(){
         if(interaction.upVote){
             return(<Stack direction="row">
-                        <Stack direction="column">
+                        <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
                             <IconButton disabled={true} onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <Box style={{ paddingBottom:2.5, textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
         }
         else if(interaction.downVote){
             return(<Stack direction="row">
-                        <Stack direction="column">
+                        <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
                             <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
                             <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton disabled={true} onClick={downVote(props)} ><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
@@ -55,7 +82,7 @@ const DiscussionPost = (props) => {
         }
         else{
             return(<Stack direction="row">
-                        <Stack direction="column">
+                        <Stack direction="column" paddingRight={2.5} paddingTop={0.5} >
                             <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
                             <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
@@ -132,7 +159,7 @@ const DiscussionPost = (props) => {
 
     function DeleteEditOptions(){
         if(auth.currentUser.email === props.item.creatorName)
-            return(<Stack direction="column" spacing={5}>
+            return(<Stack direction="column" paddingLeft={2.5} paddingTop={0.5} spacing={5}>
                         <IconButton onClick={deleteDiscussion(props)}><DeleteIcon style={{fontSize: 30}} /></IconButton>
                         <IconButton onClick={editDiscussion(props)}><EditIcon style={{fontSize: 30}} /></IconButton>
                     </Stack>)
@@ -147,27 +174,28 @@ const DiscussionPost = (props) => {
 
     return (
         <div>
-            <Stack key={props.item.key} alignItems="flex-start" direction="row">
-                    <Votes props={props}/>
-                <Box
-                    sx={{
-                        width: window.innerWidth,
-                        padding: 4,
-                        backgroundColor: 'primary.main',
-                        '&:hover': {
-                        backgroundColor: 'primary.main',
-                        opacity: [0.9, 0.8, 0.7],
-                        },
-                    }} 
-                    onClick={props.returnDiscussion(props.item)}
-                    > 
-                    <Typography>{props.item.title} </Typography>
-                    <Typography>{props.item.commentCount} comments</Typography>
-                    <Typography>Submitted by {props.item.creatorName} </Typography>
-                    <Typography>Created at {props.item.createdAt} </Typography>
-                </Box>
-                <DeleteEditOptions/>
-            </Stack>
+            <ThemeProvider theme={darkTheme}>
+                <Stack key={props.item.key} alignItems="flex-start" direction="row">
+                        <Votes props={props}/>
+                    <Box
+                        sx={{
+                            width: window.innerWidth,
+                            padding: 2.5,
+                            backgroundColor: 'primary.main',
+                            '&:hover': {
+                            backgroundColor: 'primary.main',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                        }} 
+                        onClick={props.returnDiscussion(props.item)}
+                        > 
+                        <Typography variant="h3">{props.item.title} </Typography>
+                        <Typography variant="h5">Submitted on {props.item.createdAt} by {props.item.creatorName} </Typography>
+                        <Typography variant="h6">{props.item.commentCount} comments</Typography>
+                    </Box>
+                    <DeleteEditOptions/>
+                </Stack>
+            </ThemeProvider>
         </div>
     )
     

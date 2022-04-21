@@ -19,8 +19,6 @@ function getPage() {
 const App = () => {
     const [Page, setPage] = useState(getPage)
 
-  
-      
     useEffect(() => {
         sessionStorage.setItem('Page', JSON.stringify(Page));
     }, [Page]);   

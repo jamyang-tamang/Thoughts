@@ -10,28 +10,41 @@ import TextField from '@mui/material/TextField';
 
 const AllMessagesThreads = (props) => {
     const [messagesThreads, setMessageThreads] = useState([]);
+    const [validMessageThreads, setValidMessageThreads] = useState([]);
     const [rooms, setRooms] = useState([]);
     const [newMessageThreadModalState, setNewMessageThreadModalState] = useState(false);
     const [userSearch, setUserSearch] = useState("");
 
     useEffect(()=> {
-        console.log(userSearch);
-            let q = query (collection(db, "messageThread"), where("participants", "array-contains", sessionStorage.getItem('user')));
-            onSnapshot(q, (querySnapshot) => {
-                const messagesThreads = [];
-                querySnapshot.forEach((doc) => {
-                    messagesThreads.push({...doc.data(), key: doc.id});
-                })
-                if(userSearch === ""){
-                    setMessageThreads(messagesThreads);
-                }
-                // else
-                    // setMessageThreads(messagesThreads.filter(item.participants => contains(userSearch)));
-            },
-            (error) => {
-                console.log(error.message)
+        
+        let q = query (collection(db, "messageThread"), where("participants", "array-contains", sessionStorage.getItem('user')));
+        onSnapshot(q, (querySnapshot) => {
+            const messagesThreads = [];
+            querySnapshot.forEach((doc) => {
+                messagesThreads.push({...doc.data(), key: doc.id});
             })
-    }, [userSearch]);
+            setMessageThreads(messagesThreads);
+            setValidMessageThreads(messagesThreads);
+        },
+        (error) => {
+            console.log(error.message)
+        })
+    }, []);
+
+    const match = (element) => element.includes(userSearch);
+    
+    useEffect(()=> {
+            if(userSearch !== ""){
+                console.log("Filtered ");
+                console.log(messagesThreads.filter(message => message.participants.filter(participant => participant.includes(userSearch))));
+                setValidMessageThreads(messagesThreads.filter(message => message.participants.some(match)));
+                console.log("Unfiltered " );
+                console.log(validMessageThreads);
+            }
+            else{
+                setValidMessageThreads(messagesThreads);
+            }
+        }, [userSearch]);
     
 
     useEffect(()=> {
@@ -98,7 +111,7 @@ const AllMessagesThreads = (props) => {
                             <Add />
                         </Fab>
                         <Stack width={window.innerWidth} direction="column" m={5} spacing ={2}>
-                            {messagesThreads.map((thread) => (
+                            {validMessageThreads.map((thread) => (
                                         <ThreadBox returnMessageThread={props.returnMessageThread} key={thread.key} thread={thread} />
                                     ))}
                         </Stack>
