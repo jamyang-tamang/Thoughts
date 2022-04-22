@@ -3,7 +3,7 @@ import { useState, useEffect} from 'react';
 import { IconButton } from '@material-ui/core';
 import {Container} from '@mui/material'
 import { db } from "../../../firebase-config";
-import {collection, addDoc} from "firebase/firestore";
+import {collection, query, addDoc, where, onSnapshot} from "firebase/firestore";
 import CreateIcon from '@mui/icons-material/Create';
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -19,17 +19,41 @@ const NewMessageModal = (props) => {
     const [userToSendToPresent, toggleUserPresent] = useState(false);
     const [userToSendTo, setUserToSendTo] = useState("");
     const [messageContent, setMessageContent] = useState("");
+    const [newMessageErrorMessage, setNewMessageErrorMessage] = useState ("");
 
     const threadRef = collection(db, 'messageThread');
 
     const sendNewMessage = () => {
-        addDoc(threadRef, {
-            createdAt: Date().toLocaleString(),
-            participants: [userToSendTo, sessionStorage.getItem('user')]
-        })
-        .then(() => {
-            resetModalForm()
-        })
+        setNewMessageErrorMessage("");
+        if(userToSendTo === sessionStorage.getItem('user')){
+            setNewMessageErrorMessage("You can't send a message to yourself!!!!");
+        }
+        else{
+            const q = query(collection(db, "users"), where("email", "==", userToSendTo));
+            let x = query (collection(db, "messageThread"), where("specialKey", "in", [sessionStorage.getItem('user')+userToSendTo, userToSendTo+sessionStorage.getItem('user')]));
+            onSnapshot(q, (querySnapshot) => {
+                if(querySnapshot.size > 0 ){
+                    onSnapshot(x, (newQuerySnapshot) => {
+                        if(newQuerySnapshot.size === 0 ){
+                            addDoc(threadRef, {
+                                createdAt: Date().toLocaleString(),
+                                specialKey: userToSendTo+sessionStorage.getItem('user'),
+                                participants: [userToSendTo, sessionStorage.getItem('user')]
+                            })
+                            .then(() => {
+                                resetModalForm()
+                            })
+                        }
+                        else{
+                            setNewMessageErrorMessage("Thread with that email already exists");
+                        }
+                    })
+                }
+                else{
+                    setNewMessageErrorMessage("No user with that email found");
+                }
+            })
+        }
     }
 
     useEffect(()=> {
@@ -40,6 +64,7 @@ const NewMessageModal = (props) => {
 
     const resetModalForm = () => {
         setUserToSendTo("");
+        setNewMessageErrorMessage("");
         props.closeModal();
     }
 
@@ -57,7 +82,7 @@ const NewMessageModal = (props) => {
     return(
     <Modal
         isOpen={props.modalIsOpen}
-        onRequestClose={props.closeModal}
+        onRequestClose={resetModalForm}
         style={customStyles}
         ariaHideApp={false}
         >
@@ -93,9 +118,13 @@ const NewMessageModal = (props) => {
                     />
                 </Grid>
             </Grid>
+
+            <Typography component="p" variant="h6" color="red" >
+                {newMessageErrorMessage}
+              </Typography>
                 <Grid container justifyContent="flex-end">
                     <Grid item justifyContent="flex-end">
-                        <IconButton size="medium" color="secondary" onClick={props.closeModal}>
+                        <IconButton size="medium" color="secondary" onClick={resetModalForm}>
                             <CancelIcon/>
                         </IconButton>
                         <IconButton disabled={userToSendToPresent} size="medium" onClick={sendNewMessage}>
