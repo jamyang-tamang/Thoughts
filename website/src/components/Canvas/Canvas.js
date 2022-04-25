@@ -1,4 +1,4 @@
-import { React, useState, useRef, useLayoutEffect } from "react";
+import { React, useState, useRef, useLayoutEffect, useEffect } from "react";
 import {SketchPicker } from 'react-color'
 import LineWidthPicker from 'react-line-width-picker'
 import CanvasDraw from "react-canvas-draw";
@@ -21,9 +21,9 @@ const Canvas = (props) => {
     const [eraseMode, eraseModeToggle] = useState(false);
     const [saveableCanvas, setSavableCanvas] = useState("None");
 
-    useLayoutEffect(()=> {
-        console.log("This: " +saveableCanvas);
-        if(saveableCanvas!== "None"){
+    useEffect(()=> {
+        console.log("This: " + saveableCanvas);
+        if(saveableCanvas !== "None"){
             onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
                 let canvas = doc.data().canvas.toString();
                 saveableCanvas.loadSaveData(canvas);
@@ -31,8 +31,8 @@ const Canvas = (props) => {
               });
 
             // return() => {
-            //     localStorage.setItem("savedDrawing", saveableCanvas);
-            //     console.log(localStorage.getItem("savedDrawing"));
+            //     // localStorage.setItem("savedDrawing", saveableCanvas);
+            //     // console.log(localStorage.getItem("savedDrawing"));
             // }
         }
     }, [saveableCanvas]);
@@ -134,17 +134,11 @@ const Canvas = (props) => {
                     <button onClick={toggleColorPicker}><img src={colorPicker} style = {toolButtons}/></button>
                     <button onClick={toggleWidthPicker}><img src={widthPicker} style = {toolButtons}/></button>
                     <button onClick={undo}>Undo</button>
-                    <button>Redo</button>
-                    {/* <button onClick={toogleText}>Text</button> */}
                     <button onClick={toogleTool}>hide</button>
-                    <button>pan</button>
                     <button onClick={clearCanvas}>clear</button> 
                     <button
                         onClick={post}
                     >POST</button>
-                    {/* <button
-                    onClick={load}                        
-                    >Load</button> */}
                 </div>
         }
         else{
@@ -189,6 +183,7 @@ const Canvas = (props) => {
     }
 
     const undo = () => {
+        saveableCanvas.undo();
     }
 
     const toggleShapes = () => {

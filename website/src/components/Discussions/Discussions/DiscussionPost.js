@@ -6,33 +6,20 @@ import {auth, db} from '../../../firebase-config'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/Edit';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { orange } from '@mui/material/colors';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const DiscussionPost = (props) => {
     const [interaction, updateInteraction] = useState("nonExistant");
 
     const theme = createTheme({
         palette: {
-          background: {
-            paper: '#fff',
-          },
-          text: {
-            primary: orange[500],
-            secondary: '#46505A',
-          },
-          action: {
-            active: '#001E3C',
-          },
-        //   success: {
-        //     dark: '#009688',
-        //   },
-        },
-      });
-
-      const darkTheme = createTheme({
-        palette: {
-          mode: 'dark',
+            type: 'light',
+            primary: {
+              main: '#639a60',
+            },
+            secondary: {
+              main: '#ffffff',
+            },
         },
       });
 
@@ -65,27 +52,27 @@ const DiscussionPost = (props) => {
         if(interaction.upVote){
             return(<Stack direction="row">
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
-                            <IconButton disabled={true} onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{ paddingBottom:2.5, textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
-                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
+                            <IconButton disabled={true} onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"blue"}} style={{ fontSize: 40 }} /></IconButton>
+                            <Box sx={{color:"blue"}} style={{ paddingBottom:2.5, textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} sx={{color:"white"}} /></IconButton>
                         </Stack>
                     </Stack>);
         }
         else if(interaction.downVote){
             return(<Stack direction="row">
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
-                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
-                            <IconButton disabled={true} onClick={downVote(props)} ><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
+                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
+                            <Box sx={{color:"red"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <IconButton disabled={true} onClick={downVote(props)} ><ArrowDownwardIcon sx={{color:"red"}} style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
         }
         else{
             return(<Stack direction="row">
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5} >
-                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon style={{ fontSize: 40 }} /></IconButton>
-                            <Box style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
-                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} /></IconButton>
+                            <IconButton color="secondary" onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
+                            <Box sx={{color:"white"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <IconButton color="secondary" onClick={downVote(props)}><ArrowDownwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
         }
@@ -160,8 +147,8 @@ const DiscussionPost = (props) => {
     function DeleteEditOptions(){
         if(auth.currentUser.email === props.item.creatorName)
             return(<Stack direction="column" paddingLeft={2.5} paddingTop={0.5} spacing={5}>
-                        <IconButton onClick={deleteDiscussion(props)}><DeleteIcon style={{fontSize: 30}} /></IconButton>
-                        <IconButton onClick={editDiscussion(props)}><EditIcon style={{fontSize: 30}} /></IconButton>
+                        <IconButton onClick={deleteDiscussion(props)}><DeleteIcon sx={{ '&:hover': {color: 'red',}}} style={{fontSize: 30}} /></IconButton>
+                        <IconButton onClick={editDiscussion(props)}><EditIcon sx={{ '&:hover': {color: 'blue',}}} style={{fontSize: 30}} /></IconButton>
                     </Stack>)
         
         return null;
@@ -174,7 +161,7 @@ const DiscussionPost = (props) => {
 
     return (
         <div>
-            <ThemeProvider theme={darkTheme}>
+            <ThemeProvider theme={theme}>
                 <Stack key={props.item.key} alignItems="flex-start" direction="row">
                         <Votes props={props}/>
                     <Box
@@ -189,9 +176,9 @@ const DiscussionPost = (props) => {
                         }} 
                         onClick={props.returnDiscussion(props.item)}
                         > 
-                        <Typography variant="h3">{props.item.title} </Typography>
-                        <Typography variant="h5">Submitted on {props.item.createdAt} by {props.item.creatorName} </Typography>
-                        <Typography variant="h6">{props.item.commentCount} comments</Typography>
+                        <Typography variant="h3" color="common.white">{props.item.title} </Typography>
+                        <Typography variant="h5" color="common.white">Submitted on {props.item.createdAt} by {props.item.creatorName} </Typography>
+                        <Typography variant="h6" color="common.white">{props.item.commentCount} comments</Typography>
                     </Box>
                     <DeleteEditOptions/>
                 </Stack>

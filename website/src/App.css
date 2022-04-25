@@ -37,6 +37,10 @@
   }
 }
 
+body{
+  background-color: #0b816f;
+}
+
 .cursor{
   width: 3rem;
   height: 3rem;

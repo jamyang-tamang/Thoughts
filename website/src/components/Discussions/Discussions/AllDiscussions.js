@@ -58,7 +58,7 @@ const AllDiscussions = (props) => {
     };
 
     return(
-        <div> 
+        <div>
             <EditDiscussionModal editModalRef={editModalRef} modalIsOpen={editModalIsOpen} closeModal={closeEditModal}/>
             <NewDiscussionModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
             <div style = {{textAlign: "center"}}>

@@ -83,6 +83,7 @@ const Login = (props) => {
 
     const customStyles = {
         content: {
+          backgroundColor: '#0b816f',
           top: '50%',
           left: '50%',
           right: 'auto',
@@ -93,11 +94,26 @@ const Login = (props) => {
     };
 
 
-    const theme = createTheme();
-
-    const darkTheme = createTheme({
+    const theme = createTheme({
       palette: {
-        mode: 'dark',
+        type: 'light',
+        primary: {
+          main: '#a3f341',
+        },
+        secondary: {
+          main: '#32afef',
+        },
+        text: {
+          primary: '#f8f4fb',
+          secondary: '#d4d1cc',
+        },
+        background: {
+          default: '#0b816f',
+          paper: '#0b816f',
+        },
+        success: {
+          main: '#711bf9',
+        },
       },
     });
 
@@ -112,7 +128,7 @@ const Login = (props) => {
     };
 
     return(
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -175,12 +191,6 @@ const Login = (props) => {
                   onChange={(event) => {
                     setRegisterPassword(event.target.value)
                 }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>
