@@ -55,6 +55,10 @@ const AllDiscussions = (props) => {
         bottom: 20,
         left: 'auto',
         position: 'fixed',
+        backgroundColor: '#A0DDE6',
+        // '&:hover': {
+        //     backgroundColor: '#30C5FF'
+        // },
     };
 
     return(
@@ -72,7 +76,7 @@ const AllDiscussions = (props) => {
                         <DiscussionPost key={item.key} item={item} openEditModal={openEditModal} returnDiscussion={props.returnDiscussion}/>
                     ))}
                 </Stack>
-                <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
+                <Fab onClick={openModal} style={fabStyle} size="large" aria-label="add">
                     <Add />
                 </Fab>
             </Container>

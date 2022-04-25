@@ -6,6 +6,7 @@ import {auth, db} from '../../../firebase-config'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/Edit';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const Comment = (props) => {
     const [interaction, updateInteraction] = useState("nonExistant");
@@ -141,30 +142,44 @@ const Comment = (props) => {
         return null
     }
 
+    const theme = createTheme({
+        palette: {
+            type: 'light',
+            primary: {
+              main: '#79ae92',
+            },
+            secondary: {
+              main: '#ffffff',
+            },
+        },
+      });
+      
     return (
-        <Stack key={props.item.commentId} alignItems="flex-start" direction="row">
-            <Votes props={props}/>
-            <Box
-                sx={{
-                    width: window.innerWidth,
-                    padding: 4,
-                    backgroundColor: 'primary.main',
-                    '&:hover': {
-                    backgroundColor: 'primary.main',
-                    opacity: [0.9, 0.8, 0.7],
-                    },
-                }}
-                onClick={props.returnComment(props.item)}
-                > 
-                <Typography>{props.item.comment}</Typography>
-                {/* <Typography>{props.item.commentCount} comments</Typography> */}
-                <Typography>Submitted by {props.item.creatorName} at {props.item.createdAt} </Typography>
-            </Box>
-            <Stack direction="column">
-                <DeleteButton id={props} />
-                <EditButton id={props}/>
+        <ThemeProvider theme={theme}>
+            <Stack key={props.item.commentId} alignItems="flex-start" direction="row">
+                <Votes props={props}/>
+                <Box
+                    sx={{
+                        width: window.innerWidth,
+                        padding: 4,
+                        backgroundColor: 'primary.main',
+                        '&:hover': {
+                        backgroundColor: 'primary.main',
+                        opacity: [0.9, 0.8, 0.7],
+                        },
+                    }}
+                    onClick={props.returnComment(props.item)}
+                    > 
+                    <Typography>{props.item.comment}</Typography>
+                    {/* <Typography>{props.item.commentCount} comments</Typography> */}
+                    <Typography>Submitted by {props.item.creatorName} at {props.item.createdAt} </Typography>
+                </Box>
+                <Stack direction="column">
+                    <DeleteButton id={props} />
+                    <EditButton id={props}/>
+                </Stack>
             </Stack>
-        </Stack>
+        </ThemeProvider>
     )
     
 }

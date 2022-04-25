@@ -58,6 +58,7 @@ const DiscussionThread = (props) => {
         left: 'auto',
         position: 'fixed',
     };
+    
 
         return(
             <div>
@@ -74,16 +75,21 @@ const DiscussionThread = (props) => {
                         sx={{
                             margin: 3,
                             padding: 4,
-                            backgroundColor: 'primary.main',
+                            color: '#ffffff',
+                            backgroundColor: '#7a9295',
                             '&:hover': {
-                            backgroundColor: 'primary.main',
                             opacity: [0.9, 0.8, 0.7],
                             },
                         }}
                         >
-                        <Typography>Title {props.activeDiscussion.title}</Typography>
+
+                    <Typography variant="h3" color="common.white">{props.activeDiscussion.title} </Typography>
+                    <Typography variant="h5" color="common.white">Submitted on {props.activeDiscussion.createdAt} by {props.activeDiscussion.creatorName} </Typography>
+                    <Typography variant="h6" color="common.white">{props.activeDiscussion.commentCount} comments</Typography>
+
+                        {/* <Typography>Title {props.activeDiscussion.title}</Typography>
                         <Typography>{props.activeDiscussion.commentCount} comments</Typography>
-                        <Typography>Submitted by {props.activeDiscussion.creatorName} {props.activeDiscussion.createdAt} hours ago</Typography>
+                        <Typography>Submitted by {props.activeDiscussion.creatorName} {props.activeDiscussion.createdAt} hours ago</Typography> */}
                     </Box>
                     <Stack direction="column" m={5} spacing ={2}>
                         {comments.map((item) => (

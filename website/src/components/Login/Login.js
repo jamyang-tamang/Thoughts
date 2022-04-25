@@ -19,6 +19,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {db} from '../../firebase-config';
 import {collection, addDoc} from "firebase/firestore";
+import bulb from "../../Assets/Bulb.png";
 
 
 const Login = (props) => {
@@ -226,7 +227,7 @@ const Login = (props) => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            backgroundImage: 'url(https://source.unsplash.com/NtfFqT8JBI0)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

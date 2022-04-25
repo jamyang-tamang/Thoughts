@@ -1,9 +1,21 @@
 import  {React, useState, useEffect} from 'react';
 import { Stack, Typography, Box, IconButton} from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const ThreadBox = (props) => {
 
+    const theme = createTheme({
+        palette: {
+            type: 'light',
+            primary: {
+              main: '#D16666',
+            },
+            secondary: {
+              main: '#ffffff',
+            },
+        },
+      });
 
     const recipientId = (props) => {
         var members = (props.thread.participants).toString();
@@ -18,7 +30,7 @@ const ThreadBox = (props) => {
     }
 
     return (
-        <div>
+        <ThemeProvider theme={theme}>
             <Stack key={props.thread.key} alignItems="flex-start" direction="row">
                 <Box
                     sx={{
@@ -36,7 +48,7 @@ const ThreadBox = (props) => {
                     <Typography>{recipientId(props)} </Typography>
                 </Box>
             </Stack>
-        </div>
+        </ThemeProvider>
     )
     
 }
