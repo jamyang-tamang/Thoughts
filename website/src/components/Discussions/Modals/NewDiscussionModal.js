@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect} from 'react';
 import {auth} from '../../../firebase-config'
-import { IconButton } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {Container} from '@mui/material'
 import { db } from "../../../firebase-config";
 import {collection, addDoc} from "firebase/firestore";
@@ -143,16 +143,18 @@ const NewDiscussionModal = (props) => {
                 />
                 </Grid>
             </Grid>
-                <Grid container justifyContent="flex-end">
-                    <Grid item justifyContent="flex-end">
-                        <IconButton size="medium" color="secondary" onClick={props.closeModal}>
-                            <CancelIcon/>
-                        </IconButton>
-                        <IconButton disabled={titlePresent} size="medium" onClick={postNewDisccusion}>
-                            <PostAddIcon color="success"/>
-                        </IconButton>
-                    </Grid>
+            <Grid container justifyContent="flex-end">
+                <Grid item justifyContent="flex-end" sx={{marginTop: 3}}>
+                    <Button sx={{marginRight: 3}}>
+                        <CancelIcon color="secondary" fontSize="large" onClick={props.closeModal} />
+                    </Button>
+                    <Button  disabled={titlePresent} sx={{marginRight: 3}}>
+                        <PostAddIcon color="success" fontSize="large" onClick={postNewDisccusion} />
+                    </Button>
+                    
                 </Grid>
+            </Grid>
+
             </Box>
         </Box>
     </Container>
