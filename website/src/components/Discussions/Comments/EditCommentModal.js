@@ -50,6 +50,7 @@ const EditCommentModal = (props) => {
           bottom: 'auto',
           marginRight: '-50%',
           transform: 'translate(-50%, -50%)',
+          backgroundColor: '#A0DDE6',
         },
     };
 
