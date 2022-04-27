@@ -7,6 +7,7 @@ import { Fab } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import NewMessageModal from "../Modals/NewMessageModal";
 import TextField from '@mui/material/TextField';
+import AllMessageNavbar from './Navbars/AllMessageNavbar'
 
 const AllMessagesThreads = (props) => {
     const [messagesThreads, setMessageThreads] = useState([]);
@@ -75,7 +76,7 @@ const AllMessagesThreads = (props) => {
         setNewMessageThreadModalState(false);
     }
 
-    const messagesFabStyle = {
+    const roomsFabStyle = {
         margin: 0,
         top: 'auto',
         bottom: 20,
@@ -83,7 +84,7 @@ const AllMessagesThreads = (props) => {
         position: 'fixed',
     };
 
-    const roomsFabStyle = {
+    const messagesFabStyle = {
         margin: 0,
         top: 'auto',
         right: 20,
@@ -94,23 +95,19 @@ const AllMessagesThreads = (props) => {
 
     return(
     <div>
-        <div style = {{textAlign: "center"}}>
-            <button onClick={props.goToDiscussions}>Discussions</button>
-            <button onClick={props.goToHome}>Home</button>
-            <button onClick={props.logout}>LogOut</button>
-        </div>
+        <AllMessageNavbar props={props}/>
         
         <Stack direction="column">
                 <NewMessageModal modalIsOpen={newMessageThreadModalState} closeModal={closeNewMessageThreadModal}/>
                 <Container>
-                    <TextField onChange={(event) => {
+                    <TextField sx={{margin: 2}} onChange={(event) => {
                         setUserSearch(event.target.value)
-                    }} id="outlined-search" label="Search field" type="search" fullWidth />
+                    }} id="standard-basic" label="Find Message Threads" variant="standard"  fullWidth />
                     <Stack direction="row">
-                        <Fab onClick={openNewMessageThreadModal} style={messagesFabStyle} size="large" color="primary" aria-label="add">
+                        {/* <Fab onClick={openNewRoomModal } style={roomsFabStyle} size="large" color="primary" aria-label="add">
                             <Add />
-                        </Fab>
-                        <Stack width={window.innerWidth} direction="column" m={5} spacing ={2}>
+                        </Fab> */}
+                        <Stack width={window.innerWidth} direction="column" m={5} spacing ={0}>
                             {validMessageThreads.map((thread) => (
                                         <ThreadBox returnMessageThread={props.returnMessageThread} key={thread.key} thread={thread} />
                                     ))}
@@ -120,7 +117,7 @@ const AllMessagesThreads = (props) => {
                                     <IndividualRooms key={room.key} room={room}/>
                                 ))}
                         </Stack> */}
-                        <Fab onClick={openNewRoomModal} style={roomsFabStyle} size="large" color="primary" aria-label="add">
+                        <Fab onClick={openNewMessageThreadModal} style={messagesFabStyle} size="large" color="primary" aria-label="add">
                             <Add />
                         </Fab>
                     </Stack>

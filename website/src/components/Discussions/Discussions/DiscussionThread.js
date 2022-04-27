@@ -1,8 +1,7 @@
 import React from "react";
 import { useState, useEffect} from 'react';
-import { signOut } from "firebase/auth";
-import {auth, db} from '../../../firebase-config'
-import { Fab } from '@material-ui/core';
+import { db} from '../../../firebase-config'
+import { Fab, Button } from '@material-ui/core';
 import {Stack, Container} from '@mui/material'
 import {collection, onSnapshot, query, where} from "firebase/firestore";
 import CommentBox from '../Comments/commentBox'
@@ -11,6 +10,10 @@ import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import NewCommentModal from "../Comments/NewCommentModal";
 import EditCommentModal from "../Comments/EditCommentModal";
+import ReplyIcon from '@mui/icons-material/Reply';
+import GestureIcon from '@mui/icons-material/Gesture';
+import LogoutIcon from '@mui/icons-material/Logout';
+import MailIcon from '@mui/icons-material/Mail';
 
 const DiscussionThread = (props) => {
     const [comments, setComments] = useState([]);
@@ -26,7 +29,7 @@ const DiscussionThread = (props) => {
             querySnapshot.forEach((doc) => {
                 comments.push({...doc.data(), key: doc.id});
             })
-            setComments(comments);
+            setComments(comments.sort((a,b) => ((a.upVoteCount-a.downVoteCount) < (b.upVoteCount-b.downVoteCount)) ? 1 : ((b.upVoteCount-b.downVoteCount) < (a.upVoteCount-a.downVoteCount) ? -1 : 0)));
         },
         (error) => {
             console.log(error.message)
@@ -64,17 +67,18 @@ const DiscussionThread = (props) => {
             <div>
                 <EditCommentModal editCommentRef={editCommentRef} modalIsOpen={editCommentModalIsOpen} closeModal={closeEditModal} activeComment={props.activeComment}/>
                 <NewCommentModal  modalIsOpen={modalIsOpen} closeModal={closeModal} activeDiscussion={props.activeDiscussion}/>
-                <div style = {{textAlign: "center"}}>
-                    <button onClick={props.returnDiscussion({"discussionId":"None" })}>Back</button>
-                    <button onClick={props.goToHome}>Home</button>
-                    <button onClick={props.goToInteractions}>DMs</button>
-                    <button onClick={props.logout}>LogOut</button>
+                <div style = {{backgroundColor: "#0B816f", textAlign: "right"}}>
+                    <Button onClick={props.returnDiscussion({"discussionId":"None" })}><ReplyIcon fontSize="large" /></Button>
+                    <Button onClick={props.goToHome}><GestureIcon fontSize="large" /></Button>
+                    <Button onClick={props.goToInteractions}><MailIcon fontSize="large" /></Button>
+                    <Button onClick={props.logout}><LogoutIcon fontSize="large" /></Button>
                 </div>
                 <Container>
                     <Box
                         sx={{
                             margin: 3,
                             padding: 4,
+                            boxShadow: 7,
                             color: '#ffffff',
                             backgroundColor: '#7a9295',
                             '&:hover': {
@@ -83,13 +87,10 @@ const DiscussionThread = (props) => {
                         }}
                         >
 
-                    <Typography variant="h3" color="common.white">{props.activeDiscussion.title} </Typography>
-                    <Typography variant="h5" color="common.white">Submitted on {props.activeDiscussion.createdAt} by {props.activeDiscussion.creatorName} </Typography>
-                    <Typography variant="h6" color="common.white">{props.activeDiscussion.commentCount} comments</Typography>
-
-                        {/* <Typography>Title {props.activeDiscussion.title}</Typography>
-                        <Typography>{props.activeDiscussion.commentCount} comments</Typography>
-                        <Typography>Submitted by {props.activeDiscussion.creatorName} {props.activeDiscussion.createdAt} hours ago</Typography> */}
+                        <Typography variant="h3" color="common.white">{props.activeDiscussion.title} </Typography>
+                        <Typography variant="h4" color="common.white">{props.activeDiscussion.contentText} </Typography>
+                        <Typography variant="h5" color="common.white">Submitted on {props.activeDiscussion.createdAt} by {props.activeDiscussion.creatorName} </Typography>
+                        <Typography variant="h6" color="common.white">{props.activeDiscussion.commentCount} comments</Typography>
                     </Box>
                     <Stack direction="column" m={5} spacing ={2}>
                         {comments.map((item) => (

@@ -2,7 +2,6 @@ import  {React, useState, useEffect} from 'react';
 import AllDiscussions from './Discussions/AllDiscussions';
 import DiscussionThread from './Discussions/DiscussionThread';
 
-
 const DiscussionCommentView = (props) => {
     // const [showIndividualDiscussion, toggleShowIndividualDiscussion] = useState(true);
     const [activeDiscussion, setDiscussion] = useState({"discussionId":"None"});

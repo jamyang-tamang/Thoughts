@@ -52,7 +52,7 @@ const NewCommentModal = (props) => {
     const customStyles = {
         content: {
           top: '50%',
-          backgroundColor: '#A0DDE6',
+          backgroundColor: '#C8A2C8',
           left: '50%',
           right: 'auto',
           bottom: 'auto',

@@ -36,9 +36,11 @@ const ThreadBox = (props) => {
                     sx={{
                         width: "100%",
                         padding: 4,
-                        backgroundColor: 'primary.main',
+                        border: "solid white",
+                        boxShadow: 3,
+                        backgroundColor: '#63B0CD',
                         '&:hover': {
-                        backgroundColor: 'primary.main',
+                        backgroundColor: '#60AB9A',
                         opacity: [0.9, 0.8, 0.7],
                         },
                     }}

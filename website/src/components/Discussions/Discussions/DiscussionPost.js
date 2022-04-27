@@ -55,14 +55,14 @@ const DiscussionPost = (props) => {
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
                             <IconButton disabled={true} onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"#39FF14"}} style={{ fontSize: 40 }} /></IconButton>
                             <Box sx={{color:"#39FF14"}} style={{ paddingBottom:2.5, textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
-                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} sx={{color:"white"}} /></IconButton>
+                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} sx={{color:"#808080", '&:hover': {color: 'red',}}} /></IconButton>
                         </Stack>
                     </Stack>);
         }
         else if(interaction.downVote){
             return(<Stack direction="row">
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
-                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
+                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"#808080", '&:hover': {color: '#39FF14'}, '&:hover': {color: '#808080',}}} style={{ fontSize: 40 }} /></IconButton>
                             <Box sx={{color:"red"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton disabled={true} onClick={downVote(props)} ><ArrowDownwardIcon sx={{color:"red"}} style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
@@ -71,9 +71,9 @@ const DiscussionPost = (props) => {
         else{
             return(<Stack direction="row">
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5} >
-                            <IconButton color="secondary" onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
-                            <Box sx={{color:"white"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
-                            <IconButton color="secondary" onClick={downVote(props)}><ArrowDownwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
+                            <IconButton color="secondary" onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"#808080", '&:hover': {color: '#39FF14',}}} style={{ fontSize: 40 }} /></IconButton>
+                            <Box sx={{color:"#808080"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <IconButton color="secondary" onClick={downVote(props)}><ArrowDownwardIcon sx={{color:"#808080", '&:hover': {color: 'red',}}} style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
         }

@@ -1,11 +1,15 @@
 import {React, useEffect, useState} from "react";
 import {db} from '../../../firebase-config'
-import {Stack, Container} from '@mui/material'
-import { addDoc, collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
+import {Stack, Container, Typography, Box} from '@mui/material'
+import { addDoc, collection, query, where, onSnapshot } from "firebase/firestore";
 import TextField from '@mui/material/TextField';
 import MessageBox from "./MessageBox";
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import LogoutIcon from '@mui/icons-material/Logout';
+import GestureIcon from '@mui/icons-material/Gesture';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import SendIcon from '@mui/icons-material/Send';
+import ReplyIcon from '@mui/icons-material/Reply';
 
 const IndividualMessageThread = (props) => {
     const [messages, setMessages] = useState([]);
@@ -49,11 +53,12 @@ const IndividualMessageThread = (props) => {
 
     return(
     <div>
-        <div style = {{textAlign: "center"}}>
-            <button onClick={props.returnMessageThread({"key":"None"})}>Back</button>
-            <button onClick={props.goToDiscussions}>Discussions</button>
-            <button onClick={props.goToHome}>Home</button>
-            <button onClick={props.logout}>LogOut</button>
+        <div style = {{backgroundColor: "#0B816f" ,textAlign: "right"}}>
+        <Typography marginRight="auto" display="inline" textAlign="left" variant="h6">{props.activeMessageThread.participants.filter(name => !name.includes(sessionStorage.getItem('user')))}</Typography>
+            <Button onClick={props.returnMessageThread({"key":"None" })}><ReplyIcon fontSize="large" /></Button>
+            <Button onClick={props.goToDiscussions}><WorkspacesIcon fontSize="large"/></Button>
+            <Button onClick={props.goToHome}><GestureIcon fontSize="large" /></Button>
+            <Button onClick={props.logout}><LogoutIcon fontSize="large" /></Button>
         </div>
         
         <Stack direction="column" m={5} spacing ={2}>
@@ -67,7 +72,7 @@ const IndividualMessageThread = (props) => {
                         <TextField id="outlined-search" label="Message" type="search" onChange={(event) => {
                         setNewTextMessage(event.target.value)
                     }} fullWidth/>
-                        <IconButton size="medium" onClick={createNewMessage(props)}><SendIcon/></IconButton>
+                        <Button size="medium" onClick={createNewMessage(props)}><SendIcon/></Button>
                 </Stack>
         </Stack>
     </div>

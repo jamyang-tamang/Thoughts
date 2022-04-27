@@ -8,9 +8,10 @@ import colorPicker from '../../Assets/Canvas/color-picker.png';
 import widthPicker from '../../Assets/Canvas/width-picker.png';
 import { doc, query, collection, where, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
+import Navbar from "./Navbar";
 
 const Canvas = (props) => {
-    const [color, setColor] = useState("#ffc600");
+    const [color, setColor] = useState("#000000");
     const [brushRadius, setBrushRadius] = useState(5);
     const [strokeColor, changeStrokeColor] = useState("#000000");
     const [strokeWidth, changeStrokeWidth] = useState(5);
@@ -22,7 +23,6 @@ const Canvas = (props) => {
     const [saveableCanvas, setSavableCanvas] = useState("None");
 
     useEffect(()=> {
-        console.log("This: " + saveableCanvas);
         if(saveableCanvas !== "None"){
             onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
                 let canvas = doc.data().canvas.toString();
@@ -35,6 +35,10 @@ const Canvas = (props) => {
             //     // console.log(localStorage.getItem("savedDrawing"));
             // }
         }
+        else{
+            setSavableCanvas(localStorage.getItem("savedDrawing"));
+        }
+        console.log("This: " + saveableCanvas);
     }, [saveableCanvas]);
 
     const clearCanvas = () => {
@@ -115,7 +119,10 @@ const Canvas = (props) => {
         //     "savedDrawing",
         //     saveableCanvas.getSaveData()
         //   );
-        console.log(localStorage.getItem("savedDrawing"));
+        // console.log(localStorage.getItem("savedDrawing"));
+        // console.log(localStorage.setItem("savedDrawing"));
+
+        localStorage.setItem("savedDrawing", saveableCanvas);
         updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
             canvas: saveableCanvas.getSaveData(),
         });
@@ -222,20 +229,17 @@ const Canvas = (props) => {
 
        
         <div >
-            <div style = {{textAlign: "center"}}>
-                <button onClick={props.goToDiscussions}>Discussions</button>
-                <button onClick={props.goToInteractions}>DMs</button>
-                <button onClick={props.logout}>logout</button>
-                <CanvasDraw loadTimeOffset = {0} hideGrid id="canvas"
-                ref={canvasDraw => (setSavableCanvas(canvasDraw))}
-                brushColor={color}
-                brushRadius={brushRadius}
-                lazyRadius={0}
-                enablePanAndZoom
-                canvasWidth={window.innerWidth}
-                canvasHeight={window.innerHeight}
-                />
-            </div>
+            <Navbar props={props}/>
+            <CanvasDraw loadTimeOffset = {0} hideGrid id="canvas"
+            ref={canvasDraw => (setSavableCanvas(canvasDraw))}
+            brushColor={color}
+            brushRadius={brushRadius}
+            lazyRadius={0}
+            enablePanAndZoom
+            canvasWidth={window.innerWidth}
+            canvasHeight={window.innerHeight}
+            />
+            
             <DrawingTools />
             <ColorPicker />
             <WidthPicker/>

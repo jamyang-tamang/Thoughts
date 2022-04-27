@@ -37,14 +37,14 @@ const Comment = (props) => {
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
                             <IconButton disabled={true} onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"#39FF14"}} style={{ fontSize: 40 }} /></IconButton>
                             <Box sx={{color:"#39FF14"}} style={{ paddingBottom:2.5, textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
-                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} sx={{color:"white"}} /></IconButton>
+                            <IconButton onClick={downVote(props)}><ArrowDownwardIcon style={{ fontSize: 40 }} sx={{color:"#808080", '&:hover': {color: 'red',}}} /></IconButton>
                         </Stack>
                     </Stack>);
         }
         else if(interaction.downVote){
             return(<Stack direction="row">
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5}>
-                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
+                            <IconButton onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"#808080", '&:hover': {color: '#39FF14'}}} style={{ fontSize: 40 }} /></IconButton>
                             <Box sx={{color:"red"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
                             <IconButton disabled={true} onClick={downVote(props)} ><ArrowDownwardIcon sx={{color:"red"}} style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
@@ -53,9 +53,9 @@ const Comment = (props) => {
         else{
             return(<Stack direction="row">
                         <Stack direction="column" paddingRight={2.5} paddingTop={0.5} >
-                            <IconButton color="secondary" onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
-                            <Box sx={{color:"white"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
-                            <IconButton color="secondary" onClick={downVote(props)}><ArrowDownwardIcon sx={{color:"white"}} style={{ fontSize: 40 }} /></IconButton>
+                            <IconButton color="secondary" onClick={upVote(props)}><ArrowUpwardIcon sx={{color:"#808080", '&:hover': {color: '#39FF14',}}} style={{ fontSize: 40 }} /></IconButton>
+                            <Box sx={{color:"#808080"}} style={{textAlign:"center"}}>{parseInt(props.item.upVoteCount) - parseInt(props.item.downVoteCount)}</Box>
+                            <IconButton color="secondary" onClick={downVote(props)}><ArrowDownwardIcon sx={{color:"#808080", '&:hover': {color: 'red',}}} style={{ fontSize: 40 }} /></IconButton>
                         </Stack>
                     </Stack>);
         }
@@ -131,18 +131,6 @@ const Comment = (props) => {
         props.openModal(value.item);
     }
 
-    function DeleteButton (){
-        if(auth.currentUser.email === props.item.creatorName)
-            return <IconButton onClick={deleteComment(props)}><DeleteIcon /></IconButton>;
-        return null
-    }
-
-    function EditButton (){
-        if(auth.currentUser.email === props.item.creatorName)
-            return <IconButton onClick={editComment(props)}><EditIcon /></IconButton>;
-        return null
-    }
-
     function DeleteEditOptions(){
         if(auth.currentUser.email === props.item.creatorName)
             return(<Stack direction="column" paddingLeft={2.5} paddingTop={0.5} spacing={5}>
@@ -175,17 +163,13 @@ const Comment = (props) => {
                     sx={{
                         width: window.innerWidth,
                         padding: 4,
-                        backgroundColor: 'primary.main',
-                        '&:hover': {
-                        backgroundColor: 'primary.main',
-                        opacity: [0.9, 0.8, 0.7],
-                        },
+                        backgroundColor: '#CBCBD4',
+                        boxShadow: 1,
                     }}
                     onClick={props.returnComment(props.item)}
                     > 
-                    <Typography>{props.item.comment}</Typography>
-                    {/* <Typography>{props.item.commentCount} comments</Typography> */}
-                    <Typography>Submitted by {props.item.creatorName} at {props.item.createdAt} </Typography>
+                    <Typography variant="p" color="common.black">{props.item.comment}</Typography>
+                    <Typography variant="h6" color="common.black">Submitted by {props.item.creatorName} at {props.item.createdAt} </Typography>
                 </Box>
                 <Stack direction="column">
                     <DeleteEditOptions/>

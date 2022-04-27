@@ -1,12 +1,5 @@
 import  {React, useState, useEffect} from 'react';
 import { Stack, Typography, Box, IconButton} from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { updateDoc, addDoc, deleteDoc, doc, query, collection, where, onSnapshot} from "firebase/firestore";
-import {auth, db} from '../../../firebase-config'
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import EditIcon from '@mui/icons-material/Edit';
-
 const MessageBox = (props) => {
 
     if(props.thread.senderId !== sessionStorage.getItem('user')){
@@ -16,6 +9,7 @@ const MessageBox = (props) => {
                         sx={{
                             width: (window.innerWidth*0.3),
                             padding: 2,
+                            border: "solid black",
                             backgroundColor: 'primary.main',
                             '&:hover': {
                             backgroundColor: 'primary.main',
@@ -23,7 +17,7 @@ const MessageBox = (props) => {
                             },
                         }}
                         > 
-                        <Typography>{props.thread.text} </Typography>
+                        <Typography color="white">{props.thread.text} </Typography>
                     </Box>
             </Stack>
         )
@@ -35,6 +29,7 @@ const MessageBox = (props) => {
                         sx={{
                             width: (window.innerWidth*0.3),
                             padding: 2,
+                            border: "solid black",
                             backgroundColor: 'secondary.main',
                             '&:hover': {
                             backgroundColor: 'secondary.main',
@@ -42,7 +37,7 @@ const MessageBox = (props) => {
                             },
                         }}
                         > 
-                        <Typography>{props.thread.text} </Typography>
+                        <Typography color="white">{props.thread.text} </Typography>
                     </Box>
             </Stack>
         )
