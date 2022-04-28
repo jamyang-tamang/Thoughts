@@ -22,10 +22,11 @@ const Canvas = (props) => {
     const [eraseMode, eraseModeToggle] = useState(false);
     const [saveableCanvas, setSavableCanvas] = useState(null);
     const [existingCanvas, setExistingCanvas] = useState(null);
+
     useEffect(()=> {
         if(saveableCanvas !== null){
             onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
-                let canvas = doc.data().canvas.toString();
+                let canvas = doc.data().canvas;
                 setExistingCanvas(canvas);
                 // saveableCanvas.loadSaveData(canvas);
                 // localStorage.setItem("savedDrawing", saveableCanvas);
@@ -37,8 +38,8 @@ const Canvas = (props) => {
     }, [saveableCanvas]);
 
     const clearCanvas = () => {
-        // saveableCanvas.eraseAll();
-        console.log(saveableCanvas.getDataURL());
+        saveableCanvas.eraseAll();
+        // console.log(saveableCanvas.getSaveData);
     }
 
     const toolsStyle = {
@@ -105,8 +106,10 @@ const Canvas = (props) => {
     }
 
     const post = () => {
+        // localStorage.setItem("savedDrawing", saveableCanvas);
+        console.log(saveableCanvas.getDataURL("jpg", true, "#ffffff"));
         updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
-            canvas: saveableCanvas.getDataURL(),
+            canvas: saveableCanvas.getDataURL("jpg", true, "#ffffff"),
         });
     }
 
