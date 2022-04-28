@@ -184,6 +184,30 @@ const DiscussionPost = (props) => {
                 <DeleteEditOptions/>
             </Stack>
         </ThemeProvider>
+    //     <ThemeProvider theme={theme}>
+    //     <Stack key={props.item.key} alignItems="flex-start" direction="row">
+    //             <Votes props={props}/>
+    //         <Box
+    //             sx={{
+    //                 width: window.innerWidth,
+    //                 padding: 2.5,
+    //                 boxShadow: 3,
+    //                 backgroundColor: 'white',
+    //                 opacity: 0.5,
+    //                 '&:hover': {
+    //                 backgroundColor: 'primary.main',
+    //                 opacity: [0.9, 0.8, 0.7],
+    //                 },
+    //             }} 
+    //             onClick={props.returnDiscussion(props.item)}
+    //             > 
+    //             <Typography variant="h3" sx={{opacity:1}} color="#010203">{props.item.title} </Typography>
+    //             <Typography variant="h5" sx={{opacity:1}} color="#000000">Submitted on {props.item.createdAt} by {props.item.creatorName} </Typography>
+    //             <Typography variant="h6" sx={{opacity:1}} color="#000000">{props.item.commentCount} comments</Typography>
+    //         </Box>
+    //         <DeleteEditOptions/>
+    //     </Stack>
+    // </ThemeProvider>
     )
     
 }

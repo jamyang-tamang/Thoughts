@@ -12,7 +12,7 @@ import Navbar from "./Navbar";
 
 const Canvas = (props) => {
     const [color, setColor] = useState("#000000");
-    const [brushRadius, setBrushRadius] = useState(5);
+    const [brushRadius, setBrushRadius] = useState(2);
     const [strokeColor, changeStrokeColor] = useState("#000000");
     const [strokeWidth, changeStrokeWidth] = useState(5);
     const [toolVisible, changeToolVisibility] = useState(true);
@@ -20,29 +20,25 @@ const Canvas = (props) => {
     const [widthPickerVisible, changeWidthPickerVisiblity] = useState(false);
     const [shapesVisible, changeShapesVisilbility] = useState(false);
     const [eraseMode, eraseModeToggle] = useState(false);
-    const [saveableCanvas, setSavableCanvas] = useState("None");
-
+    const [saveableCanvas, setSavableCanvas] = useState(null);
+    const [existingCanvas, setExistingCanvas] = useState(null);
     useEffect(()=> {
-        if(saveableCanvas !== "None"){
+        if(saveableCanvas !== null){
             onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
                 let canvas = doc.data().canvas.toString();
-                saveableCanvas.loadSaveData(canvas);
+                setExistingCanvas(canvas);
+                // saveableCanvas.loadSaveData(canvas);
+                // localStorage.setItem("savedDrawing", saveableCanvas);
                 console.log(canvas);
               });
 
-            // return() => {
-            //     // localStorage.setItem("savedDrawing", saveableCanvas);
-            //     // console.log(localStorage.getItem("savedDrawing"));
-            // }
-        }
-        else{
-            setSavableCanvas(localStorage.getItem("savedDrawing"));
         }
         console.log("This: " + saveableCanvas);
     }, [saveableCanvas]);
 
     const clearCanvas = () => {
-        saveableCanvas.eraseAll();
+        // saveableCanvas.eraseAll();
+        console.log(saveableCanvas.getDataURL());
     }
 
     const toolsStyle = {
@@ -91,9 +87,6 @@ const Canvas = (props) => {
         eraseModeToggle(false);
         setColor(strokeColor);
         setBrushRadius(strokeWidth);
-
-    //     document.querySelector('cursor').style.url("pencil_cursor.png");
-    //     // document.querySelector('[cursor=pointer]').style.url("pencil_cursor.png");
     }
 
     const toggleEraser = () => {
@@ -101,9 +94,6 @@ const Canvas = (props) => {
         setColor("#FFFFFF");
         setBrushRadius(10);
     }
-
-    // const toogleText = () => {
-    // }
 
     const handleWidthChangeComplete = (width) => {
         changeStrokeWidth(width);
@@ -115,23 +105,10 @@ const Canvas = (props) => {
     }
 
     const post = () => {
-        // localStorage.setItem(
-        //     "savedDrawing",
-        //     saveableCanvas.getSaveData()
-        //   );
-        // console.log(localStorage.getItem("savedDrawing"));
-        // console.log(localStorage.setItem("savedDrawing"));
-
-        localStorage.setItem("savedDrawing", saveableCanvas);
         updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
-            canvas: saveableCanvas.getSaveData(),
+            canvas: saveableCanvas.getDataURL(),
         });
     }
-
-    // const load = () => {
-    //     console.log(localStorage.getItem("savedDrawing"));
-    //     setSavableCanvas(localStorage.getItem("savedDrawing"));
-    // }
 
     function DrawingTools () {
         if(toolVisible){
@@ -207,35 +184,15 @@ const Canvas = (props) => {
         return 0
     }
 
-    function handleMouseMove(ev) { 
-        const cursor = document.querySelector(".cursor")
-        cursor.style.left = '${e.pageX}px'
-        cursor.style.top = '${e.pageY}px'
-        cursor.style.background = "cornflowerblue"
-    };
-
     return (
-        // <div onMouseMove={(ev) => handleMouseMove(ev)}>
-
-        
-
-        // <button
-        //     onClick={() => {
-        //       this.saveableCanvas.eraseAll();
-        //     }}
-        //   >
-        //     Erase
-        //   </button>
-
-       
         <div >
             <Navbar props={props}/>
-            <CanvasDraw loadTimeOffset = {0} hideGrid id="canvas"
+            <CanvasDraw imgSrc={existingCanvas} loadTimeOffset = {0} hideGrid id="canvas"
             ref={canvasDraw => (setSavableCanvas(canvasDraw))}
             brushColor={color}
-            brushRadius={brushRadius}
+            brushRadius={brushRadius/2}
             lazyRadius={0}
-            enablePanAndZoom
+            // enablePanAndZoom
             canvasWidth={window.innerWidth}
             canvasHeight={window.innerHeight}
             />

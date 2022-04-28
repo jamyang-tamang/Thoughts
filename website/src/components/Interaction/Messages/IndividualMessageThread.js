@@ -54,13 +54,13 @@ const IndividualMessageThread = (props) => {
     return(
     <div>
         <div style = {{backgroundColor: "#0B816f" ,textAlign: "right"}}>
-        <Typography marginRight="auto" display="inline" textAlign="left" variant="h6">{props.activeMessageThread.participants.filter(name => !name.includes(sessionStorage.getItem('user')))}</Typography>
-            <Button onClick={props.returnMessageThread({"key":"None" })}><ReplyIcon fontSize="large" /></Button>
-            <Button onClick={props.goToDiscussions}><WorkspacesIcon fontSize="large"/></Button>
-            <Button onClick={props.goToHome}><GestureIcon fontSize="large" /></Button>
-            <Button onClick={props.logout}><LogoutIcon fontSize="large" /></Button>
+            <Typography marginRight="auto" display="inline" textAlign="left" variant="h6">{props.activeMessageThread.participants.filter(name => !name.includes(sessionStorage.getItem('user')))}</Typography>
+            <Button onClick={props.returnMessageThread({"key":"None" })}><ReplyIcon style={{ color: 'black' }} fontSize="large" /></Button>
+            <Button onClick={props.goToDiscussions}><WorkspacesIcon style={{ color: 'black' }} fontSize="large"/></Button>
+            <Button onClick={props.goToHome}><GestureIcon style={{ color: 'black' }} fontSize="large" /></Button>
+            <Button onClick={props.logout}><LogoutIcon style={{ color: 'black' }} fontSize="large" /></Button>
         </div>
-        
+
         <Stack direction="column" m={5} spacing ={2}>
                 {/* <NewMessageModal modalIsOpen={newMessageModalState} closeModal={closeNewMessageModal}/> */}
                 <Container>

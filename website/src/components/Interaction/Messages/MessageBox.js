@@ -7,8 +7,10 @@ const MessageBox = (props) => {
             <Stack key={props.thread.key} alignItems="flex-start" direction="row">
                 <Box
                         sx={{
-                            width: (window.innerWidth*0.3),
+                            width: (window.innerWidth*0.4),
                             padding: 2,
+                            borderRadius: 3,
+                            borderTopLeftRadius: 2,
                             border: "solid black",
                             backgroundColor: 'primary.main',
                             '&:hover': {
@@ -24,11 +26,13 @@ const MessageBox = (props) => {
     }
     else{
         return (
-            <Stack key={props.thread.key} style={{marginLeft:"50%"}} direction="row">
+            <Stack key={props.thread.key} style={{marginLeft:"40%"}} direction="row">
                 <Box
                         sx={{
-                            width: (window.innerWidth*0.3),
+                            width: (window.innerWidth*0.4),
                             padding: 2,
+                            borderRadius: 3,
+                            borderTopRightRadius: 2,
                             border: "solid black",
                             backgroundColor: 'secondary.main',
                             '&:hover': {
