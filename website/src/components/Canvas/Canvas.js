@@ -43,6 +43,7 @@ const Canvas = (props) => {
     }
 
     const toolsStyle = {
+
         backgroundColor: "grey",
         borderTop: "1px solid #E7E7E7",
         textAlign: "center",
@@ -107,9 +108,13 @@ const Canvas = (props) => {
 
     const post = () => {
         // localStorage.setItem("savedDrawing", saveableCanvas);
-        console.log(saveableCanvas.getDataURL("jpg", true, "#ffffff"));
+        // console.log(saveableCanvas.getDataURL("jpg", true, "#ffffff"));
+
+        // var image = new Image();
+        // image.src = saveableCanvas.getDataURL();
+        // console.log(image);
         updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
-            canvas: saveableCanvas.getDataURL("jpg", true, "#ffffff"),
+            canvas: saveableCanvas.getDataURL(null, true),
         });
     }
 
@@ -187,10 +192,11 @@ const Canvas = (props) => {
         return 0
     }
 
+        
     return (
         <div >
             <Navbar props={props}/>
-            <CanvasDraw imgSrc={existingCanvas} loadTimeOffset = {0} hideGrid id="canvas"
+            <CanvasDraw imgSrc="https://upload.wikimedia.org/wikipedia/commons/a/a1/Nepalese_Mhapuja_Mandala.jpg" loadTimeOffset = {0} hideGrid id="canvas"
             ref={canvasDraw => (setSavableCanvas(canvasDraw))}
             brushColor={color}
             brushRadius={brushRadius/2}
