@@ -6,9 +6,13 @@ import pencil from '../../Assets/Canvas/pencil.png';
 import eraser from '../../Assets/Canvas/eraser.png';
 import colorPicker from '../../Assets/Canvas/color-picker.png';
 import widthPicker from '../../Assets/Canvas/width-picker.png';
-import { doc, query, collection, where, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import Navbar from "./Navbar";
+import undoIcon from '../../Assets/Canvas/undo.png';
+import upArrow from '../../Assets/Canvas/up-arrow.png';
+import downArrow from '../../Assets/Canvas/down-arrow.png';
+
 
 const Canvas = (props) => {
     const [color, setColor] = useState("#000000");
@@ -20,16 +24,15 @@ const Canvas = (props) => {
     const [widthPickerVisible, changeWidthPickerVisiblity] = useState(false);
     const [shapesVisible, changeShapesVisilbility] = useState(false);
     const [eraseMode, eraseModeToggle] = useState(false);
-    const [saveableCanvas, setSavableCanvas] = useState(null);
+    const [saveableCanvas, setSavableCanvas] = useState("None");
     const [existingCanvas, setExistingCanvas] = useState(null);
     const [buttonDisabled, setPostDisabled] = useState(false);
 
     useEffect(()=> {
-        if(!saveableCanvas){
+        if(saveableCanvas !== "None"){
             onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
                 let canvas = doc.data().canvas;
                 setExistingCanvas(canvas);
-                // console.log(canvas);
               });
         }
         
@@ -132,21 +135,6 @@ const Canvas = (props) => {
                 }).then(setPostDisabled(false));
               });
         }
-
-        
-        
-        // context.drawImage(existingImage,  0, 0, window.innerWidth, window.innerHeight);
-        // context.drawImage(canvasImage, 0, 0, window.innerWidth, window.innerHeight);
-        // console.log(tempCanvas.toDataURL('data/png'));
-
-        // console.log(tempCanvas);
-
-
-
-        
-        // updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
-        //     canvas: tempCanvas.toDataURL('data/png'),
-        // });
     }
 
     function DrawingTools () {
@@ -156,8 +144,8 @@ const Canvas = (props) => {
                     <button onClick={toggleEraser}><img src={eraser} style = {toolButtons}/></button>
                     <button onClick={toggleColorPicker}><img src={colorPicker} style = {toolButtons}/></button>
                     <button onClick={toggleWidthPicker}><img src={widthPicker} style = {toolButtons}/></button>
-                    <button onClick={undo}>Undo</button>
-                    <button onClick={toogleTool}>hide</button>
+                    <button onClick={undo}><img src={undoIcon} style = {toolButtons}/></button>
+                    <button onClick={toogleTool}><img src={downArrow} style = {toolButtons}/></button>
                     <button onClick={clearCanvas}>clear</button> 
                     <button disabled={buttonDisabled}
                         onClick={post}
@@ -166,7 +154,7 @@ const Canvas = (props) => {
         }
         else{
             return <div style={ShowButtonObj}>
-                <button onClick={toogleTool}>showTools</button>
+                <button onClick={toogleTool}><img src={upArrow} style = {toolButtons}/></button>
             </div>
         }
     }
