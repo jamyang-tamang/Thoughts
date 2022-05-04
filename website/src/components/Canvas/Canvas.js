@@ -22,19 +22,17 @@ const Canvas = (props) => {
     const [eraseMode, eraseModeToggle] = useState(false);
     const [saveableCanvas, setSavableCanvas] = useState(null);
     const [existingCanvas, setExistingCanvas] = useState(null);
+    const [buttonDisabled, setPostDisabled] = useState(false);
 
     useEffect(()=> {
-        if(saveableCanvas !== null){
+        if(!saveableCanvas){
             onSnapshot(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"), (doc) => {
                 let canvas = doc.data().canvas;
                 setExistingCanvas(canvas);
-                // saveableCanvas.loadSaveData(canvas);
-                // localStorage.setItem("savedDrawing", saveableCanvas);
-                console.log(canvas);
+                // console.log(canvas);
               });
-
         }
-        console.log("This: " + saveableCanvas);
+        
     }, [saveableCanvas]);
 
     const clearCanvas = () => {
@@ -107,15 +105,48 @@ const Canvas = (props) => {
     }
 
     const post = () => {
-        // localStorage.setItem("savedDrawing", saveableCanvas);
-        // console.log(saveableCanvas.getDataURL("jpg", true, "#ffffff"));
+        setPostDisabled(true);
 
-        // var image = new Image();
-        // image.src = saveableCanvas.getDataURL();
-        // console.log(image);
-        updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
-            canvas: saveableCanvas.getDataURL(null, true),
-        });
+        var tempCanvas = document.getElementById("tempCanvas");
+        var context = tempCanvas.getContext("2d");
+        var existingImage = new Image();
+        existingImage.src = existingCanvas;
+        var canvasImage = new Image();
+        canvasImage.src = saveableCanvas.getDataURL();
+        canvasImage.onload = function(){
+            animate();
+        };
+    
+          
+        function animate(){
+            var prom = new Promise(function(resolve){
+                context.drawImage(existingImage,  0, 0, window.innerWidth, window.innerHeight);
+                context.drawImage(canvasImage, 0, 0, window.innerWidth, window.innerHeight);
+                console.log("tempCanvas.toDataURL('data/png')")
+                console.log(tempCanvas.toDataURL('data/png'))
+                resolve();
+            });
+            prom.then((value) => {
+                updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
+                    canvas: tempCanvas.toDataURL('data/png'),
+                }).then(setPostDisabled(false));
+              });
+        }
+
+        
+        
+        // context.drawImage(existingImage,  0, 0, window.innerWidth, window.innerHeight);
+        // context.drawImage(canvasImage, 0, 0, window.innerWidth, window.innerHeight);
+        // console.log(tempCanvas.toDataURL('data/png'));
+
+        // console.log(tempCanvas);
+
+
+
+        
+        // updateDoc(doc(db, "canvas", "KFJWEZPg2fEOh2Zxpk6N"),{
+        //     canvas: tempCanvas.toDataURL('data/png'),
+        // });
     }
 
     function DrawingTools () {
@@ -128,7 +159,7 @@ const Canvas = (props) => {
                     <button onClick={undo}>Undo</button>
                     <button onClick={toogleTool}>hide</button>
                     <button onClick={clearCanvas}>clear</button> 
-                    <button
+                    <button disabled={buttonDisabled}
                         onClick={post}
                     >POST</button>
                 </div>
@@ -196,7 +227,8 @@ const Canvas = (props) => {
     return (
         <div >
             <Navbar props={props}/>
-            <CanvasDraw imgSrc="https://upload.wikimedia.org/wikipedia/commons/a/a1/Nepalese_Mhapuja_Mandala.jpg" loadTimeOffset = {0} hideGrid id="canvas"
+            <canvas width={window.innerWidth} height={window.innerHeight} id="tempCanvas" hidden/>
+            <CanvasDraw imgSrc={existingCanvas} loadTimeOffset = {0} hideGrid id="canvas"
             ref={canvasDraw => (setSavableCanvas(canvasDraw))}
             brushColor={color}
             brushRadius={brushRadius/2}
