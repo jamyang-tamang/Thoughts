@@ -166,7 +166,7 @@ const Comment = (props) => {
                         backgroundColor: '#CBCBD4',
                         boxShadow: 1,
                     }}
-                    onClick={props.returnComment(props.item)}
+                    // onClick={props.returnComment(props.item)}
                     > 
                     <Typography variant="p" color="common.black">{props.item.comment}</Typography>
                     <Typography variant="h6" color="common.black">Submitted by {props.item.creatorName} at {props.item.createdAt} </Typography>

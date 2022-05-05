@@ -5,7 +5,6 @@ import DiscussionThread from './Discussions/DiscussionThread';
 const DiscussionCommentView = (props) => {
     // const [showIndividualDiscussion, toggleShowIndividualDiscussion] = useState(true);
     const [activeDiscussion, setDiscussion] = useState({"discussionId":"None"});
-    const [activeComment, setComment] = useState({"commentId":"None"});
 
     // useEffect(() => {
     //     if(showIndividualDiscussion){  
@@ -23,14 +22,14 @@ const DiscussionCommentView = (props) => {
         setDiscussion(value);
     }
 
-    const returnComment = value => () => {
-        setComment(value);
-    }
+    // const returnComment = value => () => {
+    //     setComment(value);
+    // }
     
     function View() {
         if(activeDiscussion.discussionId != "None")
             return(
-                <DiscussionThread logout={props.logout} returnComment={returnComment} activeComment={activeComment} activeDiscussion={activeDiscussion} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToInteractions={props.goToInteractions} goToLogin={props.goToLogin}/>
+                <DiscussionThread logout={props.logout} activeDiscussion={activeDiscussion} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToInteractions={props.goToInteractions} goToLogin={props.goToLogin}/>
             )
         return(
             <AllDiscussions logout={props.logout} returnDiscussion={returnDiscussion} goToHome={props.goToHome} goToInteractions={props.goToInteractions} goToLogin={props.goToLogin}/>

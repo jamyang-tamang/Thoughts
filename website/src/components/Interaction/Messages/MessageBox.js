@@ -13,10 +13,6 @@ const MessageBox = (props) => {
                             borderTopLeftRadius: 2,
                             border: "solid black",
                             backgroundColor: 'primary.main',
-                            '&:hover': {
-                            backgroundColor: 'primary.main',
-                            opacity: [0.9, 0.8, 0.7],
-                            },
                         }}
                         > 
                         <Typography color="white">{props.thread.text} </Typography>
@@ -34,11 +30,7 @@ const MessageBox = (props) => {
                             borderRadius: 3,
                             borderTopRightRadius: 2,
                             border: "solid black",
-                            backgroundColor: 'secondary.main',
-                            '&:hover': {
-                            backgroundColor: 'secondary.main',
-                            opacity: [0.9, 0.8, 0.7],
-                            },
+                            backgroundColor: '#989898',
                         }}
                         > 
                         <Typography color="white">{props.thread.text} </Typography>

@@ -49,8 +49,10 @@ const NewDiscussionModal = (props) => {
 
     useEffect(()=> {
         if(discussionTitle !== "")
+            toggleTitlePresent(false);
+        else
             toggleTitlePresent(true);
-        toggleTitlePresent(false);
+        
     }, [discussionTitle]);
 
     const resetModalForm = () => {

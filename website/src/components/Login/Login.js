@@ -1,4 +1,4 @@
-import { React, useState, useEffect} from "react";
+import { React, useState, useRef} from "react";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {auth} from '../../firebase-config'
 import Modal from 'react-modal'
@@ -7,8 +7,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -33,6 +31,7 @@ const Login = (props) => {
     const [loginErrorMessage, setLoginErrorMessage] = useState ("");
     const [signUpErrorMessage, setSignupErrorMessage] = useState ("");
     const colRef = collection(db, 'users');  
+    const checked = useRef(null);
 
     const openModal = () => {
         setModalOpen(true);
@@ -227,7 +226,7 @@ const Login = (props) => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/NtfFqT8JBI0)',
+            backgroundImage: `url(${bulb})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -277,10 +276,6 @@ const Login = (props) => {
                 onChange={(event) => {
                     setLoginPassword(event.target.value)
                 }} 
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
               />
               <Typography component="p" variant="h6" color="red" >
                 {loginErrorMessage}

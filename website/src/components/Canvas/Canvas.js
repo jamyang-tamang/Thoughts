@@ -12,6 +12,9 @@ import Navbar from "./Navbar";
 import undoIcon from '../../Assets/Canvas/undo.png';
 import upArrow from '../../Assets/Canvas/up-arrow.png';
 import downArrow from '../../Assets/Canvas/down-arrow.png';
+import pencil_cursor from '../../Assets/Canvas/pencil_cursor.png'
+import eraser_cursor from '../../Assets/Canvas/eraser_cursor.png'
+
 
 
 const Canvas = (props) => {
@@ -27,6 +30,7 @@ const Canvas = (props) => {
     const [saveableCanvas, setSavableCanvas] = useState("None");
     const [existingCanvas, setExistingCanvas] = useState(null);
     const [buttonDisabled, setPostDisabled] = useState(false);
+    const [cursor, setCursor] = useState(pencil_cursor);
 
     useEffect(()=> {
         if(saveableCanvas !== "None"){
@@ -90,12 +94,14 @@ const Canvas = (props) => {
         eraseModeToggle(false);
         setColor(strokeColor);
         setBrushRadius(strokeWidth);
+        setCursor(pencil_cursor);
     }
 
     const toggleEraser = () => {
         eraseModeToggle(true);
         setColor("#FFFFFF");
         setBrushRadius(10);
+        setCursor(eraser_cursor);
     }
 
     const handleWidthChangeComplete = (width) => {
@@ -196,24 +202,9 @@ const Canvas = (props) => {
     const undo = () => {
         saveableCanvas.undo();
     }
-
-    const toggleShapes = () => {
-        changeShapesVisilbility(!shapesVisible);
-    }
-
-    function Shapes (){
-        if(shapesVisible){
-            return <div style={drawingToolStyle}>
-                <button>Rectangle</button>
-                <button>Circle</button>
-            </div>
-        }
-        return 0
-    }
-
         
     return (
-        <div >
+        <div style={{cursor: `url(${cursor}), auto`}}>
             <Navbar props={props}/>
             <canvas width={window.innerWidth} height={window.innerHeight} id="tempCanvas" hidden/>
             <CanvasDraw imgSrc={existingCanvas} loadTimeOffset = {0} hideGrid id="canvas"
@@ -222,6 +213,7 @@ const Canvas = (props) => {
             brushRadius={brushRadius/2}
             lazyRadius={0}
             // enablePanAndZoom
+            hideInterface
             canvasWidth={window.innerWidth}
             canvasHeight={window.innerHeight}
             />

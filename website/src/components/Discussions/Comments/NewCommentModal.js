@@ -40,8 +40,9 @@ const NewCommentModal = (props) => {
 
     useEffect(()=> {
         if(newComment !== "")
+            toggleCommentPresent(false);
+        else
             toggleCommentPresent(true);
-        toggleCommentPresent(false);
     }, [newComment]);
 
     const resetModalForm = () => {

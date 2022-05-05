@@ -94,7 +94,7 @@ const DiscussionThread = (props) => {
                     </Box>
                     <Stack direction="column" m={5} spacing ={2}>
                         {comments.map((item) => (
-                            <CommentBox returnComment={props.returnComment} openModal={openEditModal} item={item} key={item.key} activeDiscussion={props.activeDiscussion} />
+                            <CommentBox openModal={openEditModal} item={item} key={item.key} activeDiscussion={props.activeDiscussion} />
                         ))}
                     </Stack>
                     <Fab onClick={openModal} style={fabStyle} size="large" color="primary" aria-label="add">
